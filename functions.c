@@ -50,9 +50,6 @@ void measurement(int16_t dato){
     sprintf(str, "display,display_set_text_bgcolor,%u,%u,%u", color_black.r, color_black.g, color_black.b);
     report(clock(),hardware_event,str);
     //
-    // [ INSTRUMENTACION: Agregado para poder enviar el string con los caracteres de escape. ]
-    char aux_text_tmp[16];
-    //
     if (dato_ing>20.98)
         sprintf(text_tmp, "**H    \n");
     else
@@ -78,13 +75,20 @@ void bar( int16_t dato, int16_t dato_old) {
     //
     float dato_ing_old = 0.00524590164 * dato_old;
     // [ ADDED CODE FOR SIMPLIFYING PROPERTY TO BE CHECKED ]
-    int point = (24 * dato_ing - 96);
+    /* Sentencia incorrecta: Error de subrepresentación de las muestras grandes
+     * int point = (24 * dato_ing - 96);
+     */
+    int point = ((24 * dato_ing - 96) >= 383) ? 383 : (24 * dato_ing - 96);
     // [ INSTRUMENTACION: Variable assigned. ]
     sprintf(str, "variable_value_assigned,bar_point,%d",point);
     report(clock(),workflow_event,str);
     //
-    int g = (24 * dato_ing - 96);
-    int h = (24 * dato_ing_old - 96);
+    /* Sentencias incorrectas: Error de subrepresentación de las muestras grandes
+     * int g = (24 * dato_ing - 96);
+     * int h = (24 * dato_ing_old - 96);
+     */
+    int g = ((24 * dato_ing - 96) >= 383) ? 383 : (24 * dato_ing - 96);
+    int h = ((24 * dato_ing_old - 96) >= 383) ? 383 : (24 * dato_ing_old - 96);
 
     for (signed int i = 66; i < g + 66; i++) {
         if (i >= 49 & i < 178) {
@@ -108,9 +112,12 @@ void bar( int16_t dato, int16_t dato_old) {
             report(clock(),hardware_event,str);
             //
         }
-    }//ff0000 287233  57a639
+    }
     if (g < h)
-        for(signed int i = h+66 ; i > g+66 ; i--)
+        /* Sentencia incorrecta: Error de despintado de una fila de la barra
+         * for(signed int i = h+66 ; i > g+66 ; i--)
+         */
+        for(signed int i = h+66-1 ; i >= g+66 ; i--)
             if (i>=49 & i<450) {
                 display_Show_RGB(0x00, 0x00, 0x00, ( i ), ( i ), 155 , 190 );
                 // [ INSTRUMENTACION: hardware event. ]

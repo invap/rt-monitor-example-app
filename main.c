@@ -16,6 +16,8 @@ int main( void ){
     // Declaración de las variables de programa
     sprintf(str, "declare_variable,main_addition,uint16_t");
     report(clock(),workflow_event,str);
+    sprintf(str, "declare_variable,main_adc_read,uint16_t");
+    report(clock(),workflow_event,str);
     for (int16_t i=0;i<16; i++) {
         sprintf(str, "declare_variable,main_value_%d,uint16_t",i);
         report(clock(),workflow_event,str);
@@ -45,7 +47,7 @@ int main( void ){
         uint16_t addition;
         uint16_t value;
         uint16_t realvalue;
-        uint16_t  realvalue_old = 0;
+        uint16_t realvalue_old = 0;
         // [ INSTRUMENTACION: Variable assigned. ]
         sprintf(str, "variable_value_assigned,main_realvalue_old,%d", realvalue_old);
         report(clock(),workflow_event,str);
@@ -63,6 +65,10 @@ int main( void ){
             // [ INSTRUMENTACION: Hardware event - adc read. ]
             sprintf(str, "adc,sample,%d",value);
             report(clock(),hardware_event,str);
+            //
+            // [ INSTRUMENTACION: Variable assigned. ]
+            sprintf(str, "variable_value_assigned,main_adc_read,%d",value);
+            report(clock(),workflow_event,str);
             //
             // [ INSTRUMENTACION: Variable assigned. ]
             sprintf(str, "variable_value_assigned,main_value_%d,%d",i,value);
