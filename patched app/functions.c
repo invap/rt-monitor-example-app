@@ -4,7 +4,7 @@
 #include "functions.h"
 
 // Added to use the reporting API
-#include "../c-reporter-api/src/c-reporter-api.h"
+#include "../../c-reporter-api/src/c-reporter-api.h"
 
 rgb color_r = {0xFF,0x00, 0x00};
 rgb color_y = {0xFF,0xFF, 0x00};
@@ -74,15 +74,16 @@ void bar( int16_t dato, int16_t dato_old) {
     report(clock(),workflow_event,str);
     //
     float dato_ing_old = 0.00524590164 * dato_old;
-    // [ ADDED CODE FOR SIMPLIFYING PROPERTY TO BE CHECKED ]
+
     /* Sentencia incorrecta: Error de subrepresentación de las muestras grandes
      * int point = (24 * dato_ing - 96);
      */
     int point = ((24 * dato_ing - 96) >= 383) ? 383 : (24 * dato_ing - 96);
+
     // [ INSTRUMENTACION: Variable assigned. ]
     sprintf(str, "variable_value_assigned,bar_point,%d",point);
     report(clock(),workflow_event,str);
-    //
+
     /* Sentencias incorrectas: Error de subrepresentación de las muestras grandes
      * int g = (24 * dato_ing - 96);
      * int h = (24 * dato_ing_old - 96);
@@ -99,14 +100,14 @@ void bar( int16_t dato, int16_t dato_old) {
             //
         }
         if (i >= 178 & i < 400) { //336
-            display_Show_RGB(0x00, 0xff, 0x00, (i), (i), 155, 190);//FFFF00
+            display_Show_RGB(0xff, 0xff, 0x00, (i), (i), 155, 190);//FFFF00
             // [ INSTRUMENTACION: hardware event. ]
             sprintf(str, "display,display_Show_RGB,%u,%u,%u,%u,%u,%u,%u", 0, 255, 0, (i), (i), 155, 190);
             report(clock(),hardware_event,str);
             //
         }
         if (i >= 400 & i < 450) {
-            display_Show_RGB(0x00, 0xff, 0x00, (i), (i), 155, 190);
+            display_Show_RGB(0xff, 0x00, 0x00, (i), (i), 155, 190);
             // [ INSTRUMENTACION: hardware event. ]
             sprintf(str, "display,display_Show_RGB,%u,%u,%u,%u,%u,%u,%u", 0, 255, 0, (i), (i), 155, 190);
             report(clock(),hardware_event,str);

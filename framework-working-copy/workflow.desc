@@ -1,0 +1,11 @@
+9;{(0,1),(1,2),(2,3),(3,4),(4,5),(5,6),(6,7),(7,8),(8,2)}
+0
+0:task,init,{},{init_vars;init_fondo_display},{}
+1:operator,seq_composition
+2:operator,omega_start
+3:task,filtering,{filtering_pre},{filtering_post},{<filtering_chk,{12bitsreading;additionbound}>}
+4:operator,seq_composition
+5:task,conversion,{conversion_pre},{conversion_post},{}
+6:operator,seq_composition
+7:checkpoint,display_chk,{barpointiscorrect;bariscorrect}
+8:operator,omega_end

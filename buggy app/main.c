@@ -2,11 +2,11 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "./data-source/ex_adc.h"
+#include "../data-source/ex_adc.h"
 #include "functions.h"
 
 // Added to use the reporting API
-#include "../c-reporter-api/src/c-reporter-api.h"
+#include "../../c-reporter-api/src/c-reporter-api.h"
 
 int main( void ){
     // [ INSTRUMENTACION: Agregado para poder enviar el string especificando el evento. ]
@@ -35,23 +35,22 @@ int main( void ){
     sprintf(str, "declare_variable,bar_point,int");
     report(clock(),workflow_event,str);
     //
+    uint16_t realvalue_old, value, addition, realvalue;
     // [ INSTRUMENTACION: Task "init" started. ]
     report(clock(),workflow_event,"task_started,init");
     //
     adc_init ();
     background();
+    // [ POTENTIAL PROBLEM FOUND: realvalue_old was not initialized.  ]
+    realvalue_old = 0;
+    // [ INSTRUMENTACION: Variable assigned. ]
+    sprintf(str, "variable_value_assigned,main_realvalue_old,%d", realvalue_old);
+    report(clock(),workflow_event,str);
+    //
     // [ INSTRUMENTACION: Task "init" finished. ]
     report(clock(),workflow_event,"task_finished,init");
     //
     while (1) {
-        uint16_t addition;
-        uint16_t value;
-        uint16_t realvalue;
-        uint16_t realvalue_old = 0;
-        // [ INSTRUMENTACION: Variable assigned. ]
-        sprintf(str, "variable_value_assigned,main_realvalue_old,%d", realvalue_old);
-        report(clock(),workflow_event,str);
-        //
         addition = 0;
         // [ INSTRUMENTACION: Variable assigned. ]
         sprintf(str, "variable_value_assigned,main_addition,%d", addition);
@@ -62,7 +61,7 @@ int main( void ){
         //
         for (int16_t i=0;i<16; i++){
             value = sample ();
-            // [ INSTRUMENTACION: Hardware event - adc read. ]
+            // [ INSTRUMENTACION: Hardware event. ]
             sprintf(str, "adc,sample,%d",value);
             report(clock(),hardware_event,str);
             //
