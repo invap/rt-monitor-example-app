@@ -180,7 +180,6 @@ void background(void) {
     sprintf(str, "display,display_write_text,         \n         \n         \n         \n         \n         \n         \n         \n         \n         \n         \n         \n         \n         \n         \n         \n         \n         \n         \n         \n         \n         \n         \n         \n         \n         \n         \n         \n");
     report(clock(),hardware_event,str);
     //
-
     uint16_t x0 = 60;
     yl = 0;
     uint16_t x2 = 108;
@@ -191,97 +190,96 @@ void background(void) {
     uint16_t x7 = 348;
     uint16_t x8 = 396;
     uint16_t x9 = 444;
-    ssd1963_set_text_pos2(x0, yl);
+    display_set_text_pos2(x0, yl);
     // [ INSTRUMENTACION: hardware event. ]
-    sprintf(str, "display,ssd1963_set_text_pos2,%u,%u", x0, yl);
+    sprintf(str, "display,display_set_text_pos2,%u,%u", x0, yl);
     report(clock(),hardware_event,str);
     //
-    ssd1963_write_text("1E-11\n");
+    display_write_text("1E-11\n");
     // [ INSTRUMENTACION: hardware event. ]
-    sprintf(str, "display,ssd1963_write_text,1E-11\n");
+    sprintf(str, "display,display_write_text,1E-11\n");
     report(clock(),hardware_event,str);
     //
-    ssd1963_set_text_pos2(x2, yl);
+    display_set_text_pos2(x2, yl);
     // [ INSTRUMENTACION: hardware event. ]
-    sprintf(str, "display,ssd1963_set_text_pos2,%u,%u", x2, yl);
+    sprintf(str, "display,display_set_text_pos2,%u,%u", x2, yl);
     report(clock(),hardware_event,str);
     //
-    ssd1963_write_text("1E-10\n");
+    display_write_text("1E-10\n");
     // [ INSTRUMENTACION: hardware event. ]
-    sprintf(str, "display,ssd1963_write_text,1E-10\n");
+    sprintf(str, "display,display_write_text,1E-10\n");
     report(clock(),hardware_event,str);
     //
-    ssd1963_set_text_pos2(x3, yl);
+    display_set_text_pos2(x3, yl);
     // [ INSTRUMENTACION: hardware event. ]
-    sprintf(str, "display,ssd1963_set_text_pos2,%u,%u", x3, yl);
+    sprintf(str, "display,display_set_text_pos2,%u,%u", x3, yl);
     report(clock(),hardware_event,str);
     //
-    ssd1963_write_text(" 1E-9\n");
+    display_write_text(" 1E-9\n");
     // [ INSTRUMENTACION: hardware event. ]
-    sprintf(str, "display,ssd1963_write_text, 1E-9\n");
+    sprintf(str, "display,display_write_text, 1E-9\n");
     report(clock(),hardware_event,str);
     //
-    ssd1963_set_text_pos2(x4, yl);
+    display_set_text_pos2(x4, yl);
     // [ INSTRUMENTACION: hardware event. ]
-    sprintf(str, "display,ssd1963_set_text_pos2,%u,%u", x4, yl);
+    sprintf(str, "display,display_set_text_pos2,%u,%u", x4, yl);
     report(clock(),hardware_event,str);
     //
-    ssd1963_write_text(" 1E-8\n");
+    display_write_text(" 1E-8\n");
     // [ INSTRUMENTACION: hardware event. ]
-    sprintf(str, "display,ssd1963_write_text, 1E-8\n");
+    sprintf(str, "display,display_write_text, 1E-8\n");
     report(clock(),hardware_event,str);
     //
-    ssd1963_set_text_pos2(x5, yl);
+    display_set_text_pos2(x5, yl);
     // [ INSTRUMENTACION: hardware event. ]
-    sprintf(str, "display,ssd1963_set_text_pos2,%u,%u", x5, yl);
+    sprintf(str, "display,display_set_text_pos2,%u,%u", x5, yl);
     report(clock(),hardware_event,str);
     //
-    ssd1963_write_text(" 1E-7\n");
+    display_write_text(" 1E-7\n");
     // [ INSTRUMENTACION: hardware event. ]
-    sprintf(str, "display,ssd1963_write_text, 1E-7\n");
+    sprintf(str, "display,display_write_text, 1E-7\n");
     report(clock(),hardware_event,str);
     //
-    ssd1963_set_text_pos2(x6, yl);
+    display_set_text_pos2(x6, yl);
     // [ INSTRUMENTACION: hardware event. ]
-    sprintf(str, "display,ssd1963_set_text_pos2,%u,%u", x6, yl);
+    sprintf(str, "display,display_set_text_pos2,%u,%u", x6, yl);
     report(clock(),hardware_event,str);
     //
-    ssd1963_write_text(" 1E-6\n");
+    display_write_text(" 1E-6\n");
     // [ INSTRUMENTACION: hardware event. ]
-    sprintf(str, "display,ssd1963_write_text, 1E-6\n");
+    sprintf(str, "display,display_write_text, 1E-6\n");
     report(clock(),hardware_event,str);
     //
-    ssd1963_set_text_pos2(x7, yl);
+    display_set_text_pos2(x7, yl);
     // [ INSTRUMENTACION: hardware event. ]
-    sprintf(str, "display,ssd1963_set_text_pos2,%u,%u", x7, yl);
+    sprintf(str, "display,display_set_text_pos2,%u,%u", x7, yl);
     report(clock(),hardware_event,str);
     //
-    ssd1963_write_text(" 1E-5\n");
+    display_write_text(" 1E-5\n");
     // [ INSTRUMENTACION: hardware event. ]
-    sprintf(str, "display,ssd1963_write_text, 1E-5\n");
+    sprintf(str, "display,display_write_text, 1E-5\n");
     report(clock(),hardware_event,str);
     //
-    ssd1963_set_text_pos2(x8, yl);
+    display_set_text_pos2(x8, yl);
     // [ INSTRUMENTACION: hardware event. ]
-    sprintf(str, "display,ssd1963_set_text_pos2,%u,%u", x8, yl);
+    sprintf(str, "display,display_set_text_pos2,%u,%u", x8, yl);
     report(clock(),hardware_event,str);
     //
-    ssd1963_write_text(" 1E-4\n");
+    display_write_text(" 1E-4\n");
     // [ INSTRUMENTACION: hardware event. ]
-    sprintf(str, "display,ssd1963_write_text, 1E-4\n");
+    sprintf(str, "display,display_write_text, 1E-4\n");
     report(clock(),hardware_event,str);
     //
-    ssd1963_set_text_pos2(x9, yl);
+    display_set_text_pos2(x9, yl);
     // [ INSTRUMENTACION: hardware event. ]
-    sprintf(str, "display,ssd1963_set_text_pos2,%u,%u", x9, yl);
+    sprintf(str, "display,display_set_text_pos2,%u,%u", x9, yl);
     report(clock(),hardware_event,str);
     //
-    ssd1963_write_text(" 1E-3\n");
+    display_write_text(" 1E-3\n");
     // [ INSTRUMENTACION: hardware event. ]
-    sprintf(str, "display,ssd1963_write_text, 1E-3\n");
+    sprintf(str, "display,display_write_text, 1E-3\n");
     report(clock(),hardware_event,str);
     //
-
     display_box(0, 0, 479, 127, &color_blue);
     // [ INSTRUMENTACION: hardware event. ]
     sprintf(str, "display,display_box,%u,%u,%u,%u,%u,%u,%u", 0, 0, 479, 127, color_blue.r, color_blue.g, color_blue.b);
