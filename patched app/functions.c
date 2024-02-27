@@ -3,6 +3,10 @@
 
 #include "functions.h"
 
+//  [ INSTRUMENTACION: Define el tamano del evento más largo reportado. ]
+//  [ IMPORTANTE: 0 < __MAX_EVENT_SIZE <= 65528 ]
+#define MAX_EVENT_SIZE 308
+//
 // Added to use the reporting API
 #include "../../c-reporter-api/src/c-reporter-api.h"
 
@@ -15,7 +19,7 @@ rgb color_black = {0x00,0x00, 0x00};
 
 void measurement(int16_t dato){
     // [ INSTRUMENTACION: Agregado para poder enviar el string especificando el evento. ]
-    char str[1024];
+    char str[MAX_EVENT_SIZE];
     //
     float dato_ing = 0.00524590164*dato;
     // [ INSTRUMENTACION: Variable assigned. ]
@@ -66,7 +70,7 @@ void measurement(int16_t dato){
 
 void bar( int16_t dato, int16_t dato_old) {
     // [ INSTRUMENTACION: Agregado para poder enviar el string especificando el evento. ]
-    char str[1024];
+    char str[MAX_EVENT_SIZE];
     //
     float dato_ing = 0.00524590164 * dato;
     // [ INSTRUMENTACION: Variable assigned. ]
@@ -130,7 +134,7 @@ void bar( int16_t dato, int16_t dato_old) {
 
 void background(void) {
     // [ INSTRUMENTACION: Agregado para poder enviar el string especificando el evento. ]
-    char str[1024];
+    char str[MAX_EVENT_SIZE];
     //
     uint16_t xl = 29;
     uint16_t yl = 1;
