@@ -5,8 +5,6 @@
 #include "../data-source/ex_adc.h"
 #include "functions.h"
 
-//  [ INSTRUMENTACION: Define el tamano del evento más largo reportado. Si no se lo define es 120. ]
-#include "maxeventsize.h"
 // Added to use the reporting API
 #include "../../c-reporter-api/src/c-reporter-api.h"
 

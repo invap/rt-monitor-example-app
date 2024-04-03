@@ -5,20 +5,13 @@
 #include "../data-source/ex_adc.h"
 #include "functions.h"
 
-//  [ INSTRUMENTACION: Define el tamano del evento más largo reportado. Si no se lo define es 120. ]
-#include "maxeventsize.h"
 // Added to use the reporting API
 #include "../../c-reporter-api/src/c-reporter-api.h"
+//
 
 int main( void ){
     // [ INSTRUMENTACION: Agregado para poder enviar el string especificando el evento. ]
     char str[MAX_EVENT_SIZE];
-/*
-    printf("BUFFER_SIZE: %d\n", BUFFER_SIZE);
-    printf("MAX_EVENT_SIZE: %d\n", MAX_EVENT_SIZE);
-    printf("MAX_EVENT_PKG_SIZE: %d\n", MAX_EVENT_PKG_SIZE);
-    printf("BUFFER_CAPACITY: %d\n", BUFFER_CAPACITY);
-*/
     //
     // [ INSTRUMENTATION: Declare variables. ]
     // Declaración de las variables de programa
