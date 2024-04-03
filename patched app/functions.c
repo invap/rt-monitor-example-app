@@ -33,24 +33,24 @@ void measurement(int16_t dato){
     uint8_t scale =2;
     static char text_tmp[10];
     display_set_text_scale(scale);
-    // [ INSTRUMENTACION: hardware event. ]
+    // [ INSTRUMENTACION: component event. ]
     sprintf(str, "display,display_set_text_scale,%u",scale);
-    report(clock(),hardware_event,str);
+    report(clock(),component_event,str);
     //
     display_set_text_pos2( pl,  ll);
-    // [ INSTRUMENTACION: hardware event. ]
+    // [ INSTRUMENTACION: component event. ]
     sprintf(str, "display,display_set_text_pos2,%u,%u",pl,ll);
-    report(clock(),hardware_event,str);
+    report(clock(),component_event,str);
     //
     display_set_text_color(color_g);
-    // [ INSTRUMENTACION: hardware event. ]
+    // [ INSTRUMENTACION: component event. ]
     sprintf(str, "display,display_set_text_color,%u,%u,%u", color_g.r, color_g.g, color_g.b);
-    report(clock(),hardware_event,str);
+    report(clock(),component_event,str);
     //
     display_set_text_bgcolor(color_black);
-    // [ INSTRUMENTACION: hardware event. ]
+    // [ INSTRUMENTACION: component event. ]
     sprintf(str, "display,display_set_text_bgcolor,%u,%u,%u", color_black.r, color_black.g, color_black.b);
-    report(clock(),hardware_event,str);
+    report(clock(),component_event,str);
     //
     if (dato_ing>20.98)
         sprintf(text_tmp, "**H    \n");
@@ -60,9 +60,9 @@ void measurement(int16_t dato){
        else
            sprintf(text_tmp, "%2.0E \n", dato_ing2);
     display_write_text(text_tmp);
-    // [ INSTRUMENTACION: hardware event. ]
+    // [ INSTRUMENTACION: component event. ]
     sprintf(str, "display,display_write_text,%s", text_tmp);
-    report(clock(),hardware_event,str);
+    report(clock(),component_event,str);
     //
 }
 
@@ -96,23 +96,23 @@ void bar( int16_t dato, int16_t dato_old) {
     for (signed int i = 66; i < g + 66; i++) {
         if (i >= 49 & i < 178) {
             display_Show_RGB(0x00, 0xff, 0x00, (i), (i), 155, 190); //00ff00  1c542d
-            // [ INSTRUMENTACION: hardware event. ]
+            // [ INSTRUMENTACION: component event. ]
             sprintf(str, "display,display_Show_RGB,%u,%u,%u,%u,%u,%u,%u", 0, 255, 0, (i), (i), 155, 190);
-            report(clock(),hardware_event,str);
+            report(clock(),component_event,str);
             //
         }
         if (i >= 178 & i < 400) { //336
             display_Show_RGB(0xff, 0xff, 0x00, (i), (i), 155, 190);//FFFF00
-            // [ INSTRUMENTACION: hardware event. ]
+            // [ INSTRUMENTACION: component event. ]
             sprintf(str, "display,display_Show_RGB,%u,%u,%u,%u,%u,%u,%u", 0, 255, 0, (i), (i), 155, 190);
-            report(clock(),hardware_event,str);
+            report(clock(),component_event,str);
             //
         }
         if (i >= 400 & i < 450) {
             display_Show_RGB(0xff, 0x00, 0x00, (i), (i), 155, 190);
-            // [ INSTRUMENTACION: hardware event. ]
+            // [ INSTRUMENTACION: component event. ]
             sprintf(str, "display,display_Show_RGB,%u,%u,%u,%u,%u,%u,%u", 0, 255, 0, (i), (i), 155, 190);
-            report(clock(),hardware_event,str);
+            report(clock(),component_event,str);
             //
         }
     }
@@ -123,9 +123,9 @@ void bar( int16_t dato, int16_t dato_old) {
         for(signed int i = h+66-1 ; i >= g+66 ; i--)
             if (i>=49 & i<450) {
                 display_Show_RGB(0x00, 0x00, 0x00, ( i ), ( i ), 155 , 190 );
-                // [ INSTRUMENTACION: hardware event. ]
+                // [ INSTRUMENTACION: component event. ]
                 sprintf(str, "display,display_Show_RGB,%u,%u,%u,%u,%u,%u,%u", 0, 0, 0, (i), (i), 155, 190);
-                report(clock(),hardware_event,str);
+                report(clock(),component_event,str);
                 //
             }
 }
@@ -139,24 +139,24 @@ void background(void) {
     uint8_t scale = 2;
 
     display_set_text_scale(scale);
-    // [ INSTRUMENTACION: hardware event. ]
+    // [ INSTRUMENTACION: component event. ]
     sprintf(str, "display,display_set_text_scale,%u", scale);
-    report(clock(),hardware_event,str);
+    report(clock(),component_event,str);
     //
     display_set_text_pos(xl, yl);
-    // [ INSTRUMENTACION: hardware event. ]
+    // [ INSTRUMENTACION: component event. ]
     sprintf(str, "display,display_set_text_pos,%u,%u", xl, yl);
-    report(clock(),hardware_event,str);
+    report(clock(),component_event,str);
     //
     display_set_text_origin_position(yl);
-    // [ INSTRUMENTACION: hardware event. ]
+    // [ INSTRUMENTACION: component event. ]
     sprintf(str, "display,display_set_text_origin_position,%u", yl);
-    report(clock(),hardware_event,str);
+    report(clock(),component_event,str);
     //
     display_set_text_color(color_white);
-    // [ INSTRUMENTACION: hardware event. ]
+    // [ INSTRUMENTACION: component event. ]
     sprintf(str, "display,display_set_text_color,%u,%u,%u", color_white.r, color_white.g, color_white.b);
-    report(clock(),hardware_event,str);
+    report(clock(),component_event,str);
     //
 
     display_write_text(
@@ -189,9 +189,9 @@ void background(void) {
             "         \n"
             "         \n"
     );
-    // [ INSTRUMENTACION: hardware event. ]
+    // [ INSTRUMENTACION: component event. ]
     sprintf(str, "display,display_write_text,         \n         \n         \n         \n         \n         \n         \n         \n         \n         \n         \n         \n         \n         \n         \n         \n         \n         \n         \n         \n         \n         \n         \n         \n         \n         \n         \n         \n");
-    report(clock(),hardware_event,str);
+    report(clock(),component_event,str);
     //
     uint16_t x0 = 60;
     yl = 0;
@@ -204,153 +204,153 @@ void background(void) {
     uint16_t x8 = 396;
     uint16_t x9 = 444;
     display_set_text_pos2(x0, yl);
-    // [ INSTRUMENTACION: hardware event. ]
+    // [ INSTRUMENTACION: component event. ]
     sprintf(str, "display,display_set_text_pos2,%u,%u", x0, yl);
-    report(clock(),hardware_event,str);
+    report(clock(),component_event,str);
     //
     display_write_text("1E-11\n");
-    // [ INSTRUMENTACION: hardware event. ]
+    // [ INSTRUMENTACION: component event. ]
     sprintf(str, "display,display_write_text,1E-11\n");
-    report(clock(),hardware_event,str);
+    report(clock(),component_event,str);
     //
     display_set_text_pos2(x2, yl);
-    // [ INSTRUMENTACION: hardware event. ]
+    // [ INSTRUMENTACION: component event. ]
     sprintf(str, "display,display_set_text_pos2,%u,%u", x2, yl);
-    report(clock(),hardware_event,str);
+    report(clock(),component_event,str);
     //
     display_write_text("1E-10\n");
-    // [ INSTRUMENTACION: hardware event. ]
+    // [ INSTRUMENTACION: component event. ]
     sprintf(str, "display,display_write_text,1E-10\n");
-    report(clock(),hardware_event,str);
+    report(clock(),component_event,str);
     //
     display_set_text_pos2(x3, yl);
-    // [ INSTRUMENTACION: hardware event. ]
+    // [ INSTRUMENTACION: component event. ]
     sprintf(str, "display,display_set_text_pos2,%u,%u", x3, yl);
-    report(clock(),hardware_event,str);
+    report(clock(),component_event,str);
     //
     display_write_text(" 1E-9\n");
-    // [ INSTRUMENTACION: hardware event. ]
+    // [ INSTRUMENTACION: component event. ]
     sprintf(str, "display,display_write_text, 1E-9\n");
-    report(clock(),hardware_event,str);
+    report(clock(),component_event,str);
     //
     display_set_text_pos2(x4, yl);
-    // [ INSTRUMENTACION: hardware event. ]
+    // [ INSTRUMENTACION: component event. ]
     sprintf(str, "display,display_set_text_pos2,%u,%u", x4, yl);
-    report(clock(),hardware_event,str);
+    report(clock(),component_event,str);
     //
     display_write_text(" 1E-8\n");
-    // [ INSTRUMENTACION: hardware event. ]
+    // [ INSTRUMENTACION: component event. ]
     sprintf(str, "display,display_write_text, 1E-8\n");
-    report(clock(),hardware_event,str);
+    report(clock(),component_event,str);
     //
     display_set_text_pos2(x5, yl);
-    // [ INSTRUMENTACION: hardware event. ]
+    // [ INSTRUMENTACION: component event. ]
     sprintf(str, "display,display_set_text_pos2,%u,%u", x5, yl);
-    report(clock(),hardware_event,str);
+    report(clock(),component_event,str);
     //
     display_write_text(" 1E-7\n");
-    // [ INSTRUMENTACION: hardware event. ]
+    // [ INSTRUMENTACION: component event. ]
     sprintf(str, "display,display_write_text, 1E-7\n");
-    report(clock(),hardware_event,str);
+    report(clock(),component_event,str);
     //
     display_set_text_pos2(x6, yl);
-    // [ INSTRUMENTACION: hardware event. ]
+    // [ INSTRUMENTACION: component event. ]
     sprintf(str, "display,display_set_text_pos2,%u,%u", x6, yl);
-    report(clock(),hardware_event,str);
+    report(clock(),component_event,str);
     //
     display_write_text(" 1E-6\n");
-    // [ INSTRUMENTACION: hardware event. ]
+    // [ INSTRUMENTACION: component event. ]
     sprintf(str, "display,display_write_text, 1E-6\n");
-    report(clock(),hardware_event,str);
+    report(clock(),component_event,str);
     //
     display_set_text_pos2(x7, yl);
-    // [ INSTRUMENTACION: hardware event. ]
+    // [ INSTRUMENTACION: component event. ]
     sprintf(str, "display,display_set_text_pos2,%u,%u", x7, yl);
-    report(clock(),hardware_event,str);
+    report(clock(),component_event,str);
     //
     display_write_text(" 1E-5\n");
-    // [ INSTRUMENTACION: hardware event. ]
+    // [ INSTRUMENTACION: component event. ]
     sprintf(str, "display,display_write_text, 1E-5\n");
-    report(clock(),hardware_event,str);
+    report(clock(),component_event,str);
     //
     display_set_text_pos2(x8, yl);
-    // [ INSTRUMENTACION: hardware event. ]
+    // [ INSTRUMENTACION: component event. ]
     sprintf(str, "display,display_set_text_pos2,%u,%u", x8, yl);
-    report(clock(),hardware_event,str);
+    report(clock(),component_event,str);
     //
     display_write_text(" 1E-4\n");
-    // [ INSTRUMENTACION: hardware event. ]
+    // [ INSTRUMENTACION: component event. ]
     sprintf(str, "display,display_write_text, 1E-4\n");
-    report(clock(),hardware_event,str);
+    report(clock(),component_event,str);
     //
     display_set_text_pos2(x9, yl);
-    // [ INSTRUMENTACION: hardware event. ]
+    // [ INSTRUMENTACION: component event. ]
     sprintf(str, "display,display_set_text_pos2,%u,%u", x9, yl);
-    report(clock(),hardware_event,str);
+    report(clock(),component_event,str);
     //
     display_write_text(" 1E-3\n");
-    // [ INSTRUMENTACION: hardware event. ]
+    // [ INSTRUMENTACION: component event. ]
     sprintf(str, "display,display_write_text, 1E-3\n");
-    report(clock(),hardware_event,str);
+    report(clock(),component_event,str);
     //
     display_box(0, 0, 479, 127, &color_blue);
-    // [ INSTRUMENTACION: hardware event. ]
+    // [ INSTRUMENTACION: component event. ]
     sprintf(str, "display,display_box,%u,%u,%u,%u,%u,%u,%u", 0, 0, 479, 127, color_blue.r, color_blue.g, color_blue.b);
-    report(clock(),hardware_event,str);
+    report(clock(),component_event,str);
     //
     display_rect(0, 20, 1, 87, &color_black);
-    // [ INSTRUMENTACION: hardware event. ]
+    // [ INSTRUMENTACION: component event. ]
     sprintf(str, "display,display_rect,%u,%u,%u,%u,%u,%u,%u", 0, 20, 1, 87, color_black.r, color_black.g, color_black.b);
-    report(clock(),hardware_event,str);
+    report(clock(),component_event,str);
     //
     display_rect(478, 20, 1, 87, &color_black);
-    // [ INSTRUMENTACION: hardware event. ]
+    // [ INSTRUMENTACION: component event. ]
     sprintf(str, "display,display_rect,%u,%u,%u,%u,%u,%u,%u", 478, 20, 1, 87, color_black.r, color_black.g, color_black.b);
-    report(clock(),hardware_event,str);
+    report(clock(),component_event,str);
     //
     display_rect(50 + 14, 60, 2, 20, &color_white);
-    // [ INSTRUMENTACION: hardware event. ]
+    // [ INSTRUMENTACION: component event. ]
     sprintf(str, "display,display_rect,%u,%u,%u,%u,%u,%u,%u", 50+14, 60, 2, 20, color_white.r, color_white.g, color_white.b);
-    report(clock(),hardware_event,str);
+    report(clock(),component_event,str);
     //
     display_rect(98 + 14, 60, 2, 20, &color_white);
-    // [ INSTRUMENTACION: hardware event. ]
+    // [ INSTRUMENTACION: component event. ]
     sprintf(str, "display,display_rect,%u,%u,%u,%u,%u,%u,%u", 98+14, 60, 2, 20, color_white.r, color_white.g, color_white.b);
-    report(clock(),hardware_event,str);
+    report(clock(),component_event,str);
     //
     display_rect(146 + 14, 60, 2, 20, &color_white);
-    // [ INSTRUMENTACION: hardware event. ]
+    // [ INSTRUMENTACION: component event. ]
     sprintf(str, "display,display_rect,%u,%u,%u,%u,%u,%u,%u", 146+14, 60, 2, 20, color_white.r, color_white.g, color_white.b);
-    report(clock(),hardware_event,str);
+    report(clock(),component_event,str);
     //
     display_rect(194 + 14, 60, 2, 20, &color_white);
-    // [ INSTRUMENTACION: hardware event. ]
+    // [ INSTRUMENTACION: component event. ]
     sprintf(str, "display,display_rect,%u,%u,%u,%u,%u,%u,%u", 194+14, 60, 2, 20, color_white.r, color_white.g, color_white.b);
-    report(clock(),hardware_event,str);
+    report(clock(),component_event,str);
     //
     display_rect(242 + 14, 60, 2, 20, &color_white);
-    // [ INSTRUMENTACION: hardware event. ]
+    // [ INSTRUMENTACION: component event. ]
     sprintf(str, "display,display_rect,%u,%u,%u,%u,%u,%u,%u", 242+14, 60, 2, 20, color_white.r, color_white.g, color_white.b);
-    report(clock(),hardware_event,str);
+    report(clock(),component_event,str);
     //
     display_rect(290 + 14, 60, 2, 20, &color_white);
-    // [ INSTRUMENTACION: hardware event. ]
+    // [ INSTRUMENTACION: component event. ]
     sprintf(str, "display,display_rect,%u,%u,%u,%u,%u,%u,%u", 290+14, 60, 2, 20, color_white.r, color_white.g, color_white.b);
-    report(clock(),hardware_event,str);
+    report(clock(),component_event,str);
     //
     display_rect(338 + 14, 60, 2, 20, &color_white);
-    // [ INSTRUMENTACION: hardware event. ]
+    // [ INSTRUMENTACION: component event. ]
     sprintf(str, "display,display_rect,%u,%u,%u,%u,%u,%u,%u", 338+14, 60, 2, 20, color_white.r, color_white.g, color_white.b);
-    report(clock(),hardware_event,str);
+    report(clock(),component_event,str);
     //
     display_rect(386 + 14, 60, 2, 20, &color_white);
-    // [ INSTRUMENTACION: hardware event. ]
+    // [ INSTRUMENTACION: component event. ]
     sprintf(str, "display,display_rect,%u,%u,%u,%u,%u,%u,%u", 386+14, 60, 2, 20, color_white.r, color_white.g, color_white.b);
-    report(clock(),hardware_event,str);
+    report(clock(),component_event,str);
     //
     display_rect(434 + 14, 60, 2, 20, &color_white);
-    // [ INSTRUMENTACION: hardware event. ]
+    // [ INSTRUMENTACION: component event. ]
     sprintf(str, "display,display_rect,%u,%u,%u,%u,%u,%u,%u", 434+14, 60, 2, 20, color_white.r, color_white.g, color_white.b);
-    report(clock(),hardware_event,str);
+    report(clock(),component_event,str);
     //
 }

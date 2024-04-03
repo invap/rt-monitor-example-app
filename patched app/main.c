@@ -63,9 +63,9 @@ int main( void ){
         //
         for (int16_t i=0;i<16; i++){
             value = sample ();
-            // [ INSTRUMENTACION: Hardware event. ]
+            // [ INSTRUMENTACION: Component event. ]
             sprintf(str, "adc,sample,%d",value);
-            report(clock(),hardware_event,str);
+            report(clock(),component_event,str);
             //
             // [ INSTRUMENTACION: Variable assigned. ]
             sprintf(str, "variable_value_assigned,main_adc_read,%d",value);
