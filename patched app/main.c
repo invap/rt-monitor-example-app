@@ -8,103 +8,144 @@
 // Added to use the reporting API
 #include "../../c-reporter-api/src/c-reporter-api.h"
 
+// [ INSTRUMENTACION: Agregado para poder contabilizar el tiempo excluyendo el tiempo necesario para la instrumentación. ]
+extern timer clk;
+//
+
 int main( void ){
+    // [ INSTRUMENTACION: Inicialización del timer. ]
+    start (&clk);
+    //
     // [ INSTRUMENTACION: Agregado para poder enviar el string especificando el evento. ]
     char str[MAX_EVENT_SIZE];
     //
     // [ INSTRUMENTATION: Declare variables. ]
     // Declaración de las variables de programa
+    pause(&clk);
     sprintf(str, "declare_variable,main_addition,uint16_t");
-    report(clock(),workflow_event,str);
+    report(workflow_event,str);
     sprintf(str, "declare_variable,main_adc_read,uint16_t");
-    report(clock(),workflow_event,str);
+    report(workflow_event,str);
     for (int16_t i=0;i<16; i++) {
         sprintf(str, "declare_variable,main_value_%d,uint16_t",i);
-        report(clock(),workflow_event,str);
+        report(workflow_event,str);
     }
     sprintf(str, "declare_variable,main_realvalue,uint16_t");
-    report(clock(),workflow_event,str);
+    report(workflow_event,str);
     sprintf(str, "declare_variable,main_realvalue_old,uint16_t");
-    report(clock(),workflow_event,str);
+    report(workflow_event,str);
     sprintf(str, "declare_variable,measurement_dato_ing,float");
-    report(clock(),workflow_event,str);
+    report(workflow_event,str);
     sprintf(str, "declare_variable,measurement_dato_ing2,float");
-    report(clock(),workflow_event,str);
+    report(workflow_event,str);
     sprintf(str, "declare_variable,bar_dato_ing,float");
-    report(clock(),workflow_event,str);
+    report(workflow_event,str);
     sprintf(str, "declare_variable,bar_point,int");
-    report(clock(),workflow_event,str);
+    report(workflow_event,str);
+    resume(&clk);
     //
     uint16_t realvalue_old, value, addition, realvalue;
     // [ INSTRUMENTACION: Task "init" started. ]
-    report(clock(),workflow_event,"task_started,init");
+    pause(&clk);
+    report(workflow_event,"task_started,init");
+    resume(&clk);
     //
     adc_init ();
     background();
     // [ POTENTIAL PROBLEM FOUND: realvalue_old was not initialized.  ]
     realvalue_old = 0;
     // [ INSTRUMENTACION: Variable assigned. ]
+    pause(&clk);
     sprintf(str, "variable_value_assigned,main_realvalue_old,%d", realvalue_old);
-    report(clock(),workflow_event,str);
+    report(workflow_event,str);
+    resume(&clk);
     //
     // [ INSTRUMENTACION: Task "init" finished. ]
-    report(clock(),workflow_event,"task_finished,init");
+    pause(&clk);
+    report(workflow_event,"task_finished,init");
+    resume(&clk);
     //
     while (1) {
         addition = 0;
         // [ INSTRUMENTACION: Variable assigned. ]
+        pause(&clk);
         sprintf(str, "variable_value_assigned,main_addition,%d", addition);
-        report(clock(),workflow_event,str);
+        report(workflow_event,str);
+        resume(&clk);
         //
         // [ INSTRUMENTACION: Task "filtering" started. ]
-        report(clock(),workflow_event,"task_started,filtering");
+        pause(&clk);
+        report(workflow_event,"task_started,filtering");
+        resume(&clk);
         //
         for (int16_t i=0;i<16; i++){
             value = sample ();
             // [ INSTRUMENTACION: Component event. ]
+            pause(&clk);
             sprintf(str, "adc,sample,%d",value);
-            report(clock(),component_event,str);
+            report(component_event,str);
+            resume(&clk);
             //
             // [ INSTRUMENTACION: Variable assigned. ]
+            pause(&clk);
             sprintf(str, "variable_value_assigned,main_adc_read,%d",value);
-            report(clock(),workflow_event,str);
+            report(workflow_event,str);
+            resume(&clk);
             //
             // [ INSTRUMENTACION: Variable assigned. ]
+            pause(&clk);
             sprintf(str, "variable_value_assigned,main_value_%d,%d",i,value);
-            report(clock(),workflow_event,str);
+            report(workflow_event,str);
+            resume(&clk);
             //
             // [ INSTRUMENTACION: Checkpoint filtering_chk alcanzado. ]
-            report(clock(),workflow_event,"checkpoint_reached,filtering_chk");
+            pause(&clk);
+            report(workflow_event,"checkpoint_reached,filtering_chk");
+            resume(&clk);
             //
             addition = addition + value;
             // [ INSTRUMENTACION: Variable assigned. ]
+            pause(&clk);
             sprintf(str, "variable_value_assigned,main_addition,%d", addition);
-            report(clock(),workflow_event,str);
+            report(workflow_event,str);
+            resume(&clk);
             //
         }
         realvalue = addition/16;
         // [ INSTRUMENTACION: Variable assigned. ]
+        pause(&clk);
         sprintf(str, "variable_value_assigned,main_realvalue,%d", realvalue);
-        report(clock(),workflow_event,str);
+        report(workflow_event,str);
+        resume(&clk);
         //
         // [ INSTRUMENTACION: Task "filtering" finished. ]
-        report(clock(),workflow_event,"task_finished,filtering");
+        pause(&clk);
+        report(workflow_event,"task_finished,filtering");
+        resume(&clk);
         //
         // [ INSTRUMENTACION: Task "conversion" started. ]
-        report(clock(),workflow_event,"task_started,conversion");
+        pause(&clk);
+        report(workflow_event,"task_started,conversion");
+        resume(&clk);
         //
         measurement(realvalue);
         bar(realvalue, realvalue_old);
         // [ INSTRUMENTACION: Task "conversion" finished. ]
-        report(clock(),workflow_event,"task_finished,conversion");
+        pause(&clk);
+        report(workflow_event,"task_finished,conversion");
+        resume(&clk);
         //
         realvalue_old = realvalue;
         // [ INSTRUMENTACION: Variable assigned. ]
+        pause(&clk);
         sprintf(str, "variable_value_assigned,main_realvalue_old,%d", realvalue_old);
-        report(clock(),workflow_event,str);
+        report(workflow_event,str);
+        resume(&clk);
         //
         // [ INSTRUMENTACION: Checkpoint filtering_chk alcanzado. ]
-        report(clock(),workflow_event,"checkpoint_reached,display_chk");
+        pause(&clk);
+        report(workflow_event,"checkpoint_reached,display_chk");
+        resume(&clk);
         //
 	} // WHILE
 } // MAIN
