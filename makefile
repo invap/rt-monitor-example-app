@@ -9,8 +9,8 @@ buggy-debug: clean
 	gcc -g buggy\ app/main.c buggy\ app/functions.c data-display/ex_display.c data-source/ex_adc.c ../timer/bin/timer.o ../c-reporter-api/bin/c-reporter-api.o -o main
 
 buggy-exec: clean
-	make -C ../c-reporter-api lib
-	make -C ../timer lib
+	make -C ../c-reporter-api/ lib
+	make -C ../timer/ lib
 	gcc buggy\ app/main.c buggy\ app/functions.c data-display/ex_display.c data-source/ex_adc.c -L../timer/lib/ -ltimer -L../c-reporter-api/lib/ -lc-reporter-api -o main
 
 patched-debug: clean
