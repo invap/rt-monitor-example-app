@@ -5,7 +5,7 @@
 
 // Added to use the reporting API
 #include "../../c-reporter-api/include/c-reporter-api.h"
-#include "../../timer/include/timer.h"
+#include "../../c-reporter-api/include/timer.h"
 
 // [ INSTRUMENTACION: Agregado para poder contabilizar el tiempo excluyendo el tiempo necesario para la instrumentación. ]
 extern timer reporting_clk;
