@@ -5,16 +5,16 @@ clean:
 
 buggy-debug: clean
 	make -C ../c-reporter-api debug
-	gcc -g buggy\ app/main.c buggy\ app/functions.c data-display/ex_display.c data-source/ex_adc.c ../c-reporter-api/bin/timer.o ../c-reporter-api/bin/c-reporter-api.o -o main
+	gcc -g buggy\ app/main.c buggy\ app/functions.c data-display/ex_display.c data-source/ex_adc.c ../c-reporter-api/bin/stopwatch.o ../c-reporter-api/bin/c-reporter-api.o -o main
 
 buggy-exec: clean
 	make -C ../c-reporter-api/ lib
-	gcc buggy\ app/main.c buggy\ app/functions.c data-display/ex_display.c data-source/ex_adc.c -L../c-reporter-api/lib/ -ltimer -L../c-reporter-api/lib/ -lc-reporter-api -o main
+	gcc buggy\ app/main.c buggy\ app/functions.c data-display/ex_display.c data-source/ex_adc.c -L../c-reporter-api/lib/ -lstopwatch -lc-reporter-api -o main
 
 patched-debug: clean
 	make -C ../c-reporter-api debug
-	gcc -g patched\ app/main.c patched\ app/functions.c data-display/ex_display.c data-source/ex_adc.c ../c-reporter-api/bin/timer.o ../c-reporter-api/bin/c-reporter-api.o -o main
+	gcc -g patched\ app/main.c patched\ app/functions.c data-display/ex_display.c data-source/ex_adc.c ../c-reporter-api/bin/stopwatch.o ../c-reporter-api/bin/c-reporter-api.o -o main
 
 patched-exec: clean
 	make -C ../c-reporter-api lib
-	gcc patched\ app/main.c patched\ app/functions.c data-display/ex_display.c data-source/ex_adc.c -L../c-reporter-api/lib/ -ltimer -L../c-reporter-api/lib/ -lc-reporter-api -o main
+	gcc patched\ app/main.c patched\ app/functions.c data-display/ex_display.c data-source/ex_adc.c -L../c-reporter-api/lib/ -lstopwatch -lc-reporter-api -o main

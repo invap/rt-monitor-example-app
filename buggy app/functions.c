@@ -5,10 +5,10 @@
 
 // Added to use the reporting API
 #include "../../c-reporter-api/include/c-reporter-api.h"
-#include "../../c-reporter-api/include/timer.h"
+#include "../../c-reporter-api/include/stopwatch.h"
 
 // [ INSTRUMENTACION: Agregado para poder contabilizar el tiempo excluyendo el tiempo necesario para la instrumentación. ]
-extern timer reporting_clk;
+extern stopwatch reporting_clk;
 //
 
 rgb color_r = {0xFF,0x00, 0x00};
@@ -26,14 +26,14 @@ void measurement(int16_t dato){
     // [ INSTRUMENTACION: Variable assigned. ]
     pause(&reporting_clk);
     sprintf(str, "variable_value_assigned,measurement_dato_ing,%.7f",dato_ing);
-    report(workflow_event,str);
+    report(state_event,str);
     resume(&reporting_clk);
     //
     float dato_ing2 = (1E-13 * pow(2.71828,(1.1231*dato_ing)));
     // [ INSTRUMENTACION: Variable assigned. ]
     pause(&reporting_clk);
     sprintf(str, "variable_value_assigned,measurement_dato_ing2,%.7f",dato_ing2);
-    report(workflow_event,str);
+    report(state_event,str);
     resume(&reporting_clk);
     //
     uint16_t pl =30; uint16_t ll =20;
@@ -91,7 +91,7 @@ void bar( int16_t dato, int16_t dato_old) {
     // [ INSTRUMENTACION: Variable assigned. ]
     pause(&reporting_clk);
     sprintf(str, "variable_value_assigned,bar_dato_ing,%.7f",dato_ing);
-    report(workflow_event,str);
+    report(state_event,str);
     resume(&reporting_clk);
     //
     float dato_ing_old = 0.00524590164 * dato_old;
@@ -100,7 +100,7 @@ void bar( int16_t dato, int16_t dato_old) {
     // [ INSTRUMENTACION: Variable assigned. ]
     pause(&reporting_clk);
     sprintf(str, "variable_value_assigned,bar_point,%d",point);
-    report(workflow_event,str);
+    report(state_event,str);
     resume(&reporting_clk);
     //
     int g = (24 * dato_ing - 96);

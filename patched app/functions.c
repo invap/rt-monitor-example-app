@@ -5,10 +5,10 @@
 
 // Added to use the reporting API
 #include "../../c-reporter-api/include/c-reporter-api.h"
-#include "../../c-reporter-api/include/timer.h"
+#include "../../c-reporter-api/include/stopwatch.h"
 
 // [ INSTRUMENTACION: Agregado para poder contabilizar el tiempo excluyendo el tiempo necesario para la instrumentación. ]
-extern timer reporting_clk;
+extern stopwatch reporting_clk;
 //
 
 rgb color_r = {0xFF,0x00, 0x00};
