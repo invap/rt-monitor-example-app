@@ -1,2 +1,2 @@
-adc,workflow_runtime_verification.hardware_devices.rt_monitor_example_app.ex_adc.adc
-display,workflow_runtime_verification.hardware_devices.rt_monitor_example_app.ex_display.display
+adc,workflow_runtime_verification.components.rt_monitor_example_app.ex_adc.adc
+display,workflow_runtime_verification.components.rt_monitor_example_app.ex_display.display
