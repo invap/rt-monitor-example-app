@@ -1,9 +1,9 @@
 9;{(0,1),(1,2),(2,3),(3,4),(4,5),(5,6),(6,7),(7,8),(8,2)}
 0
-0:task,init,{},{smt2:init_vars;smt2:init_fondo_display;cas:init_time_bound},{}
+0:task,init,{},{smt2:init_vars;smt2:init_fondo_display;sympy:init_time_bound},{}
 1:operator,seq_composition
 2:operator,omega_start
-3:task,filtering,{smt2:filtering_pre},{smt2:filtering_post},{<filtering_chk,{smt2:12bitsreading;smt2:additionbound}>}
+3:task,filtering,{smt2:filtering_pre},{smt2:filtering_post;sympy:filtering_time_bound},{<filtering_chk,{smt2:12bitsreading;smt2:additionbound}>}
 4:operator,seq_composition
 5:task,conversion,{smt2:conversion_pre},{smt2:conversion_post},{}
 6:operator,seq_composition

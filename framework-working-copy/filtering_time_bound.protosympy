@@ -1,0 +1,2 @@
+filtering_clk
+((10 <= filtering_clk) & (filtering_clk < 100))

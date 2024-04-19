@@ -1,2 +1,0 @@
-init_clk
-1000 <= init_clk < 10000
