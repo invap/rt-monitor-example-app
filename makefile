@@ -9,7 +9,7 @@ buggy-debug: clean
 
 buggy-exec: clean
 	make -C ../c-reporter-api/ lib
-	gcc buggy\ app/main.c buggy\ app/functions.c data-display/ex_display.c data-source/ex_adc.c -L../c-reporter-api/lib/ -lstopwatch -lc-reporter-api -o main
+	gcc buggy\ app/main.c buggy\ app/functions.c data-display/ex_display.c data-source/ex_adc.c -L../c-reporter-api/lib/ -lstopwatch -L../c-reporter-api/lib/ -lc-reporter-api -o main
 
 patched-debug: clean
 	make -C ../c-reporter-api debug
@@ -17,4 +17,4 @@ patched-debug: clean
 
 patched-exec: clean
 	make -C ../c-reporter-api lib
-	gcc patched\ app/main.c patched\ app/functions.c data-display/ex_display.c data-source/ex_adc.c -L../c-reporter-api/lib/ -lstopwatch -lc-reporter-api -o main
+	gcc patched\ app/main.c patched\ app/functions.c data-display/ex_display.c data-source/ex_adc.c -L../c-reporter-api/lib/ -lstopwatch -L../c-reporter-api/lib/ -lc-reporter-api -o main
