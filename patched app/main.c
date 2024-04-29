@@ -83,12 +83,6 @@ int main( void ){
         //
         for (int16_t i=0;i<16; i++){
             value = sample ();
-            // [ INSTRUMENTACION: Component event. ]
-            pause(&reporting_clk);
-            sprintf(str, "adc,sample,%d",value);
-            report(component_event,str);
-            resume(&reporting_clk);
-            //
             // [ INSTRUMENTACION: Variable assigned. ]
             pause(&reporting_clk);
             sprintf(str, "variable_value_assigned,main_adc_read,%d",value);
