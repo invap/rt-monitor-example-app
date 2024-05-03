@@ -1,2 +1,2 @@
 filtering_clk
-((10 <= filtering_clk) and (filtering_clk < 100))
+((100 <= filtering_clk) and (filtering_clk < 500))

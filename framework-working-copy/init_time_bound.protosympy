@@ -1,2 +1,2 @@
 init_clk
-((10 <= init_clk) & (init_clk < 50))
+((10 <= init_clk) & (init_clk < 200))
