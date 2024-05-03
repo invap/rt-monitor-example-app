@@ -20,7 +20,7 @@ void adc_init (void)
     previous_sample = previous_sample>>4;
     // [ INSTRUMENTACION: Initialization event. ]
     pause(&reporting_clk);
-    report(init_event,"adc,adc_log.txt");
+    report(self_loggable_component_log_init_event,"adc");
     resume(&reporting_clk);
     //
 }
