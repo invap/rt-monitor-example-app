@@ -39,7 +39,6 @@ int main( void ){
 
     report(timed_event,"declare_clock,init_clk");
     resume(&reporting_clk);
-
     //
     uint16_t realvalue_old, value, addition, realvalue;
     // [ INSTRUMENTACION: Task "init" started. ]
