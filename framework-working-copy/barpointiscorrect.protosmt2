@@ -11,7 +11,10 @@ bar_dato_ing,bar_point
                 (< abs_diff (* real_value 0.00001))
                 (=
                     bar_point
-                    (to_int (- (* 24 real_value) 96))
+                    (ite (<= 383 (- (* 24 real_value) 96))
+                        383
+                        (to_int (- (* 24 real_value) 96))
+                    )
                 )
              )
         )
