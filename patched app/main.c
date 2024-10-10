@@ -21,25 +21,6 @@ int main( void ){
     // [ INSTRUMENTACION: Agregado para poder enviar el string especificando el evento. ]
     char str[MAX_EVENT_SIZE];
     //
-    // [ INSTRUMENTATION: Declare variables. ]
-    // Declaración de las variables de programa
-    pause(&reporting_clk);
-    report(state_event,"declare_variable,main_addition,uint16_t");
-    report(state_event,"declare_variable,main_adc_read,uint16_t");
-    for (int16_t i=0;i<16; i++) {
-        sprintf(str, "declare_variable,main_value_%d,uint16_t",i);
-        report(state_event,str);
-    }
-    report(state_event,"declare_variable,main_realvalue,uint16_t");
-    report(state_event,"declare_variable,main_realvalue_old,uint16_t");
-    report(state_event,"declare_variable,measurement_dato_ing,float");
-    report(state_event,"declare_variable,measurement_dato_ing2,float");
-    report(state_event,"declare_variable,bar_dato_ing,float");
-    report(state_event,"declare_variable,bar_point,int");
-
-    report(timed_event,"declare_clock,init_clk");
-    resume(&reporting_clk);
-    //
     uint16_t realvalue_old, value, addition, realvalue;
     // [ INSTRUMENTACION: Task "init" started. ]
     pause(&reporting_clk);

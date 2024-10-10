@@ -1,4 +1,4 @@
-bar_dato_ing,bar_point
+(bar_dato_ing Real),(bar_point Int)
 (exists ((real_value Real))
         (let (
                 (abs_diff

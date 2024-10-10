@@ -1,2 +1,2 @@
-adc_read
+adc_read Int
 (and (<= 0 adc_read) (< adc_read 4096))

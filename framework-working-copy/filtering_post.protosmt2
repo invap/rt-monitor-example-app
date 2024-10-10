@@ -1,4 +1,4 @@
-main_addition,main_realvalue,main_value_0,main_value_1,main_value_2,main_value_3,main_value_4,main_value_5,main_value_6,main_value_7,main_value_8,main_value_9,main_value_10,main_value_11,main_value_12,main_value_13,main_value_14,main_value_15
+(main_addition Int),(main_realvalue Int),(main_value_0 Int),(main_value_1 Int),(main_value_2 Int),(main_value_3 Int),(main_value_4 Int),(main_value_5 Int)(main_value_6 Int),(main_value_7 Int),(main_value_8 Int),(main_value_9 Int),(main_value_10 Int),(main_value_11 Int),(main_value_12 Int),(main_value_13 Int),(main_value_14 Int),(main_value_15 Int)
 (and
     (and
         (and (<= 0 main_value_0) (< main_value_0 4096))

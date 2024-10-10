@@ -1,4 +1,4 @@
-bar_point,pixels
+(bar_point Int),(pixels (Array Int (Array Int (Array Int Int))))
 (forall ((y Int) (x Int))
         (=>
             (and (>= y 155) (<= y 190))

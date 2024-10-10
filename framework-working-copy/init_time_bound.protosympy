@@ -1,2 +1,2 @@
-init_clk
+(init_clk unsigned_integer)
 ((10 <= init_clk) & (init_clk < 200))
