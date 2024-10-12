@@ -1,0 +1,3 @@
+(main_realvalue:State Int)
+(and (<= 0 main_realvalue) (< main_realvalue 4096))
+
