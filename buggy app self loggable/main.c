@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "../data-source/ex_adc.h"
+#include "../data-source self loggable/ex_adc.h"
 #include "functions.h"
 
 // Added to use the reporting API
@@ -29,12 +29,6 @@ int main( void ){
     resume(&reporting_clk);
     //
     adc_init ();
-    // [ INSTRUMENTACION: Component event. ]
-    pause(&reporting_clk);
-    sprintf(str, "adc,adc_init");
-    report(component_event,str);
-    resume(&reporting_clk);
-    //
     background();
     // [ POTENTIAL PROBLEM FOUND: realvalue_old was not initialized.  ]
     realvalue_old = 0;
@@ -68,12 +62,6 @@ int main( void ){
         //
         for (int16_t i=0;i<16; i++){
             value = sample ();
-            // [ INSTRUMENTACION: Component event. ]
-            pause(&reporting_clk);
-            sprintf(str, "adc,sample,%d",value);
-            report(component_event,str);
-            resume(&reporting_clk);
-            //
             // [ INSTRUMENTACION: Variable assigned. ]
             pause(&reporting_clk);
             sprintf(str, "variable_value_assigned,main_value_%d,%d",i,value);
@@ -130,5 +118,5 @@ int main( void ){
         report(workflow_event,"checkpoint_reached,display_chk");
         resume(&reporting_clk);
         //
-    } // WHILE
+	} // WHILE
 } // MAIN
