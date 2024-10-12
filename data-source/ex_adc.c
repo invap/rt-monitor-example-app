@@ -18,11 +18,13 @@ void adc_init (void)
     srand(time(NULL));
     previous_sample = rand();
     previous_sample = previous_sample>>4;
+/*
     // [ INSTRUMENTACION: Initialization event. ]
     pause(&reporting_clk);
     report(self_loggable_component_log_init_event,"adc");
     resume(&reporting_clk);
     //
+*/
 }
 
 // Sampling the ADC
@@ -42,11 +44,13 @@ int sample (void)
             previous_sample = 4095;
         else
             previous_sample = 0;
+/*
     // [ INSTRUMENTACION: Component event. ]
     pause(&reporting_clk);
     sprintf(str, "adc,%d",previous_sample);
     report(self_loggable_component_event,str);
     resume(&reporting_clk);
     //
+*/
     return previous_sample;
 }

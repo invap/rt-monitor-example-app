@@ -95,15 +95,13 @@ void bar( int16_t dato, int16_t dato_old) {
     resume(&reporting_clk);
     //
     float dato_ing_old = 0.00524590164 * dato_old;
-
-    int point = (24 * dato_ing - 96);
+    int g = (24 * dato_ing - 96);
     // [ INSTRUMENTACION: Variable assigned. ]
     pause(&reporting_clk);
-    sprintf(str, "variable_value_assigned,bar_point,%d",point);
+    sprintf(str, "variable_value_assigned,bar_point,%d",g);
     report(state_event,str);
     resume(&reporting_clk);
     //
-    int g = (24 * dato_ing - 96);
     int h = (24 * dato_ing_old - 96);
 
     for (signed int i = 66; i < g + 66; i++) {

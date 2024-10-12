@@ -21,6 +21,11 @@ int main( void ){
     // [ INSTRUMENTACION: Agregado para poder enviar el string especificando el evento. ]
     char str[MAX_EVENT_SIZE];
     //
+    // [ INSTRUMENTATION: Declare init_clk. ]
+    pause(&reporting_clk);
+    report(timed_event,"declare_clock,init_clk");
+    resume(&reporting_clk);
+    //
     uint16_t realvalue_old, value, addition, realvalue;
     // [ INSTRUMENTACION: Task "init" started. ]
     pause(&reporting_clk);
@@ -29,6 +34,12 @@ int main( void ){
     resume(&reporting_clk);
     //
     adc_init ();
+    // [ INSTRUMENTACION: Component event. ]
+    pause(&reporting_clk);
+    sprintf(str, "adc,adc_init");
+    report(component_event,str);
+    resume(&reporting_clk);
+    //
     background();
     // [ POTENTIAL PROBLEM FOUND: realvalue_old was not initialized.  ]
     realvalue_old = 0;
@@ -63,6 +74,12 @@ int main( void ){
         //
         for (int16_t i=0;i<16; i++){
             value = sample ();
+            // [ INSTRUMENTACION: Component event. ]
+            pause(&reporting_clk);
+            sprintf(str, "adc,sample,%d",value);
+            report(component_event,str);
+            resume(&reporting_clk);
+            //
             // [ INSTRUMENTACION: Variable assigned. ]
             pause(&reporting_clk);
             sprintf(str, "variable_value_assigned,main_adc_read,%d",value);

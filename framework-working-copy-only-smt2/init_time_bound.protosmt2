@@ -1,0 +1,2 @@
+(init_clk:Clock Int)
+(and (<= 10 init_clk) (< init_clk 1000))
