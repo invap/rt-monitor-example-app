@@ -1,4 +1,4 @@
-(measurement_dato_ing Real),(main_realvalue Int),(measurement_dato_ing2 Real)
+(measurement_dato_ing:State Real),(main_realvalue:State Int),(measurement_dato_ing2:State Real)
 (exists (
             (real_measurement_dato_ing Real)
             (real_measurement_dato_ing2 Real)

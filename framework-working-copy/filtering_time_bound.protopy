@@ -1,2 +1,2 @@
-filtering_clk
+(filtering_clk:Clock Int)
 ((100 <= filtering_clk) and (filtering_clk < 500))

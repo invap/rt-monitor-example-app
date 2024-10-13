@@ -1,2 +1,2 @@
-(init_clk unsigned_integer)
-((10 <= init_clk) & (init_clk < 200))
+(init_clk:Clock Int)
+((10 <= init_clk) & (init_clk < 1000))

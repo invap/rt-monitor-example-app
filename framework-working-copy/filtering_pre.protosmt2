@@ -1,2 +1,2 @@
-(main_addition Int)
+(main_addition:State Int)
 (= main_addition 0)
