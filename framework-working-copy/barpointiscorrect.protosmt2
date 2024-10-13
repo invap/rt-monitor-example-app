@@ -1,4 +1,4 @@
-(bar_dato_ing Real),(bar_point Int)
+(bar_dato_ing:State Real),(bar_point:State Int)
 (exists ((real_value Real))
         (let (
                 (abs_diff
@@ -11,13 +11,14 @@
                 (< abs_diff (* real_value 0.00001))
                 (=
                     bar_point
-                    (ite (<= 383 (- (* 24 real_value) 96))
-                        383
-                        (to_int (- (* 24 real_value) 96))
+                    (ite (<= (- (* 24 real_value) 96) 0)
+                        0
+                        (ite (<= 383 (- (* 24 real_value) 96))
+                            383
+                            (to_int (- (* 24 real_value) 96))
+                        )
                     )
                 )
              )
         )
 )
-
-

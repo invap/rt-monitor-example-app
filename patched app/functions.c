@@ -95,12 +95,14 @@ void bar( int16_t dato, int16_t dato_old) {
     resume(&reporting_clk);
     //
     float dato_ing_old = 0.00524590164 * dato_old;
-    /* Sentencias incorrectas: Error de subrepresentación de las muestras grandes
+    /* Sentencias incorrectas: Error de representación de las muestras:
+     *      dato > 3805 implies g > 383
+     *      dato < 762 implies g < 0
      * int g = (24 * dato_ing - 96);
      * int h = (24 * dato_ing_old - 96);
      */
-    int g = ((24 * dato_ing - 96) >= 383) ? 383 : (24 * dato_ing - 96);
-    int h = ((24 * dato_ing_old - 96) >= 383) ? 383 : (24 * dato_ing_old - 96);
+    int g = ((24 * dato_ing - 96) <= 0) ? 0 : ((24 * dato_ing - 96) >= 383) ? 383 : (24 * dato_ing - 96);
+    int h = ((24 * dato_ing_old - 96) <= 0) ? 0 : ((24 * dato_ing_old - 96) >= 383) ? 383 : (24 * dato_ing_old - 96);
     // [ INSTRUMENTACION: Variable assigned. ]
     pause(&reporting_clk);
     sprintf(str, "variable_value_assigned,bar_point,%d",g);
