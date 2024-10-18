@@ -1,0 +1,78 @@
+name = "test_toml"
+format = "regex"
+process = "init;(filtering;conversion;display)w"
+
+[[tasks]]
+    name = "init"
+    [[tasks.pres]]
+    [[tasks.posts]]
+        name = "init_vars"
+        format = "protosmt2"
+        variables = "(main_realvalue_old:State Int)"
+        formula = "(= main_realvalue_old 0)"        # inline formula.
+    [[tasks.posts]]
+        name = "init_fondo_display"
+        format = "protosmt2"
+        file = "init_fondo_display.protosmt2"       # local file.
+    [[tasks.posts]]
+        name = "init_time_bound"
+        format = "protosympy"
+        # file = "init_time_bound"       # local file.
+        file = "./sandbox/rt-monitor-example-app/specification/init_time_bound"       # relative path to file.
+                                                                                      # file is the filename as it is; if it does not have
+                                                                                      # extension, so be it.
+
+[[tasks]]
+    name = "filtering"
+    [[tasks.pres]]
+        name = "filtering_pre"
+        format = "protosmt2"
+        file = "/Users/clpombo/sandbox/invap-github/rt-monitor/sandbox/rt-monitor-example-app/specification/filtering_pre.protosmt2"       # absolute path to file.
+    [[tasks.posts]]
+        name = "filtering_post"
+        format = "protosmt2"
+        file = "filtering_post.protosmt2"       # local file.
+    [[tasks.posts]]
+        name = "filtering_time_bound"
+        format = "protopy"
+        file = "filtering_time_bound.protopy"       # local file.
+    [[tasks.checkpoints]]
+        name = "filtering_chk"
+        [[tasks.checkpoints.properties]]
+            name = "12bitsreading"
+            format = "protosympy"
+            file = "12bitsreading.protosympy"       # local file.
+        [[tasks.checkpoints.properties]]
+            name = "additionbound"
+            format = "protopy"
+            file = "additionbound.protopy"       # local file.
+
+[[tasks]]
+    name = "conversion"
+    [[tasks.pres]]
+        name = "conversion_pre"
+        format = "protosmt2"
+        file = "conversion_pre.protosmt2"       # absolute path to file.
+    [[tasks.posts]]
+        name = "conversion_post"
+        format = "protosmt2"
+        file = "conversion_post.protosmt2"       # local file.
+    [[tasks.checkpoints]]
+
+[[checkpoints]]
+    name = "display_chk"
+    [[checkpoints.properties]]
+        name = "barpointiscorrect"
+        format = "protosmt2"
+        file = "barpointiscorrect.protosmt2"       # local file.
+    [[checkpoints.properties]]
+        name = "bariscorrect"
+        format = "protosmt2"
+        file = "bariscorrect.protosmt2"       # local file.
+
+[[components]]
+    name = "adc"
+    component = "workflow_runtime_verification.components.rt_monitor_example_app.ex_adc.adc"        # python relative component name
+[[components]]
+    name = "display"
+    component = "workflow_runtime_verification.components.rt_monitor_example_app.ex_display.display"        # python relative component name
