@@ -24,7 +24,7 @@ int main( void ){
     uint16_t realvalue_old, value, addition, realvalue;
     // [ INSTRUMENTACION: Task "init" started. ]
     pause(&reporting_clk);
-    report(workflow_event,"task_started,init");
+    report(process_event,"task_started,init");
     report(timed_event,"clock_start,init_clk");
     resume(&reporting_clk);
     //
@@ -41,7 +41,7 @@ int main( void ){
     //
     // [ INSTRUMENTACION: Task "init" finished. ]
     pause(&reporting_clk);
-    report(workflow_event,"task_finished,init");
+    report(process_event,"task_finished,init");
     report(timed_event,"clock_start,filtering_clk");
     report(timed_event,"clock_pause,filtering_clk");
     resume(&reporting_clk);
@@ -56,7 +56,7 @@ int main( void ){
         //
         // [ INSTRUMENTACION: Task "filtering" started. ]
         pause(&reporting_clk);
-        report(workflow_event,"task_started,filtering");
+        report(process_event,"task_started,filtering");
         report(timed_event,"clock_reset,filtering_clk");
         resume(&reporting_clk);
         //
@@ -70,7 +70,7 @@ int main( void ){
             //
             // [ INSTRUMENTACION: Checkpoint filtering_chk alcanzado. ]
             pause(&reporting_clk);
-            report(workflow_event,"checkpoint_reached,filtering_chk");
+            report(process_event,"checkpoint_reached,filtering_chk");
             resume(&reporting_clk);
             //
             addition = addition + value;
@@ -91,19 +91,19 @@ int main( void ){
         // [ INSTRUMENTACION: Task "filtering" finished. ]
         pause(&reporting_clk);
         report(timed_event,"clock_pause,filtering_clk");
-        report(workflow_event,"task_finished,filtering");
+        report(process_event,"task_finished,filtering");
         resume(&reporting_clk);
         //
         // [ INSTRUMENTACION: Task "conversion" started. ]
         pause(&reporting_clk);
-        report(workflow_event,"task_started,conversion");
+        report(process_event,"task_started,conversion");
         resume(&reporting_clk);
         //
         measurement(realvalue);
         bar(realvalue, realvalue_old);
         // [ INSTRUMENTACION: Task "conversion" finished. ]
         pause(&reporting_clk);
-        report(workflow_event,"task_finished,conversion");
+        report(process_event,"task_finished,conversion");
         resume(&reporting_clk);
         //
         realvalue_old = realvalue;
@@ -115,7 +115,7 @@ int main( void ){
         //
         // [ INSTRUMENTACION: Checkpoint filtering_chk alcanzado. ]
         pause(&reporting_clk);
-        report(workflow_event,"checkpoint_reached,display_chk");
+        report(process_event,"checkpoint_reached,display_chk");
         resume(&reporting_clk);
         //
     } // WHILE
