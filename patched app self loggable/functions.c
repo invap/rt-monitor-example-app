@@ -96,8 +96,8 @@ void bar( int16_t dato, int16_t dato_old) {
     //
     float dato_ing_old = 0.00524590164 * dato_old;
     /* Sentencias incorrectas: Error de representación de las muestras:
-     *      dato > 3805 implies g > 383
-     *      dato < 762 implies g < 0
+     *      dato > 3812 implies g > 383
+     *      dato < 755 implies g < 0
      * int g = (24 * dato_ing - 96);
      * int h = (24 * dato_ing_old - 96);
      */
