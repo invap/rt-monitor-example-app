@@ -3,18 +3,8 @@
 
 #include "ex_adc.h"
 
-// Added to use the reporting API
-#include "../../c-reporter-api/include/c-reporter-api.h"
-#include "../../c-reporter-api/include/stopwatch.h"
-//
-
-// [ INSTRUMENTACION: Agregado para poder contabilizar el tiempo excluyendo el tiempo necesario para la instrumentación. ]
-extern stopwatch reporting_clk;
-//
-
 // Initialization of the ADC
-void adc_init (void)
-{
+void adc_init (void){
     srand(time(NULL));
     previous_sample = rand();
     previous_sample = previous_sample>>4;
@@ -35,4 +25,25 @@ int sample (void)
         else
             previous_sample = 0;
     return previous_sample;
+}
+
+// Initialization of the ADC
+void adc_init (void) {
+    file = fopen("./adc_info.csv","r");
+    if (file == NULL) {
+        fprintf(stderr, "Error: Could not open data file.\n");
+        exit(-1);
+    }
+}
+
+// Sampling the ADC
+int sample (void)
+{
+    uint16_t sample;
+    int result = fscanf(file, "%hd\n", &sample);
+    if (result != 1) {
+        fprintf(stderr, "Error: Could not read sample from the file.\n");
+        exit(-2);
+    }
+    return sample;
 }
