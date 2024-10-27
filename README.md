@@ -1,6 +1,4 @@
 # Example application for the Runtime Monitor
-
-## Description of the contents of the project
 This project provides a simple application serving as example for the 
 [Runtime Monitor](https://github.com/invap/rt-monitor.git "A Runtime Monitoring tool"). The rationale of the app 
 is that it implements the software layer of the hardware-software system for displaying the magnitude of an analog 
@@ -12,19 +10,27 @@ signal read from a sensor, shown in [Figure 1](#hardware-software-system).
   </figcaption>
 </figure>
 
-The rationale of the system is that of a control loop that performs the following tasks:
-1. reads a digital data from a simulated analog-digital converter (*ADC*) (from now on referred to as sample),
-2. converts the sample to a floating point number (from now on, referred to as engineering value), and
-3. displays that engineering value as a bar in a dummy LCD akin the SSD1963 from Solomon Systech Limited (*LCD*).
+The rationale of the system is that of a control loop (**Main control loop** in 
+[Figure 1](#hardware-software-system)) that performs the following tasks:
+1. reads digital data from a simulated analog-digital converter (*ADC*) (from now on referred to as sample),
+2. converts it to a floating point number (from now on, referred to as engineering value), and
+3. displays it as a bar in a simulated LCD akin the SSD1963 from Solomon Systech Limited (*LCD*).
 
-The *ADC* is used through a library (ADC API in ) containing only two functions, *adc_init* for initialising the 
-data generation strategy, and *sample* for acquiring a sample as a 16 bits integer (go to the 
-[ADC section](#ADC implementation and operation) for more details). The *LCD* is operated through a high level 
-interface providing more specific capabilities for setting writing positions, writing text, drawing rectangles or 
-painting pixels with a specific color (go to the [LCD section](#LCD implementation and operation) for more details). 
+The ADC is used through a library (**ADC API** in [Figure 1](#hardware-software-system)) containing only two 
+functions, *adc_init* for initialising the data generation strategy, and *sample* for acquiring a sample as a 16 
+bits integer (go to the [ADC section](#ADC implementation and operation) for more details). The LCD is operated 
+also through a library (**LCD API** in [Figure 1](#hardware-software-system)) which implements a high level interface 
+providing more specific capabilities for setting writing positions, writing text, drawing rectangles or painting 
+pixels with a specific color (go to the [LCD section](#LCD implementation and operation) for more details). 
 
-There are four implementation of the application (we will describe them in detail in 
-[Implementations section](#Implementations of the app)), all sharing the same rationale, structure and mission. 
+The project provides four implementations of the software level of the system (we will describe them in detail in 
+[Implementations section](#Implementations of the app)), all sharing the same rationale and source code structure. 
+Two of them use [an implementation of the ADC with self logging capabilities](./data-source%20self%20loggable), 
+while the other two (resorting to an [implementation of the ADC](./data-source) that does not implement this 
+capability) rely on the main program for logging the ADC behaviour as *component function calls* (see 
+Section [Event language](https://github.com/invap/rt-monitor/blob/main/README.md#Event-Language "Event language") 
+for a detailed description of the event language).
+
 From a general point of view, the main program implements the infinite control loop which, after taking some 
 initial actions like initialising some variables, painting the background of the display, and initializing the ADC, 
 proceeds to subsequently compute the average of 16 samples, read from the ADC and then write the engineering value 
