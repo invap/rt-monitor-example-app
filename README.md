@@ -4,17 +4,11 @@
 This project provides a simple application serving as example for the 
 [Runtime Monitor](https://github.com/invap/rt-monitor.git "A Runtime Monitoring tool"). The rationale of the app 
 is that it implements the software layer of the hardware-software system for displaying the magnitude of an analog 
-signal read from a sensor, shown below:
-<figure 
-  style="text-align: center;">
-  <img 
-    src="./README_images/hardware-software-system.png" 
-    width="300"
-    alt="A hardware-software system for displaying the magnitude of an analog signal."
-  >
-  <figcaption 
-     style="font-style: italic;"><b>Figure 1<\b>: A hardware-software system for displaying the magnitude of an analog 
-signal.
+signal read from a sensor, shown in [Figure 1](#hardware-software-system).
+
+<figure id="hardware-software-system" style="text-align: center;">
+  <img src="./README_images/hardware-software-system.png" width="600" alt="A hardware-software system for displaying the magnitude of an analog signal.">
+  <figcaption style="font-style: italic;"><b>Figure 1</b>: A hardware-software system for displaying the magnitude of an analog signal.
   </figcaption>
 </figure>
 
