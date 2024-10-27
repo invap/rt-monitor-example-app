@@ -13,7 +13,7 @@ signal read from a sensor, shown below:
     alt="A hardware-software system for displaying the magnitude of an analog signal."
   >
   <figcaption 
-     style="font-style: italic;"><b>Figure 1<\n>: A hardware-software system for displaying the magnitude of an analog 
+     style="font-style: italic;"><b>Figure 1<\b>: A hardware-software system for displaying the magnitude of an analog 
 signal.
   </figcaption>
 </figure>
