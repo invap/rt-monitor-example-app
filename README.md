@@ -9,11 +9,12 @@ signal read from a sensor, shown below:
   style="text-align: center;">
   <img 
     src="./README_images/hardware-software-system.png" 
+    width="300"
     alt="A hardware-software system for displaying the magnitude of an analog signal."
   >
   <figcaption 
-     style="font-style: italic;">*Figure 1: A hardware-software system for displaying the magnitude of an analog 
-signal.*
+     style="font-style: italic;"><b>Figure 1<\n>: A hardware-software system for displaying the magnitude of an analog 
+signal.
   </figcaption>
 </figure>
 
