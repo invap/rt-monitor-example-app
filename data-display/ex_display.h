@@ -1,4 +1,4 @@
-/**
+/*
  * This is a dummy implementation of a display
  * Its purpose is for the main application to compile and run.
  */

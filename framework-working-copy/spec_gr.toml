@@ -22,7 +22,6 @@ name = "rt-monitor-example-app"
     [[process.tasks.posts]]
         name = "init_time_bound"
         format = "protosympy"
-        # file = "init_time_bound"       # local file.
         file = "./sandbox/rt-monitor-example-app/specification/init_time_bound"       # relative path to file.
                                                                                       # file is the filename as it is; if it does not have
                                                                                       # extension, so be it.
