@@ -24,7 +24,8 @@ The project provides four implementations of the software level of the system (w
 In this section we formalise the intended behaviour of the software layer of the system shown in [Figure 1](#hardware-software-system). [Figure 2](#ssp-software) provides a graphical depiction of the expected behaviour of the software layer of the hardware-software system shown in Figure 1 as a structured sequential process (SSP).
 
 <figure id="ssp-software" style="text-align: center;">
-  <img src="./README_images/hardware-software-system.png" width="600" alt="Specification of the software layer of the hardware-software system shown in Figure 1 as a structured sequential process.">
+  <img src="./README_images/ssp-software.png" width="600" alt="Specification of the software layer of the 
+hardware-software system shown in Figure 1 as a structured sequential process.">
   <figcaption style="font-style: italic;"><b>Figure 2</b>: Specification of the software layer of the hardware-software system shown in Figure 1 as a structured sequential process.
   </figcaption>
 </figure>
