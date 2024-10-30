@@ -31,7 +31,13 @@ In this section we formalise the intended behaviour of the software layer of the
 
 The intuition behind the SSP shown above is that after an initial task (*init*) that performs the initialization of the process, the artifact enters an infinite loop which performs a filtering task (*filtering*), which has an local checkpoint (*filtering_chk*), that computes a stable sample by taking the average of 16 individual samples, then the process goes through a conversion task (*conversion*) that produces the engineering value corresponding to that sample according to the interpretation of the analog signal being sampled, and, finally, there is a global checkpoint (*display_chk*) for checking the coherence of the data shown in the display with respect to the engineering value computed in the task *conversion*.
 
-**ToDo: Complete description of the model by explaining all the properties involved**
+
+**ToDo: Complete description of the model by explaining all the properties involved.**
+
+**ToDo: Complete explaining that the specification requires 2 components, the adc and the display.**
+
+The specification of the analysis framework is provided as a [TOML file](https://github.com/invap/rt-monitor-example-app/blob/main/framework-working-copy/spec_gr.toml). For a complete explanation of the syntax se Section [Specification language for describing the analysis framework](https://github.com/invap/rt-monitor/blob/main/README.md#specification-language "Specification language for describing the analysis framework").
+
 
 ## ADC implementation and operation
 In a proper implementation of the system, the software layer of the system shown in [Figure 1](#hardware-software-system) should implement the access to the register in which the ADC stores the sample after its computation but, as we mentioned in the introduction, this application constitutes only a case-study for exemplifying the use of the [Runtime Reporter](https://github.com/invap/rt-reporter.git "The Runtime Reporter") and the [Runtime Monitor](https://github.com/invap/rt-monitor.git "The Runtime Monitoring") for the runtime verification of a software artifact. Verification with hardware in the loop can be attained and is discussed in Section [Runtime verification with hardware in the loop](https://github.com/invap/rt-monitor/blob/main/README.md#runtime-verification-with-hardware-in-the-loop "Runtime verification with hardware in the loop") for a detailed description of the event language. In other words, we restrict ourselves to the analysis of the objects appearing in the upper-right quadrant delimited by red dotted lines of [Figure 1](#hardware-software-system) (i.e., the Software-Digital corner of the world). From this point of view, the analog digital converter is just the implementation of the machinary capable of generating 12 bits integer numbers. We provide two methods to accomplish this task:
