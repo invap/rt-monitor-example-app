@@ -29,14 +29,166 @@ In this section we formalise the intended behaviour of the software layer of the
   </figcaption>
 </figure>
 
-The intuition behind the SSP shown above is that after an initial task (*init*) that performs the initialization of the process, the artifact enters an infinite loop which performs a filtering task (*filtering*), which has an local checkpoint (*filtering_chk*), that computes a stable sample by taking the average of 16 individual samples, then the process goes through a conversion task (*conversion*) that produces the engineering value corresponding to that sample according to the interpretation of the analog signal being sampled, and, finally, there is a global checkpoint (*display_chk*) for checking the coherence of the data shown in the display with respect to the engineering value computed in the task *conversion*.
+The intuition behind the SSP shown above is that after an initial task (*init*) that performs the initialization of the process, the artifact enters an infinite loop which performs a filtering task (*filtering*), which has an local checkpoint (*filtering_chk*), that computes a stable sample by taking the average of 16 individual samples, then the process goes through a conversion task (*conversion*) that produces the engineering value corresponding to that sample according to the interpretation of the analog signal being sampled, and, finally, there is a global checkpoint (*display_chk*) for checking the coherence of the data shown in the LCD with respect to the engineering value computed in the task *conversion*.
 
+Below there is a list of the properties involved in the formal specification of [Figure 2](#ssp-software). We omit the information about the solver that will be used for checking each individual property but it can be seen as a label in fron of each of them in the structured sequential process of [Figure 2](#ssp-software). For a detailed presentation of the syntax the reader is pointed to Section [Specification language for describing the analysis framework](https://github.com/invap/rt-monitor/blob/main/README.md#specification-language "Specification language for describing the analysis framework").
 
-**ToDo: Complete description of the model by explaining all the properties involved.**
+- `init_vars`: asserts that the variable storing the previous sample is initialised with 0
+```
+(main_realvalue_old:State Int)
+(= main_realvalue_old 0)
+```
+- `init_fondo_display`: asserts that the invariant part of the image shown in the display has been correctly written. **Important note**: this is a dummy property because it is too cumbersome and does not add much to the purpose of this example; we will complete this in the future with a proper formula
+```
+None
+(= 1 1)
+```
+- `init_time_bound`: establishes a bound to the time required to perform the task *init*, between 10 and 1000 miliseconds
+```
+(init_clk:Clock Int)
+((10 <= init_clk) & (init_clk < 1000))
+```
+- `filtering_pre`: states the precondition of the task *filtering* asserting that the variable in which the process computes the addition of the 16 samples has been assigned 0
+```
+(main_addition:State Int)
+(= main_addition 0)
+```
+- `filtering_post`: states that the value reported as the result of computing the addition of 16 sampled datum and then deviding by 16 is indeed the average of those values
+```
+(main_addition:State Int),(main_realvalue:State Int),(main_value_0:State Int),(main_value_1:State Int),(main_value_2:State Int),(main_value_3:State Int),(main_value_4:State Int),(main_value_5:State Int),(main_value_6:State Int),(main_value_7:State Int),(main_value_8:State Int),(main_value_9:State Int),(main_value_10:State Int),(main_value_11:State Int),(main_value_12:State Int),(main_value_13:State Int),(main_value_14:State Int),(main_value_15:State Int)
+(and
+    (and
+        (and (<= 0 main_value_0) (< main_value_0 4096))
+        (and (<= 0 main_value_1) (< main_value_1 4096))
+        (and (<= 0 main_value_2) (< main_value_2 4096))
+        (and (<= 0 main_value_3) (< main_value_3 4096))
+        (and (<= 0 main_value_4) (< main_value_4 4096))
+        (and (<= 0 main_value_5) (< main_value_5 4096))
+        (and (<= 0 main_value_6) (< main_value_6 4096))
+        (and (<= 0 main_value_7) (< main_value_7 4096))
+        (and (<= 0 main_value_8) (< main_value_8 4096))
+        (and (<= 0 main_value_9) (< main_value_9 4096))
+        (and (<= 0 main_value_10) (< main_value_10 4096))
+        (and (<= 0 main_value_11) (< main_value_11 4096))
+        (and (<= 0 main_value_12) (< main_value_12 4096))
+        (and (<= 0 main_value_13) (< main_value_13 4096))
+        (and (<= 0 main_value_14) (< main_value_14 4096))
+        (and (<= 0 main_value_15) (< main_value_15 4096))
+    )
+    (= main_addition (+ main_value_0 main_value_1 main_value_2 main_value_3 main_value_4 main_value_5 main_value_6 main_value_7 main_value_8 main_value_9 main_value_10 main_value_11 main_value_12 main_value_13 main_value_14 main_value_15))
+    (= main_realvalue (div main_addition 16))
+)
+```
+- `filtering_time_bound`: establishes a bound to the time required to compute the the final sample as the average of 16 sampled datum from the ADC, between 100 and 500 miliseconds
+```
+(filtering_clk:Clock Int)
+((100 <= filtering_clk) and (filtering_clk < 500))
+```
+- `12bitsreading`: asserts that the value read from the ADC is bound to an unsigned integers in the range [0, 4096), which is the integers that can be represented with 12 bits 
+```
+(adc_read:Component Int)
+((0 <= adc_read) & (adc_read < 4096))
+```
+- `additionbound`: asserts that the partial addition performed until the moment in which this property is checked is necessarilly in hte range [0, 16*4096)
+```
+(main_addition:State Int)
+((0 <= main_addition) and (main_addition < 16 * 4096))
+```
+- `conversion_pre`: asserts that the sample computed by task *filtering* is an unsigned integer value in the range [0, 4095)
+```
+(main_realvalue:State Int)
+(and (<= 0 main_realvalue) (< main_realvalue 4096))
+```
+- `conversion_post`: asserts that the engineering value computed, as a floating point value, by task *conversion* correspond (upto a rounding error not representable in a single presition floating point) to the theoretical value resulting from the mathematical interpretation of the sample with respecto to the analog signal
+```
+(measurement_dato_ing:State Real),(main_realvalue:State Int),(measurement_dato_ing2:State Real)
+(exists (
+            (real_measurement_dato_ing Real)
+            (real_measurement_dato_ing2 Real)
+        )
+        (and
+            (let (
+                    (abs_diff
+                    (ite (< measurement_dato_ing real_measurement_dato_ing)
+                         (- real_measurement_dato_ing measurement_dato_ing)
+                         (- measurement_dato_ing real_measurement_dato_ing))
+                    )
+                 )
+                 (< abs_diff (* real_measurement_dato_ing 0.00001))
+            )
+            (let (
+                    (abs_diff
+                    (ite (< measurement_dato_ing2 real_measurement_dato_ing2)
+                         (- real_measurement_dato_ing2 measurement_dato_ing2)
+                         (- measurement_dato_ing2 real_measurement_dato_ing2))
+                    )
+                 )
+                 (< abs_diff (* real_measurement_dato_ing2 0.00001))
+            )
+            (= real_measurement_dato_ing (* 0.00524590164 main_realvalue))
+            (= real_measurement_dato_ing2 (* (^ 1 -13) (^ 2.71828 (* 1.1231 measurement_dato_ing))))
+        )
+)
 
-**ToDo: Complete explaining that the specification requires 2 components, the adc and the display.**
+```
+- `barpointiscorrect`: asserts that the topmost row of the bar that is colured in green (referred to as `bar_point') corresponds to the engineering value computed by task *conversion*, also establishing a hard upper and lower bound for that row
+```
+(bar_dato_ing:State Real),(bar_point:State Int)
+(exists ((real_value Real))
+        (let (
+                (abs_diff
+                (ite (< bar_dato_ing real_value)
+                    (- real_value bar_dato_ing)
+                    (- bar_dato_ing real_value))
+                )
+             )
+             (and
+                (< abs_diff (* real_value 0.00001))
+                (=
+                    bar_point
+                    (ite (<= (- (* 24 real_value) 96) 0)
+                        0
+                        (ite (<= 383 (- (* 24 real_value) 96))
+                            383
+                            (to_int (- (* 24 real_value) 96))
+                        )
+                    )
+                )
+             )
+        )
+)
+```
+- `bariscorrect`: establishes that the rows of the bar that fall below or equal to the `bar_point` are coloured in green, and those that fall above are black
+```
+(bar_point:State Int),(pixels:Component (Array Int (Array Int (Array Int Int))))
+(forall ((y Int) (x Int))
+        (=>
+            (and (>= y 155) (<= y 190))
+            (and
+                (=>
+                    (and (<= x 413) (> x  (- 413 bar_point)))
+                    (and
+                        (= (select (select (select pixels x) y) 0) 0)
+                        (= (select (select (select pixels x) y) 1) 255)
+                        (= (select (select (select pixels x) y) 2) 0)
+                    )
+                )
+                (=>
+                    (and (>= x 2) (<= x (- 413 bar_point)))
+                    (and
+                        (= (select (select (select pixels x) y) 0) 0)
+                        (= (select (select (select pixels x) y) 1) 0)
+                        (= (select (select (select pixels x) y) 2) 0)
+                    )
+                )
+            )
+        )
+)
+```
 
-The specification of the analysis framework is provided as a [TOML file](https://github.com/invap/rt-monitor-example-app/blob/main/framework-working-copy/spec_gr.toml). For a complete explanation of the syntax se Section [Specification language for describing the analysis framework](https://github.com/invap/rt-monitor/blob/main/README.md#specification-language "Specification language for describing the analysis framework").
+Another aspect that has to be declared in the specification of the analysis framework is the components that will play a role for analysing the system. In this specific case study we analyse the behaviour of the system by considering that the implementation of the ADC and the LCD are is not monitored internally but only through the invocation of the functions in their interface. This requires us to declare which are the Python clases that providing implementations of the digital twins for both the [ADC](https://github.com/invap/rt-monitor/blob/main/framework/components/rt_monitor_example_app/ex_adc.py) and the [LCD](https://github.com/invap/rt-monitor/blob/main/framework/components/rt_monitor_example_app/ex_display.py). 
+
+The complete specification of the analysis framework is provided as a [TOML file](https://github.com/invap/rt-monitor-example-app/blob/main/framework-working-copy/spec_gr.toml). For a complete explanation of the syntax se Section [Specification language for describing the analysis framework](https://github.com/invap/rt-monitor/blob/main/README.md#specification-language "Specification language for describing the analysis framework").
 
 
 ## ADC implementation and operation
@@ -76,7 +228,7 @@ containing only two functions:
 2. `sample`: produces a sample as a 16 bits integer by, either reading it from the file handler stored in the file pointer variable `file`, whenever the booblean variable `adc_info_present` is set to `true`, or by generating a pseudo-random unsigned 16 bits integer value which is bound to be in the range [0, 4096). If the generation of data samples is done by reading from `file` and `EOF` is reached, then the process aborts exiting with error code `-1`.
 
 
-## Display implementation and operation
+## LCD implementation and operation
 As we mentioned in Section [ADC implementation and operation](#adc-implementation-and-operation), a proper implementation of the system should implement the access the LCD by writing the appropriate data in memory locations where the communication bus is mapped. Once again, as we are only interested in the runtime verification of the software layer (shown in the upper-right quadrant delimited by red dotted lines of [Figure 1](#hardware-software-system)) and, as we are not concerned by the effect resulting from the invocation of the functions, we only provide a stub implementation of the interface "[ex_display.h](https://github.com/invap/rt-monitor-example-app/blob/main/data-display/ex_display.h)" shown below:
 ```
 /*
@@ -105,7 +257,7 @@ void display_Show_RGB(unsigned char dat1,unsigned char dat2,unsigned char dat3, 
 
 #endif
 ``` 
-The reader should note that the example proposes an interface providing high level capabilities for operating with the LCD. If we consider the hardware-software system proposed in [Figure 1](#hardware-software-system), in general, the low-level interface of the LCD hardware devices do not provide any capability for inspecting the state of the hardware component. This characteristic, shared with many other hardware components, is a key argument behind the addition of an event type for *component function calls* (see Section [Event language](https://github.com/invap/rt-monitor/blob/main/README.md#event-language "Event language") for further details), as it provides an effective connection between the operation of the component, part of the software under test and whose internal behaviour is not being verified, and a digital twin, used by the monitor for checking the properties of interest. In the case of the display of the present application, it is implemented in "[ex_display.py](https://github.com/invap/rt-monitor/blob/main/framework/components/rt_monitor_example_app/ex_display.py)"). For a more detailed explanation regarding the (black box) runtime verification of components see Section [Monitoring components](https://github.com/invap/rt-monitor/blob/main/README.md#monitoring-components).
+The reader should note that the example proposes an interface providing high level capabilities for operating with the LCD. If we consider the hardware-software system proposed in [Figure 1](#hardware-software-system), in general, the low-level interface of the LCD hardware devices do not provide any capability for inspecting the state of the hardware component. This characteristic, shared with many other hardware components, is a key argument behind the addition of an event type for *component function calls* (see Section [Event language](https://github.com/invap/rt-monitor/blob/main/README.md#event-language "Event language") for further details), as it provides an effective connection between the operation of the component, part of the software under test and whose internal behaviour is not being verified, and a digital twin, used by the monitor for checking the properties of interest. In the case of the LCD of the present application, it is implemented in "[ex_display.py](https://github.com/invap/rt-monitor/blob/main/framework/components/rt_monitor_example_app/ex_display.py)"). For a more detailed explanation regarding the (black box) runtime verification of components see Section [Monitoring components](https://github.com/invap/rt-monitor/blob/main/README.md#monitoring-components).
 
 
 ## Implementations of the application
@@ -117,7 +269,7 @@ The reader should note that the example proposes an interface providing high lev
   </figcaption>
 </figure>
 
-From a general point of view, the component `main` implements the infinite control loop (through function `main`) which, after taking some initial actions like initialising some variables, painting the background of the display (functions `background` of component `ex_display`), and initializing the ADC (function `adc_init` of component `ex_adc`), proceeds to subsequently compute the average of 16 samples, read from the ADC (through function `sample` of component `ex_adc`) and then write the engineering value corresponding to that computation in numbers in the lower section of the screen (through `measure` of component `ex_display`) and as a vertical bar (akin to a VU meter) in the central part of the LCD (through `bat` of component `ex_display`).
+From a general point of view, the component `main` implements the infinite control loop (through function `main`) which, after taking some initial actions like initialising some variables, painting the background of the LCD (functions `background` of component `ex_display`), and initializing the ADC (function `adc_init` of component `ex_adc`), proceeds to subsequently compute the average of 16 samples, read from the ADC (through function `sample` of component `ex_adc`) and then write the engineering value corresponding to that computation in numbers in the lower section of the screen (through `measure` of component `ex_display`) and as a vertical bar (akin to a VU meter) in the central part of the LCD (through `bat` of component `ex_display`).
 
 Below we provide an explanation of the different implementaions contained in this project. Notice that, as in the case of testing, the notion of *buggy* for the implementation experiencing bugs, and *patched* for the implementaion correcting them is relative to the formal properties we stated in the specification of the system we gave in Section [The software layer of the system as a structured sequential process](#the-software-layer-of-the-system-as-a-structured-sequential-process).
 
