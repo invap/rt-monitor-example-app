@@ -341,7 +341,7 @@ void display_Show_RGB(unsigned char dat1,unsigned char dat2,unsigned char dat3, 
 
 #endif
 ``` 
-The reader should note that the example proposes an interface providing high level functionalities for operating with the LCD. If we consider the hardware-software system proposed in [Figure 1](#hardware-software-system), in general, the low-level interface of the LCD hardware devices do not provide any capability for inspecting the state of the hardware component. This characteristic, shared with many other hardware components, is a key argument behind the addition of an event type for *component function calls* (see Section [Event language](https://github.com/invap/rt-monitor/blob/main/README.md#event-language "Event language") for further details), as it provides an effective connection between the operation of the component, part of the software under test (SUT) and whose internal behaviours is not being verified, and a digital twin, used by the monitor for checking the properties of interest. In the case of the LCD of the present application, it is implemented in "[ex_display.py](https://github.com/invap/rt-monitor/blob/main/framework/components/rt_monitor_example_app/ex_display.py)"). For a more detailed explanation regarding the (black box) runtime verification of components see Section [Monitoring components](https://github.com/invap/rt-monitor/blob/main/README.md#monitoring-components).
+The reader should note that the example proposes an interface providing high level functionalities for operating with the LCD. If we consider the hardware-software system proposed in [Figure 1](#hardware-software-system), in general, the low-level interface of the LCD hardware devices do not provide any capability for inspecting the state of the hardware component. This characteristic, shared with many other hardware components, is a key argument behind the addition of an event type for *component function calls* (see Section [Event language](https://github.com/invap/rt-monitor/blob/main/README.md#event-language "Event language") for further details), as it provides an effective connection between the operation of the component, part of the software under test (SUT) and whose internal behaviour is not being verified, and a digital twin, used by the monitor for checking the properties of interest. In the case of the LCD of the present application, it is implemented in "[ex_display.py](https://github.com/invap/rt-monitor/blob/main/framework/components/rt_monitor_example_app/ex_display.py)"). For a more detailed explanation regarding the (black box) runtime verification of components see Section [Monitoring components](https://github.com/invap/rt-monitor/blob/main/README.md#monitoring-components).
 
 
 ## Implementations of the application
@@ -379,33 +379,33 @@ int g = ((24 * dato_ing - 96) <= 0) ? 0 : ((24 * dato_ing - 96) >= 383) ? 383 : 
 int h = ((24 * dato_ing_old - 96) <= 0) ? 0 : ((24 * dato_ing_old - 96) >= 383) ? 383 : (24 * dato_ing_old - 96);
 ```
 3. *[buggy app self loggable](https://github.com/invap/rt-monitor-example-app/blob/main/buggy%20app%20self%20loggable/)*: the application is identical to the one described in **1.** but the component ADC was implemented with self logging capability. This is reflected in the following code fragments:
-- in function [`adc_init`](https://github.com/invap/rt-monitor-example-app/blob/main/data-source%20self%20loggable/ex_adc.c#L16), see the code fragment from [line 17](https://github.com/invap/rt-monitor-example-app/blob/main/data-source%20self%20loggable/ex_adc.c#L17) to [line 21](https://github.com/invap/rt-monitor-example-app/blob/main/data-source%20self%20loggable/ex_adc.c#L21), where the execution reports the initialisation of a log file identified as "adc":
-```
-// [ INSTRUMENTACION: Initialization event. ]
-pause(&reporting_clk);
-report(self_loggable_component_log_init_event,"adc");
-resume(&reporting_clk);
-//
-```
-- in function [`sample`](https://github.com/invap/rt-monitor-example-app/blob/main/data-source%20self%20loggable/ex_adc.c#L34), see the code fragment from [line 62](https://github.com/invap/rt-monitor-example-app/blob/main/data-source%20self%20loggable/ex_adc.c#L62) to [line 67](https://github.com/invap/rt-monitor-example-app/blob/main/data-source%20self%20loggable/ex_adc.c#L67), where the execution reports events that have to be logged in the log file identified as "adc":
-```
-// [ INSTRUMENTACION: Component event. ]
-pause(&reporting_clk);
-sprintf(str, "adc,%d", sample);
-report(self_loggable_component_event,str);
-resume(&reporting_clk);
-//
-```
-- in function [`main`](https://github.com/invap/rt-monitor-example-app/blob/main/buggy%20app%20self%20loggable/main.c#L17), the instruction of [line 64](https://github.com/invap/rt-monitor-example-app/blob/main/buggy%20app%20self%20loggable/main.c#L64) is not accompanied by a reporting code fragment. In contraposition see function [`main`](https://github.com/invap/rt-monitor-example-app/blob/main/buggy%20app/main.c#L17), code fragment from [line 70](https://github.com/invap/rt-monitor-example-app/blob/main/buggy%20app/main.c#L70) to [line 76](https://github.com/invap/rt-monitor-example-app/blob/main/buggy%20app/main.c#L76), where the invocation of function `sample` is followed by a code fragment reporting a component event:  
-```
-value = sample ();
-// [ INSTRUMENTACION: Component event. ]
-pause(&reporting_clk);
-sprintf(str, "adc,sample,%d",value);
-report(component_event,str);
-resume(&reporting_clk);
-//
-```
+	- in function [`adc_init`](https://github.com/invap/rt-monitor-example-app/blob/main/data-source%20self%20loggable/ex_adc.c#L16), see the code fragment from [line 17](https://github.com/invap/rt-monitor-example-app/blob/main/data-source%20self%20loggable/ex_adc.c#L17) to [line 21](https://github.com/invap/rt-monitor-example-app/blob/main/data-source%20self%20loggable/ex_adc.c#L21), where the execution reports the initialisation of a log file identified as "adc":
+	```
+	// [ INSTRUMENTACION: Initialization event. ]
+	pause(&reporting_clk);
+	report(self_loggable_component_log_init_event,"adc");
+	resume(&reporting_clk);
+	//
+	```
+	- in function [`sample`](https://github.com/invap/rt-monitor-example-app/blob/main/data-source%20self%20loggable/ex_adc.c#L34), see the code fragment from [line 62](https://github.com/invap/rt-monitor-example-app/blob/main/data-source%20self%20loggable/ex_adc.c#L62) to [line 67](https://github.com/invap/rt-monitor-example-app/blob/main/data-source%20self%20loggable/ex_adc.c#L67), where the execution reports events that have to be logged in the log file identified as "adc":
+	```
+	// [ INSTRUMENTACION: Component event. ]
+	pause(&reporting_clk);
+	sprintf(str, "adc,%d", sample);
+	report(self_loggable_component_event,str);
+	resume(&reporting_clk);
+	//
+	```
+	- in function [`main`](https://github.com/invap/rt-monitor-example-app/blob/main/buggy%20app%20self%20loggable/main.c#L17), the instruction of [line 64](https://github.com/invap/rt-monitor-example-app/blob/main/buggy%20app%20self%20loggable/main.c#L64) is not accompanied by a reporting code fragment. In contraposition see function [`main`](https://github.com/invap/rt-monitor-example-app/blob/main/buggy%20app/main.c#L17), code fragment from [line 70](https://github.com/invap/rt-monitor-example-app/blob/main/buggy%20app/main.c#L70) to [line 76](https://github.com/invap/rt-monitor-example-app/blob/main/buggy%20app/main.c#L76), where the invocation of function `sample` is followed by a code fragment reporting a component event:  
+	```
+	value = sample ();
+	// [ INSTRUMENTACION: Component event. ]
+	pause(&reporting_clk);
+	sprintf(str, "adc,sample,%d",value);
+	report(component_event,str);
+	resume(&reporting_clk);
+	//
+	```
 4. *[patched app self loggable](https://github.com/invap/rt-monitor-example-app/blob/main/patched%20app%20self%20loggable/)*: it is identical to the implementation presented in **2.** but including the considerations about the use of an implementation of the ADC with self-logging capability.
 
 
