@@ -19,7 +19,7 @@ The ADC and the LCD are operated through high level libraries (**ADC API** and *
 (#hardware-software-system), respectively, for reference) that are discussed in detail in Section [ADC 
 implementation and operation](#adc-implementation-and-operation) and Section [LCD implementation and operation](#lcd-implementation-and-operation).
 
-The project provides four implementations of the software level of the system (we will describe them in detail in Section [Implementations of the app](#implementations-of-the-app)), all sharing the same rationale and source code structure. Two of them use an implementation of the ADC with self logging capabilities, while the other two rely on the main program for logging the ADC behaviour.
+The project provides four implementations of the software level of the system (we will describe them in detail in Section [Implementations of the app](#implementations-of-the-app)), all sharing the same rationale and source code structure. Two of them use an implementation of the ADC with self-logging capability, while the other two rely on the main program for logging the ADC behaviour.
 
 
 ## The software layer of the system as a structured sequential process
@@ -113,7 +113,7 @@ name = "rt-monitor-example-app"
         file = "bariscorrect.protosmt2"
 ```
 
-Below there is a list of the properties involved in the above, accompanied by its rationale.
+Below there is a list of the properties involved in the above, accompanied by its rationale. The reader is pointed to Section [Specification language for describing the analysis framework](https://github.com/invap/rt-monitor/blob/main/README.md#specification-language "Specification language for describing the analysis framework") for a detailed explanation of the syntax used to write each type of formula. 
 
 - `init_vars`: asserts that the variable storing the previous sample is initialised with 0
 ```
@@ -268,13 +268,7 @@ None
 )
 ```
 
-Another aspect that has to be declared in the specification of the analysis framework is the components that will play a role for analysing the system. In this specific case study we analyse the behaviour of the system by considering that the implementation of the ADC and the LCD are not monitored internally but only through the invocation of the functions in their interface. This requires us to declare which are the Python clases that provide implementations of the digital twins for both the ADC and the LCD.
-
-**[[[ ToDo: Explain that there are 2 ADC because of the example with self-loggable components. ]]]**
-
-[ADC](https://github.com/invap/rt-monitor/blob/main/framework/components/rt_monitor_example_app/ex_adc.py) and the [LCD](https://github.com/invap/rt-monitor/blob/main/framework/components/rt_monitor_example_app/ex_display.py). 
-
-**[[[ END ToDo ]]]**
+Another aspect that has to be declared in the specification of the analysis framework is the components that will play a role for analysing the system. In this specific case study we analyse the behaviour of the system by considering that the implementation of the ADC and the LCD are not monitored internally but only through the invocation of the functions in their interface. This requires from us to declare which are the Python clases that provide implementations of the digital twins for both the [ADC](https://github.com/invap/rt-monitor/blob/main/framework/components/rt_monitor_example_app/ex_adc.py) and the [LCD](https://github.com/invap/rt-monitor/blob/main/framework/components/rt_monitor_example_app/ex_display.py). 
 
 THe reader should note that the specification is incomplete as many properties of interest would have been added to be checked along the execution of the system but we focussed on a subset that could provide an interesting example for the use of the Runtime monitor.
 
@@ -289,7 +283,7 @@ In a proper implementation of the system, the software layer of the system shown
 The generation method is chosen automatically depending on whether the file "adc_info.csv" is found in the working directory or not.
 
 The project provides two implementations of the software library simulating the operation of the ADC:
-1. [one providing self-logging capabilities](./data-source%20self%20loggable) which emits a file named "adc_log.csv". The "adc" part of the name is set as the second parameter passed to the instruction reporting a "self_loggable_component_log_init_event" event in the instruction: `report(self_loggable_component_log_init_event,"adc")` (the function `report` is implemented by the [C reporting API](https://github.com/invap/c-reporter-api.git)) and the part "_log.csv" of the name is added by the [Runtime Reporter](https://github.com/invap/rt-reporter.git "The Runtime Reporter") when it decodes the event type from the package received, and
+1. [one providing self-logging capability](./data-source%20self%20loggable) which emits a file named "adc_log.csv". The "adc" part of the name is set as the second parameter passed to the instruction reporting a "self_loggable_component_log_init_event" event in the instruction: `report(self_loggable_component_log_init_event,"adc")` (the function `report` is implemented by the [C reporting API](https://github.com/invap/c-reporter-api.git)) and the part "_log.csv" of the name is added by the [Runtime Reporter](https://github.com/invap/rt-reporter.git "The Runtime Reporter") when it decodes the event type from the package received, and
 2. [another](./data-source) that does not implement this capability and rely on the program using the component, for logging the ADC activity by resorting to *component function calls* (see Section [Event language](https://github.com/invap/rt-monitor/blob/main/README.md#event-language "Event language") for a detailed description of this type of events).
 
 Both implementations have the same interface (see file "[ex_adc.h](https://github.com/invap/rt-monitor-example-app/blob/main/data-source/ex_adc.h)" or, equivalently, "[ex_adc.h](https://github.com/invap/rt-monitor-example-app/blob/main/data-source%20self%20loggable/ex_adc.h)"):
@@ -347,7 +341,7 @@ void display_Show_RGB(unsigned char dat1,unsigned char dat2,unsigned char dat3, 
 
 #endif
 ``` 
-The reader should note that the example proposes an interface providing high level capabilities for operating with the LCD. If we consider the hardware-software system proposed in [Figure 1](#hardware-software-system), in general, the low-level interface of the LCD hardware devices do not provide any capability for inspecting the state of the hardware component. This characteristic, shared with many other hardware components, is a key argument behind the addition of an event type for *component function calls* (see Section [Event language](https://github.com/invap/rt-monitor/blob/main/README.md#event-language "Event language") for further details), as it provides an effective connection between the operation of the component, part of the software under test and whose internal behaviour is not being verified, and a digital twin, used by the monitor for checking the properties of interest. In the case of the LCD of the present application, it is implemented in "[ex_display.py](https://github.com/invap/rt-monitor/blob/main/framework/components/rt_monitor_example_app/ex_display.py)"). For a more detailed explanation regarding the (black box) runtime verification of components see Section [Monitoring components](https://github.com/invap/rt-monitor/blob/main/README.md#monitoring-components).
+The reader should note that the example proposes an interface providing high level functionalities for operating with the LCD. If we consider the hardware-software system proposed in [Figure 1](#hardware-software-system), in general, the low-level interface of the LCD hardware devices do not provide any capability for inspecting the state of the hardware component. This characteristic, shared with many other hardware components, is a key argument behind the addition of an event type for *component function calls* (see Section [Event language](https://github.com/invap/rt-monitor/blob/main/README.md#event-language "Event language") for further details), as it provides an effective connection between the operation of the component, part of the software under test and whose internal behaviour is not being verified, and a digital twin, used by the monitor for checking the properties of interest. In the case of the LCD of the present application, it is implemented in "[ex_display.py](https://github.com/invap/rt-monitor/blob/main/framework/components/rt_monitor_example_app/ex_display.py)"). For a more detailed explanation regarding the (black box) runtime verification of components see Section [Monitoring components](https://github.com/invap/rt-monitor/blob/main/README.md#monitoring-components).
 
 
 ## Implementations of the application
@@ -361,15 +355,58 @@ The reader should note that the example proposes an interface providing high lev
 
 From a general point of view, the component `main` implements the infinite control loop (through function `main`) which, after taking some initial actions like initialising some variables, painting the background of the LCD (functions `background` of component `ex_display`), and initializing the ADC (function `adc_init` of component `ex_adc`), proceeds to subsequently compute the average of 16 samples, read from the ADC (through function `sample` of component `ex_adc`) and then write the engineering value corresponding to that computation in numbers in the lower section of the screen (through `measure` of component `ex_display`) and as a vertical bar (akin to a VU meter) in the central part of the LCD (through `bat` of component `ex_display`).
 
-Below we provide an explanation of the different implementations contained in this project. Notice that, as in the case of testing, the notion of *buggy* for the implementation experiencing bugs, and *patched* for the implementation correcting them is relative to the formal properties we stated in the specification of the system we gave in Section [The software layer of the system as a structured sequential process](#the-software-layer-of-the-system-as-a-structured-sequential-process).
+Below we provide an explanation of the different implementations contained in this project. Notice that, as in the case of testing, the notion of *buggy* for the implementation experiencing bugs, and *patched* for the implementation correcting them, is relative to the formal properties we stated in the specification of the system we gave in Section [The software layer of the system as a structured sequential process](#the-software-layer-of-the-system-as-a-structured-sequential-process).
 
-There are four different implementations of the application sketched above:
-1. *buggy app*: contains an implementation experiencing a bug in the function `bar`, which displays the engineering value as a vertical bar. The bug is located in [line 136](https://github.com/invap/rt-monitor-example-app/blob/main/buggy%20app/functions.c#L136) where the instruction `for(signed int i = h+66 ; i > g+66 ; i--)` turns pixels off whenever the current engineering value is smaller than the previous one. There, it should iterate until `i >= g+66` in order to satisfy that the last row of pixels of the vertical bar that are painted in green, is the one corresponding to the current engineering value. 
-Additionally, the implementation relies on implicitly enforcing an upper bound (code fragment from [line 106]
-   (https://github.com/invap/rt-monitor-example-app/blob/main/buggy%20app/functions.c#L106) to [line 134](https://github.com/invap/rt-monitor-example-app/blob/main/buggy%20app/functions.c#L134)) and a lower bound (code fragment from [line 136](https://github.com/invap/rt-monitor-example-app/blob/main/buggy%20app/functions.c#L136) to [line 145](https://github.com/invap/rt-monitor-example-app/blob/main/buggy%20app/functions.c#L145)) for the rows on the geometry of the bar, disregarding the conversion of the engineering value to a specific row in the geometry of the bar (i.e., [the value computed for the variable `g`](https://github.com/invap/rt-monitor-example-app/blob/main/buggy%20app/functions.c#L98)). Notice that even when this last observation does not manifest as a bug, checking the correctness of the implementation according to the behaviour prescribed by the specification requires to predicate about the appropriateness of the value computed for `g` with respecto to the engineering value, and the shape of the bar which would fail the value of `g` is not explicitly bound the intended geometry of the bar.
-2. *patched app*: contains an implementation correcting both problems explained above. See code fragment from [line 142](https://github.com/invap/rt-monitor-example-app/blob/main/buggy%20app/functions.c#L142) to [line 145](https://github.com/invap/rt-monitor-example-app/blob/main/buggy%20app/functions.c#L145) and [line 98](https://github.com/invap/rt-monitor-example-app/blob/main/buggy%20app/functions.c#L98) to [line 105](https://github.com/invap/rt-monitor-example-app/blob/main/buggy%20app/functions.c#L105).
-
-**[[[ ToDo: Complete the descriptions of the implementations. ]]]**
+There are four different implementations of the application sketched above (the first two are built by resorting to an implementation of the [ADC](https://github.com/invap/rt-monitor-example-app/blob/main/data-source/) without self-logging capability and the remaining two by resorting to [another](https://github.com/invap/rt-monitor-example-app/blob/main/data-source%20self%20loggable/) that has it):
+1. *[buggy app](https://github.com/invap/rt-monitor-example-app/blob/main/buggy%20app/)*: contains an implementation experiencing a bug in the function `bar`, which displays the engineering value as a vertical bar. The bug is located in [line 136](https://github.com/invap/rt-monitor-example-app/blob/main/buggy%20app/functions.c#L136) where the instruction `for(signed int i = h+66 ; i > g+66 ; i--)` turns pixels off whenever the current engineering value is smaller than the previous one. There, it should iterate until `i >= g+66` in order to satisfy that the last row of pixels of the vertical bar that are painted in green, is the one corresponding to the current engineering value. 
+Additionally, the implementation relies on implicitly enforcing an upper bound (code fragment from [line 106](https://github.com/invap/rt-monitor-example-app/blob/main/buggy%20app/functions.c#L106) to [line 134](https://github.com/invap/rt-monitor-example-app/blob/main/buggy%20app/functions.c#L134)) and a lower bound (code fragment from [line 136](https://github.com/invap/rt-monitor-example-app/blob/main/buggy%20app/functions.c#L136) to [line 145](https://github.com/invap/rt-monitor-example-app/blob/main/buggy%20app/functions.c#L145)) for the rows on the geometry of the bar, disregarding the conversion of the engineering value to a specific row in the geometry of the bar (i.e., [the value computed for the variable `g`](https://github.com/invap/rt-monitor-example-app/blob/main/buggy%20app/functions.c#L98)). Notice that even when this last observation does not manifest as a bug, checking the correctness of the implementation according to the behaviour prescribed by the specification requires to predicate about the appropriateness of the value computed for `g` with respecto to the engineering value, and the shape of the bar which would fail the value of `g` is not explicitly bound the intended geometry of the bar.
+2. *[patched app](https://github.com/invap/rt-monitor-example-app/blob/main/patched%20app/)*: contains an implementation correcting both problems explained above. See code fragment from [line 142](https://github.com/invap/rt-monitor-example-app/blob/main/patched%20app/functions.c#L142) to [line 145](https://github.com/invap/rt-monitor-example-app/blob/main/patched%20app/functions.c#L145):
+```
+/* Incorrect sentence: Error unpainting a row in the bar
+ * for(signed int i = h+66 ; i > g+66 ; i--)
+ */
+for(signed int i = h+66-1 ; i >= g+66 ; i--)
+```
+and code fragment from [line 98](https://github.com/invap/rt-monitor-example-app/blob/main/patched%20app/functions.c#L98) to [line 105](https://github.com/invap/rt-monitor-example-app/blob/main/patched%20app/functions.c#L105):
+```
+/* Sentencias incorrectas: Error de representación de las muestras:
+ *      dato > 3812 implies g > 383
+ *      dato < 755 implies g < 0
+ * int g = (24 * dato_ing - 96);
+ * int h = (24 * dato_ing_old - 96);
+ */
+int g = ((24 * dato_ing - 96) <= 0) ? 0 : ((24 * dato_ing - 96) >= 383) ? 383 : (24 * dato_ing - 96);
+int h = ((24 * dato_ing_old - 96) <= 0) ? 0 : ((24 * dato_ing_old - 96) >= 383) ? 383 : (24 * dato_ing_old - 96);
+```
+3. *[buggy app self loggable](https://github.com/invap/rt-monitor-example-app/blob/main/buggy%20app%20self%20loggable/)*: the application is identical to the one described in **1.** but the component ADC was implemented with self logging capability. This is reflected in the following code fragments:
+- in function [`adc_init`](https://github.com/invap/rt-monitor-example-app/blob/main/data-source%20self%20loggable/ex_adc.c#L16), see the code fragment from [line 17](https://github.com/invap/rt-monitor-example-app/blob/main/data-source%20self%20loggable/ex_adc.c#L17) to [line 21](https://github.com/invap/rt-monitor-example-app/blob/main/data-source%20self%20loggable/ex_adc.c#L21), where the execution reports the initialisation of a log file identified as "adc":
+```
+// [ INSTRUMENTACION: Initialization event. ]
+pause(&reporting_clk);
+report(self_loggable_component_log_init_event,"adc");
+resume(&reporting_clk);
+//
+```
+- in function [`sample`](https://github.com/invap/rt-monitor-example-app/blob/main/data-source%20self%20loggable/ex_adc.c#L34), see the code fragment from [line 62](https://github.com/invap/rt-monitor-example-app/blob/main/data-source%20self%20loggable/ex_adc.c#L62) to [line 67](https://github.com/invap/rt-monitor-example-app/blob/main/data-source%20self%20loggable/ex_adc.c#L67), where the execution reports events that have to be logged in the log file identified as "adc":
+```
+// [ INSTRUMENTACION: Component event. ]
+pause(&reporting_clk);
+sprintf(str, "adc,%d", sample);
+report(self_loggable_component_event,str);
+resume(&reporting_clk);
+//
+```
+- in function [`main`](https://github.com/invap/rt-monitor-example-app/blob/main/buggy%20app%20self%20loggable/main.c#L17), the instruction of [line 64](https://github.com/invap/rt-monitor-example-app/blob/main/buggy%20app%20self%20loggable/main.c#L64) is not accompanied by a reporting code fragment. In contraposition see function [`main`](https://github.com/invap/rt-monitor-example-app/blob/main/buggy%20app/main.c#L17), code fragment from [line 70](https://github.com/invap/rt-monitor-example-app/blob/main/buggy%20app/main.c#L70) to [line 76](https://github.com/invap/rt-monitor-example-app/blob/main/buggy%20app/main.c#L76), where the invocation of function `sample` is followed by a code fragment reporting a component event:  
+```
+value = sample ();
+// [ INSTRUMENTACION: Component event. ]
+pause(&reporting_clk);
+sprintf(str, "adc,sample,%d",value);
+report(component_event,str);
+resume(&reporting_clk);
+//
+```
+4. *[patched app self loggable](https://github.com/invap/rt-monitor-example-app/blob/main/patched%20app%20self%20loggable/)*: it is identical to the implementation presented in **2.** but including the considerations about the use of an implementation of the ADC with self-logging capability.
 
 
 ## License
