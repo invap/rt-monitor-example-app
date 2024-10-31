@@ -13,7 +13,7 @@ The rationale of the system is that of a control loop (**Main control loop** in 
 2. converts it to a floating point number (from now on, referred to as engineering value), and
 3. displays it as a bar in an LCD akin the SSD1963 from Solomon Systech Limited (*LCD*).
 
-The runtime verification attained with the runtime monitor is done at the software layer of the system in order to check the correctness[^correctness] of the software implementation with respect to an abstract specification of the process (see Section [Structured Sequential Processes](https://github.com/invap/rt-monitor/blob/main/README.md#structured-sequential-processes "Structured Sequential Processes") for a detailed presentation of the lenguage for describing structured sequential processes, the abstract labuage used for specifying software artifacts). 
+The runtime verification attained with the runtime monitor is done at the software layer of the system in order to check the correctness[^correctness] of the software implementation with respect to an abstract specification of the process (see Section [Structured Sequential Processes](https://github.com/invap/rt-monitor/blob/main/README.md#structured-sequential-processes "Structured Sequential Processes") for a detailed presentation of the language for describing structured sequential processes, the abstract language used for specifying software artifacts). 
 
 The ADC and the LCD are operated through high level libraries (**ADC API** and **LCD API** in [Figure 1]
 (#hardware-software-system), respectively, for reference) that are discussed in detail in Section [ADC 
@@ -34,7 +34,86 @@ hardware-software system shown in Figure 1 as a structured sequential process.">
 
 The intuition behind the SSP shown above is that after an initial task (*init*) that performs the initialization of the process, the artifact enters an infinite loop which performs a filtering task (*filtering*), which has a local checkpoint (*filtering_chk*), that computes a stable sample by taking the average of 16 individual samples, then the process goes through a conversion task (*conversion*) that produces the engineering value corresponding to that sample according to the interpretation of the analog signal being sampled, and, finally, there is a global checkpoint (*display_chk*) for checking the coherence of the data shown in the LCD with respect to the engineering value computed in the task *conversion*.
 
-Below there is a list of the properties involved in the formal specification of [Figure 2](#ssp-software) accompanied by its rationale. We omit the information about the solver that will be used for checking each individual property, but it can be seen as a label in fron of each of them in the structured sequential process of [Figure 2](#ssp-software). For a detailed presentation of the syntax the reader is pointed to Section [Specification language for describing the analysis framework](https://github.com/invap/rt-monitor/blob/main/README.md#specification-language "Specification language for describing the analysis framework").
+The specification of the analysis framework must be written in TOML format. For a detailed presentation of the syntax the reader is pointed to Section [Specification language for describing the analysis framework](https://github.com/invap/rt-monitor/blob/main/README.md#specification-language "Specification language for describing the analysis framework").
+
+The following fragment shows the structured sequential process of [Figure 2](#ssp-software) in TOML format:
+```
+name = "rt-monitor-example-app"
+[process]
+    format = "graph"
+[process.structure]
+    nodes = 9
+    edges = [[0,1],[1,2],[2,3],[3,4],[4,5],[5,6],[6,7],[7,8],[8,2]]
+    start = 0
+    map = [ ["task", "init"], ["operator", "seq_composition"], ["operator", "omega_start"], ["task", "filtering"], ["operator", "seq_composition"], ["task", "conversion"], ["operator", "seq_composition"], ["checkpoint", "display_chk"], ["operator", "omega_end"] ]
+
+[[process.tasks]]
+    name = "init"
+    [[process.tasks.pres]]
+    [[process.tasks.posts]]
+        name = "init_vars"
+        format = "protosmt2"
+        variables = "(main_realvalue_old:State Int)"
+        formula = "(= main_realvalue_old 0)"
+    [[process.tasks.posts]]
+        name = "init_fondo_display"
+        format = "protosmt2"
+        file = "init_fondo_display.protosmt2"
+    [[process.tasks.posts]]
+        name = "init_time_bound"
+        format = "protosympy"
+        file = "./sandbox/rt-monitor-example-app/specification/init_time_bound"
+
+[[process.tasks]]
+    name = "filtering"
+    [[process.tasks.pres]]
+        name = "filtering_pre"
+        format = "protosmt2"
+        file = "/Users/clpombo/sandbox/invap-github/rt-monitor/sandbox/rt-monitor-example-app/specification/filtering_pre.protosmt2"
+    [[process.tasks.posts]]
+        name = "filtering_post"
+        format = "protosmt2"
+        file = "filtering_post.protosmt2"
+    [[process.tasks.posts]]
+        name = "filtering_time_bound"
+        format = "protopy"
+        file = "filtering_time_bound.protopy"
+    [[process.tasks.checkpoints]]
+        name = "filtering_chk"
+        [[process.tasks.checkpoints.properties]]
+            name = "12bitsreading"
+            format = "protosympy"
+            file = "12bitsreading.protosympy"
+        [[process.tasks.checkpoints.properties]]
+            name = "additionbound"
+            format = "protopy"
+            file = "additionbound.protopy"
+
+[[process.tasks]]
+    name = "conversion"
+    [[process.tasks.pres]]
+        name = "conversion_pre"
+        format = "protosmt2"
+        file = "conversion_pre.protosmt2"
+    [[process.tasks.posts]]
+        name = "conversion_post"
+        format = "protosmt2"
+        file = "conversion_post.protosmt2"
+    [[process.tasks.checkpoints]]
+
+[[process.checkpoints]]
+    name = "display_chk"
+    [[process.checkpoints.properties]]
+        name = "barpointiscorrect"
+        format = "protosmt2"
+        file = "barpointiscorrect.protosmt2"
+    [[process.checkpoints.properties]]
+        name = "bariscorrect"
+        format = "protosmt2"
+        file = "bariscorrect.protosmt2"
+```
+
+Below there is a list of the properties involved in the above, accompanied by its rationale.
 
 - `init_vars`: asserts that the variable storing the previous sample is initialised with 0
 ```
@@ -46,7 +125,7 @@ Below there is a list of the properties involved in the formal specification of 
 None
 (= 1 1)
 ```
-- `init_time_bound`: establishes a bound to the time required to perform the task *init*, between 10 and 1000 miliseconds
+- `init_time_bound`: establishes a bound to the time required to perform the task *init*, between 10 and 1000 milliseconds
 ```
 (init_clk:Clock Int)
 ((10 <= init_clk) & (init_clk < 1000))
@@ -56,7 +135,7 @@ None
 (main_addition:State Int)
 (= main_addition 0)
 ```
-- `filtering_post`: states that the value reported as the result of computing the addition of 16 sampled datum and then deviding by 16 is indeed the average of those values
+- `filtering_post`: states that the value reported as the result of computing the addition of 16 sampled datum and then dividing by 16 is indeed the average of those values
 ```
 (main_addition:State Int),(main_realvalue:State Int),(main_value_0:State Int),(main_value_1:State Int),(main_value_2:State Int),(main_value_3:State Int),(main_value_4:State Int),(main_value_5:State Int),(main_value_6:State Int),(main_value_7:State Int),(main_value_8:State Int),(main_value_9:State Int),(main_value_10:State Int),(main_value_11:State Int),(main_value_12:State Int),(main_value_13:State Int),(main_value_14:State Int),(main_value_15:State Int)
 (and
@@ -82,7 +161,7 @@ None
     (= main_realvalue (div main_addition 16))
 )
 ```
-- `filtering_time_bound`: establishes a bound to the time required to compute the final sample as the average of 16 sampled datum from the ADC, between 100 and 500 miliseconds
+- `filtering_time_bound`: establishes a bound to the time required to compute the final sample as the average of 16 sampled datum from the ADC, between 100 and 500 milliseconds
 ```
 (filtering_clk:Clock Int)
 ((100 <= filtering_clk) and (filtering_clk < 500))
@@ -92,7 +171,7 @@ None
 (adc_read:Component Int)
 ((0 <= adc_read) & (adc_read < 4096))
 ```
-- `additionbound`: asserts that the partial addition performed until the moment in which this property is checked is necessarilly in hte range [0, 16*4096)
+- `additionbound`: asserts that the partial addition performed until the moment in which this property is checked is necessarily in hte range [0, 16*4096)
 ```
 (main_addition:State Int)
 ((0 <= main_addition) and (main_addition < 16 * 4096))
@@ -102,7 +181,7 @@ None
 (main_realvalue:State Int)
 (and (<= 0 main_realvalue) (< main_realvalue 4096))
 ```
-- `conversion_post`: asserts that the engineering value computed, as a floating point value, by task *conversion* correspond (upto a rounding error not representable in a single presition floating point) to the theoretical value resulting from the mathematical interpretation of the sample with respecto to the analog signal
+- `conversion_post`: asserts that the engineering value computed, as a floating point value, by task *conversion* correspond (upto a rounding error not representable in a single precision floating point) to the theoretical value resulting from the mathematical interpretation of the sample with respecto to the analog signal
 ```
 (measurement_dato_ing:State Real),(main_realvalue:State Int),(measurement_dato_ing2:State Real)
 (exists (
@@ -134,7 +213,7 @@ None
 )
 
 ```
-- `barpointiscorrect`: asserts that the topmost row of the bar that is colured in green (referred to as `bar_point`) corresponds to the engineering value computed by task *conversion*, also establishing a hard upper and lower bound for that row
+- `barpointiscorrect`: asserts that the topmost row of the bar that is coloured in green (referred to as `bar_point`) corresponds to the engineering value computed by task *conversion*, also establishing a hard upper and lower bound for that row
 ```
 (bar_dato_ing:State Real),(bar_point:State Int)
 (exists ((real_value Real))
@@ -199,11 +278,11 @@ Another aspect that has to be declared in the specification of the analysis fram
 
 THe reader should note that the specification is incomplete as many properties of interest would have been added to be checked along the execution of the system but we focussed on a subset that could provide an interesting example for the use of the Runtime monitor.
 
-The complete specification of the analysis framework is provided as a [TOML file](https://github.com/invap/rt-monitor-example-app/blob/main/framework-working-copy/spec_gr.toml). For a complete explanation of the syntax se Section [Specification language for describing the analysis framework](https://github.com/invap/rt-monitor/blob/main/README.md#specification-language "Specification language for describing the analysis framework").
+The complete specification of the analysis framework is provided as a [TOML file](https://github.com/invap/rt-monitor-example-app/blob/main/framework-working-copy/spec_gr.toml). For a complete explanation of the syntax se 
 
 
 ## ADC implementation and operation
-In a proper implementation of the system, the software layer of the system shown in [Figure 1](#hardware-software-system) should implement the access to the register in which the ADC stores the sample after its computation but, as we mentioned in the introduction, this application constitutes only a case-study for exemplifying the use of the [Runtime Reporter](https://github.com/invap/rt-reporter.git "The Runtime Reporter") and the [Runtime Monitor](https://github.com/invap/rt-monitor.git "The Runtime Monitoring") for the runtime verification of a software artifact. Verification with hardware in the loop can be attained and is discussed in Section [Runtime verification with hardware in the loop](https://github.com/invap/rt-monitor/blob/main/README.md#runtime-verification-with-hardware-in-the-loop "Runtime verification with hardware in the loop") for a detailed description of the event language. In other words, we restrict ourselves to the analysis of the objects appearing in the upper-right quadrant delimited by red dotted lines of [Figure 1](#hardware-software-system) (i.e., the Software-Digital corner of the world). From this point of view, the analog digital converter is just the implementation of the machinary capable of generating 12 bits integer numbers. We provide two methods to accomplish this task:
+In a proper implementation of the system, the software layer of the system shown in [Figure 1](#hardware-software-system) should implement the access to the register in which the ADC stores the sample after its computation but, as we mentioned in the introduction, this application constitutes only a case-study for exemplifying the use of the [Runtime Reporter](https://github.com/invap/rt-reporter.git "The Runtime Reporter") and the [Runtime Monitor](https://github.com/invap/rt-monitor.git "The Runtime Monitoring") for the runtime verification of a software artifact. Verification with hardware in the loop can be attained and is discussed in Section [Runtime verification with hardware in the loop](https://github.com/invap/rt-monitor/blob/main/README.md#runtime-verification-with-hardware-in-the-loop "Runtime verification with hardware in the loop") for a detailed description of the event language. In other words, we restrict ourselves to the analysis of the objects appearing in the upper-right quadrant delimited by red dotted lines of [Figure 1](#hardware-software-system) (i.e., the Software-Digital corner of the world). From this point of view, the analog digital converter is just the implementation of the machinery capable of generating 12 bits integer numbers. We provide two methods to accomplish this task:
 1. data is generated by sampling a pseudo-random unsigned integer variable whose outcome is bounded to the range [0, 4096); successive samples do not differ in more than around 0.4%, obtained adding an integer, also resulting from sampling the pseudo-random unsigned integer variable whose outcome is shifted by 4 bits (i.e., adding an integer in the range (-16, 16)), and
 2. data is read from a fixed file as one integer per line; the file has to be named "adc_info.csv" and placed in the working directory from where the reporting process is launched.
 
@@ -236,7 +315,7 @@ int sample (void);
 ```
 containing only two functions:
 1. `adc_init`: initialises the data generation strategy by determining whether the file "adc_info.csv", containing data samples, is present in the working directory, or not. If the file is present: **a.** it is opened and the handler is stored in the file pointer variable `file`, and **b.** the boolean variable `adc_info_present` is set to `true`; if the file is not present, the pseudo-random number generator is initialised and the boolean variable `adc_info_present` is set to `false`, and 
-2. `sample`: produces a sample as a 16 bits integer by, either reading it from the file handler stored in the file pointer variable `file`, whenever the booblean variable `adc_info_present` is set to `true`, or by generating a pseudo-random unsigned 16 bits integer value which is bound to be in the range [0, 4096). If the generation of data samples is done by reading from `file` and `EOF` is reached, then the process aborts exiting with error code `-1`.
+2. `sample`: produces a sample as a 16 bits integer by, either reading it from the file handler stored in the file pointer variable `file`, whenever the boolean variable `adc_info_present` is set to `true`, or by generating a pseudo-random unsigned 16 bits integer value which is bound to be in the range [0, 4096). If the generation of data samples is done by reading from `file` and `EOF` is reached, then the process aborts exiting with error code `-1`.
 
 
 ## LCD implementation and operation
@@ -282,12 +361,12 @@ The reader should note that the example proposes an interface providing high lev
 
 From a general point of view, the component `main` implements the infinite control loop (through function `main`) which, after taking some initial actions like initialising some variables, painting the background of the LCD (functions `background` of component `ex_display`), and initializing the ADC (function `adc_init` of component `ex_adc`), proceeds to subsequently compute the average of 16 samples, read from the ADC (through function `sample` of component `ex_adc`) and then write the engineering value corresponding to that computation in numbers in the lower section of the screen (through `measure` of component `ex_display`) and as a vertical bar (akin to a VU meter) in the central part of the LCD (through `bat` of component `ex_display`).
 
-Below we provide an explanation of the different implementaions contained in this project. Notice that, as in the case of testing, the notion of *buggy* for the implementation experiencing bugs, and *patched* for the implementaion correcting them is relative to the formal properties we stated in the specification of the system we gave in Section [The software layer of the system as a structured sequential process](#the-software-layer-of-the-system-as-a-structured-sequential-process).
+Below we provide an explanation of the different implementations contained in this project. Notice that, as in the case of testing, the notion of *buggy* for the implementation experiencing bugs, and *patched* for the implementation correcting them is relative to the formal properties we stated in the specification of the system we gave in Section [The software layer of the system as a structured sequential process](#the-software-layer-of-the-system-as-a-structured-sequential-process).
 
 There are four different implementations of the application sketched above:
 1. *buggy app*: contains an implementation experiencing a bug in the function `bar`, which displays the engineering value as a vertical bar. The bug is located in [line 136](https://github.com/invap/rt-monitor-example-app/blob/main/buggy%20app/functions.c#L136) where the instruction `for(signed int i = h+66 ; i > g+66 ; i--)` turns pixels off whenever the current engineering value is smaller than the previous one. There, it should iterate until `i >= g+66` in order to satisfy that the last row of pixels of the vertical bar that are painted in green, is the one corresponding to the current engineering value. 
-Aditionally, the implementaion relies on implicitly enforcing an upper bound (code fragment from [line 106]
-   (https://github.com/invap/rt-monitor-example-app/blob/main/buggy%20app/functions.c#L106) to [line 134](https://github.com/invap/rt-monitor-example-app/blob/main/buggy%20app/functions.c#L134)) and a lower bound (code fragment from [line 136](https://github.com/invap/rt-monitor-example-app/blob/main/buggy%20app/functions.c#L136) to [line 145](https://github.com/invap/rt-monitor-example-app/blob/main/buggy%20app/functions.c#L145)) for the rows on the geometry of the bar, disregarding the conversion of the engineering value to a specific row in the geometry of the bar (i.e., [the value computed for the variable `g`](https://github.com/invap/rt-monitor-example-app/blob/main/buggy%20app/functions.c#L98)). Notice that even when this last observation does not manifest as a bug, checking the correctness of the implementation according to the behaviour prescribed by the specification requires to predicate about the appropriateness of the value computed for `g` with respecto to the engineering value, and the shape of the bar which would fail the value of `g` is not explicitly bound the intende geometry of the bar.
+Additionally, the implementation relies on implicitly enforcing an upper bound (code fragment from [line 106]
+   (https://github.com/invap/rt-monitor-example-app/blob/main/buggy%20app/functions.c#L106) to [line 134](https://github.com/invap/rt-monitor-example-app/blob/main/buggy%20app/functions.c#L134)) and a lower bound (code fragment from [line 136](https://github.com/invap/rt-monitor-example-app/blob/main/buggy%20app/functions.c#L136) to [line 145](https://github.com/invap/rt-monitor-example-app/blob/main/buggy%20app/functions.c#L145)) for the rows on the geometry of the bar, disregarding the conversion of the engineering value to a specific row in the geometry of the bar (i.e., [the value computed for the variable `g`](https://github.com/invap/rt-monitor-example-app/blob/main/buggy%20app/functions.c#L98)). Notice that even when this last observation does not manifest as a bug, checking the correctness of the implementation according to the behaviour prescribed by the specification requires to predicate about the appropriateness of the value computed for `g` with respecto to the engineering value, and the shape of the bar which would fail the value of `g` is not explicitly bound the intended geometry of the bar.
 2. *patched app*: contains an implementation correcting both problems explained above. See code fragment from [line 142](https://github.com/invap/rt-monitor-example-app/blob/main/buggy%20app/functions.c#L142) to [line 145](https://github.com/invap/rt-monitor-example-app/blob/main/buggy%20app/functions.c#L145) and [line 98](https://github.com/invap/rt-monitor-example-app/blob/main/buggy%20app/functions.c#L98) to [line 105](https://github.com/invap/rt-monitor-example-app/blob/main/buggy%20app/functions.c#L105).
 
 **[[[ ToDo: Complete the descriptions of the implementations. ]]]**
