@@ -37,7 +37,7 @@ The intuition behind the SSP shown above is that after an initial task (*init*) 
 The specification of the analysis framework must be written in TOML format. For a detailed presentation of the syntax the reader is pointed to Section [Specification language for describing the analysis framework](https://github.com/invap/rt-monitor/blob/main/README.md#specification-language "Specification language for describing the analysis framework").
 
 The following fragment shows the structured sequential process of [Figure 2](#ssp-software) in TOML format:
-```
+```toml
 name = "rt-monitor-example-app"
 [process]
     format = "graph"
@@ -116,27 +116,27 @@ name = "rt-monitor-example-app"
 Below there is a list of the properties involved in the above, accompanied by its rationale. The reader is pointed to Section [Specification language for describing the analysis framework](https://github.com/invap/rt-monitor/blob/main/README.md#specification-language "Specification language for describing the analysis framework") for a detailed explanation of the syntax used to write each type of formula. 
 
 - `init_vars`: asserts that the variable storing the previous sample is initialised with 0
-```
+```smt
 (main_realvalue_old:State Int)
 (= main_realvalue_old 0)
 ```
 - `init_fondo_display`: asserts that the invariant part of the image shown in the display has been correctly written. **Important note**: this is a dummy property because it is too cumbersome and does not add much to the purpose of this example; we will complete this in the future with a proper formula
-```
+```smt
 None
 (= 1 1)
 ```
 - `init_time_bound`: establishes a bound to the time required to perform the task *init*, between 10 and 1000 milliseconds
-```
+```smt
 (init_clk:Clock Int)
 ((10 <= init_clk) & (init_clk < 1000))
 ```
 - `filtering_pre`: states the precondition of the task *filtering* asserting that the variable in which the process computes the addition of the 16 samples has been assigned 0
-```
+```smt
 (main_addition:State Int)
 (= main_addition 0)
 ```
 - `filtering_post`: states that the value reported as the result of computing the addition of 16 sampled datum and then dividing by 16 is indeed the average of those values
-```
+```smt
 (main_addition:State Int),(main_realvalue:State Int),(main_value_0:State Int),(main_value_1:State Int),(main_value_2:State Int),(main_value_3:State Int),(main_value_4:State Int),(main_value_5:State Int),(main_value_6:State Int),(main_value_7:State Int),(main_value_8:State Int),(main_value_9:State Int),(main_value_10:State Int),(main_value_11:State Int),(main_value_12:State Int),(main_value_13:State Int),(main_value_14:State Int),(main_value_15:State Int)
 (and
     (and
@@ -162,27 +162,27 @@ None
 )
 ```
 - `filtering_time_bound`: establishes a bound to the time required to compute the final sample as the average of 16 sampled datum from the ADC, between 100 and 500 milliseconds
-```
+```smt
 (filtering_clk:Clock Int)
 ((100 <= filtering_clk) and (filtering_clk < 500))
 ```
 - `12bitsreading`: asserts that the value read from the ADC is bound to an unsigned integers in the range [0, 4096), which is the integers that can be represented with 12 bits 
-```
+```smt
 (adc_read:Component Int)
 ((0 <= adc_read) & (adc_read < 4096))
 ```
 - `additionbound`: asserts that the partial addition performed until the moment in which this property is checked is necessarily in hte range [0, 16*4096)
-```
+```smt
 (main_addition:State Int)
 ((0 <= main_addition) and (main_addition < 16 * 4096))
 ```
 - `conversion_pre`: asserts that the sample computed by task *filtering* is an unsigned integer value in the range [0, 4095)
-```
+```smt
 (main_realvalue:State Int)
 (and (<= 0 main_realvalue) (< main_realvalue 4096))
 ```
 - `conversion_post`: asserts that the engineering value computed, as a floating point value, by task *conversion* correspond (upto a rounding error not representable in a single precision floating point) to the theoretical value resulting from the mathematical interpretation of the sample with respecto to the analog signal
-```
+```smt
 (measurement_dato_ing:State Real),(main_realvalue:State Int),(measurement_dato_ing2:State Real)
 (exists (
             (real_measurement_dato_ing Real)
@@ -214,7 +214,7 @@ None
 
 ```
 - `barpointiscorrect`: asserts that the topmost row of the bar that is coloured in green (referred to as `bar_point`) corresponds to the engineering value computed by task *conversion*, also establishing a hard upper and lower bound for that row
-```
+```smt
 (bar_dato_ing:State Real),(bar_point:State Int)
 (exists ((real_value Real))
         (let (
@@ -241,7 +241,7 @@ None
 )
 ```
 - `bariscorrect`: establishes that the rows of the bar that fall below or equal to the `bar_point` are coloured in green, and those that fall above are black
-```
+```smt
 (bar_point:State Int),(pixels:Component (Array Int (Array Int (Array Int Int))))
 (forall ((y Int) (x Int))
         (=>
@@ -287,7 +287,7 @@ The project provides two implementations of the software library simulating the 
 2. [another](https://github.com/invap/rt-monitor-example-app/blob/main/data-source/) that does not implement this capability and rely on the program using the component, for logging the ADC activity by resorting to *component function calls* (see Section [Event language](https://github.com/invap/rt-monitor/blob/main/README.md#event-language "Event language") for a detailed description of this type of events).
 
 Both implementations have the same interface (see file "[ex_adc.h](https://github.com/invap/rt-monitor-example-app/blob/main/data-source/ex_adc.h)" or, equivalently, "[ex_adc.h](https://github.com/invap/rt-monitor-example-app/blob/main/data-source%20self%20loggable/ex_adc.h)"):
-```
+```c
 #ifndef ADC_H
 #define ADC_H
 
@@ -314,7 +314,7 @@ containing only two functions:
 
 ## LCD implementation and operation
 As we mentioned in Section [ADC implementation and operation](#adc-implementation-and-operation), a proper implementation of the system should implement the access the LCD by writing the appropriate data in memory locations where the communication bus is mapped. Once again, as we are only interested in the runtime verification of the software layer (shown in the upper-right quadrant delimited by red dotted lines of [Figure 1](#hardware-software-system)) and, as we are not concerned by the effect resulting from the invocation of the functions, we only provide a stub implementation of the interface "[ex_display.h](https://github.com/invap/rt-monitor-example-app/blob/main/data-display/ex_display.h)" shown below:
-```
+```c
 /*
  * This is a dummy implementation of a display
  * Its purpose is for the main application to compile and run.
@@ -361,14 +361,14 @@ There are four different implementations of the application sketched above, the 
 1. *[buggy app](https://github.com/invap/rt-monitor-example-app/blob/main/buggy%20app/)*: contains an implementation experiencing a bug in the function `bar`, which displays the engineering value as a vertical bar. The bug is located in [line 136](https://github.com/invap/rt-monitor-example-app/blob/main/buggy%20app/functions.c#L136) where the instruction `for(signed int i = h+66 ; i > g+66 ; i--)` turns pixels off whenever the current engineering value is smaller than the previous one. There, it should iterate until `i >= g+66` in order to satisfy that the last row of pixels of the vertical bar that are painted in green, is the one corresponding to the current engineering value. 
 Additionally, the implementation relies on implicitly enforcing an upper bound (code fragment from [line 106](https://github.com/invap/rt-monitor-example-app/blob/main/buggy%20app/functions.c#L106) to [line 134](https://github.com/invap/rt-monitor-example-app/blob/main/buggy%20app/functions.c#L134)) and a lower bound (code fragment from [line 136](https://github.com/invap/rt-monitor-example-app/blob/main/buggy%20app/functions.c#L136) to [line 145](https://github.com/invap/rt-monitor-example-app/blob/main/buggy%20app/functions.c#L145)) for the rows on the geometry of the bar, disregarding the conversion of the engineering value to a specific row in the geometry of the bar (i.e., [the value computed for the variable `g`](https://github.com/invap/rt-monitor-example-app/blob/main/buggy%20app/functions.c#L98)). Notice that even when this last observation does not manifest as a bug, checking the correctness of the implementation according to the behaviour prescribed by the specification requires to predicate about the appropriateness of the value computed for `g` with respecto to the engineering value, and the shape of the bar which would fail the value of `g` is not explicitly bound the intended geometry of the bar.
 2. *[patched app](https://github.com/invap/rt-monitor-example-app/blob/main/patched%20app/)*: contains an implementation correcting both problems explained above. See code fragment from [line 142](https://github.com/invap/rt-monitor-example-app/blob/main/patched%20app/functions.c#L142) to [line 145](https://github.com/invap/rt-monitor-example-app/blob/main/patched%20app/functions.c#L145):
-```
+```c
 /* Sentencia incorrecta: Error de despintado de una fila de la barra
  * for(signed int i = h+66 ; i > g+66 ; i--)
  */
 for(signed int i = h+66-1 ; i >= g+66 ; i--)
 ```
 and code fragment from [line 98](https://github.com/invap/rt-monitor-example-app/blob/main/patched%20app/functions.c#L98) to [line 105](https://github.com/invap/rt-monitor-example-app/blob/main/patched%20app/functions.c#L105):
-```
+```c
 /* Sentencias incorrectas: Error de representación de las muestras:
  *      dato > 3812 implies g > 383
  *      dato < 755 implies g < 0
@@ -380,7 +380,7 @@ int h = ((24 * dato_ing_old - 96) <= 0) ? 0 : ((24 * dato_ing_old - 96) >= 383) 
 ```
 3. *[buggy app self loggable](https://github.com/invap/rt-monitor-example-app/blob/main/buggy%20app%20self%20loggable/)*: the application is identical to the one described in **1.** but the component ADC was implemented with self logging capability. This is reflected in the following code fragments:
 	- in function [`adc_init`](https://github.com/invap/rt-monitor-example-app/blob/main/data-source%20self%20loggable/ex_adc.c#L16), see the code fragment from [line 17](https://github.com/invap/rt-monitor-example-app/blob/main/data-source%20self%20loggable/ex_adc.c#L17) to [line 21](https://github.com/invap/rt-monitor-example-app/blob/main/data-source%20self%20loggable/ex_adc.c#L21), where the execution reports the initialisation of a log file identified as "adc":
-	```
+	```c
 	// [ INSTRUMENTACION: Initialization event. ]
 	pause(&reporting_clk);
 	report(self_loggable_component_log_init_event,"adc");
@@ -388,7 +388,7 @@ int h = ((24 * dato_ing_old - 96) <= 0) ? 0 : ((24 * dato_ing_old - 96) >= 383) 
 	//
 	```
 	- in function [`sample`](https://github.com/invap/rt-monitor-example-app/blob/main/data-source%20self%20loggable/ex_adc.c#L34), see the code fragment from [line 62](https://github.com/invap/rt-monitor-example-app/blob/main/data-source%20self%20loggable/ex_adc.c#L62) to [line 67](https://github.com/invap/rt-monitor-example-app/blob/main/data-source%20self%20loggable/ex_adc.c#L67), where the execution reports events that have to be logged in the log file identified as "adc":
-	```
+	```c
 	// [ INSTRUMENTACION: Component event. ]
 	pause(&reporting_clk);
 	sprintf(str, "adc,%d", sample);
@@ -397,7 +397,7 @@ int h = ((24 * dato_ing_old - 96) <= 0) ? 0 : ((24 * dato_ing_old - 96) >= 383) 
 	//
 	```
 	- in function [`main`](https://github.com/invap/rt-monitor-example-app/blob/main/buggy%20app%20self%20loggable/main.c#L17), the instruction of [line 64](https://github.com/invap/rt-monitor-example-app/blob/main/buggy%20app%20self%20loggable/main.c#L64) is not accompanied by a reporting code fragment. In contraposition see function [`main`](https://github.com/invap/rt-monitor-example-app/blob/main/buggy%20app/main.c#L17), code fragment from [line 70](https://github.com/invap/rt-monitor-example-app/blob/main/buggy%20app/main.c#L70) to [line 76](https://github.com/invap/rt-monitor-example-app/blob/main/buggy%20app/main.c#L76), where the invocation of function `sample` is followed by a code fragment reporting a component event:  
-	```
+	```c
 	value = sample ();
 	// [ INSTRUMENTACION: Component event. ]
 	pause(&reporting_clk);
@@ -413,7 +413,7 @@ int h = ((24 * dato_ing_old - 96) <= 0) ? 0 : ((24 * dato_ing_old - 96) >= 383) 
 For the sake of this example, we resorted to an instrumentation-based event reporting strategy. This is done via a reporting API, which in this case is the [C reporting API](https://github.com/invap/c-reporter-api.git) which implements the primitive `report` through which the SUT reports the events occurring during its execution (see [README.md](https://github.com/invap/c-reporter-api/blob/main/README.md) for a more detailed presentation of the C reporting API). The C reporting API works in tandem with a reporting application (see, for example, the [Runtime Reporter](https://github.com/invap/rt-reporter.git "The Runtime Reporter")). The event reporter application launches the execution of the SUT as a separate process, from which it captures the output pipe through which it receives the reported events and, after processing them, writes the appropriate information in the corresponding event log.
 
 The reader must have noted that in the code fragments performing reports, the invocations of the instruction `report` appear enclosed in a `pause-resume` operation on the global stopwatch named `reporting_clk`, declared in the reporting API. An example of this situation can be seen in the following code fragment, taken from the function [`main`](https://github.com/invap/rt-monitor-example-app/blob/main/buggy%20app/main.c#L17), code fragment from [line 56](https://github.com/invap/rt-monitor-example-app/blob/main/buggy%20app/main.c#L56) to [line 62](https://github.com/invap/rt-monitor-example-app/blob/main/buggy%20app/main.c#L62), where the variable `addition` is assigned a new value, event that is reported immediately after:
-```
+```c
 addition = 0;
 // [ INSTRUMENTACION: Variable assigned. ]
 pause(&reporting_clk);
