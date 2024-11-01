@@ -77,6 +77,8 @@ name = "rt-monitor-example-app"
 [[components]]
     name = "adc"
     component = "process_rt_monitor.components.rt_monitor_example_app.ex_adc.adc"        # python relative component name
+    visual = true
 [[components]]
     name = "display"
     component = "process_rt_monitor.components.rt_monitor_example_app.ex_display.display"        # python relative component name
+    visual = true
