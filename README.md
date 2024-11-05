@@ -1,5 +1,4 @@
 # Example application for the Runtime Monitor
-
 This project provides a simple C application serving as example for the use of the [Runtime Reporter](https://github.com/invap/rt-reporter/ "The Runtime Reporter") and the [Runtime Monitor](https://github.com/invap/rt-monitor/ "The Runtime Monitoring") in the runtime verification of a software system. The application implements the software layer of the hardware-software system shown in [Figure 1](#hardware-software-system).
 
 <figure id="hardware-software-system" style="text-align: center;">
@@ -18,6 +17,63 @@ The runtime verification attained with the runtime monitor is done at the softwa
 The ADC and the LCD are operated through high level libraries (**ADC API** and **LCD API** in [Figure 1](#hardware-software-system), respectively, for reference) that are discussed in detail in Section [ADC implementation and operation](#adc-implementation-and-operation) and Section [LCD implementation and operation](#lcd-implementation-and-operation).
 
 The project provides four implementations of the software level of the system (we will describe them in detail in Section [Implementations of the app](#implementations-of-the-app)), all sharing the same rationale and source code structure. Two of them use an implementation of the ADC with self-logging capability, while the other two rely on the main program for logging the ADC behaviour.
+
+
+## Installation
+In this section we will review relevant aspects of how to setup this project for using it as a example application for using the [Runtime Reporter](https://github.com/invap/rt-reporter/ "The Runtime Reporter") and the [Runtime Monitor](https://github.com/invap/rt-monitor/ "The Runtime Monitoring").
+
+The implementation of the example application is distributed as source code to be used as running example. For obtaining it checkout the repository [rt-monitor-example-app](https://github.com/invap/rt-monitor-example-app/ "An example application for the Runtime Monitor")
+
+### Base C language installation
+- gcc 11.x to gcc 12, or newer (https://gcc.gnu.org/)
+- clang 14.0.0 or newer (Install via [Homebrew](https://brew.sh) with command `brew install gcc`
+- MinGW (https://osdn.net/projects/mingw/)
+
+### Structure the project
+The example application project is organized as follows:
+```graphql
+rt-monitor-example-app/
+├── buggy app/                        # Example application with a bug in file functions.c
+│   ├── functions.c
+│   ├── functions.h
+│   └── main.c
+├── buggy app self loggable/          # Example application with a bug in file functions.c
+│   ├── functions.c                   # and resorting to the self-loggable implementation
+│   ├── functions.h                   # of the data source.
+│   └── main.c
+├── data-display/                     # Implementation of the stub for the API of the display
+│   ├── ex_display.c
+│   ├── ex_display.h
+│   └── rgb.h
+├── data-source/                      # Implementation of the API of the data source
+│   ├── ex_adc.c
+│   └── ex_adc.h
+├── data-source self loggable/        # Implementation of the API of the data source with
+│   ├── ex_adc.c                      # self-loggable capabilities
+│   └── ex_adc.h
+├── framework-working-copy/           # Definition of the analysis framework
+│   ├── 12bitsreading.protosympy      # │
+│   ├── additionbound.protopy         # │
+│   ├── bariscorrect.protosmt2        # │ Properties to be checked at different points in the SSP
+│   │...                              # │ the SSP
+│   ├── init_time_bound               # │
+│   └── spec_gr.toml                  # Specification of the SSP
+├── patched app/                      # Example application with the bug in file functions.c
+│   ├── functions.c                   # fixed and resorting to the self-loggable implementation
+│   ├── functions.h
+│   └── main.c
+├── patched app self loggable/        # Example application with the bug in file functions.c
+│   ├── functions.c                   # fixed and resorting to the self-loggable implementation
+│   ├── functions.h                   # of the data source.
+│   └── main.c
+├── README_images/                    # Images for the read me file
+│   ├── class-diagram.png             # Class diagram of the software layer of the system
+│   ├── hardware-software-system.png  # Systems design
+│   └── ssp-software.png              # SSP diagram
+├── COPYING                           # Licence of the project 
+├── makefile                          # Make file for building the different versions of the application
+└── README.md                         # Read me file of the project
+```
 
 
 ## The software layer of the system as a structured sequential process
