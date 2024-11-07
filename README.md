@@ -96,10 +96,29 @@ name = "rt-monitor-example-app"
 [process]
     format = "graph"
 [process.structure]
-    nodes = 9
-    edges = [[0,1],[1,2],[2,3],[3,4],[4,5],[5,6],[6,7],[7,8],[8,2]]
-    start = 0
-    map = [ ["task", "init"], ["operator", "seq_composition"], ["operator", "omega_start"], ["task", "filtering"], ["operator", "seq_composition"], ["task", "conversion"], ["operator", "seq_composition"], ["checkpoint", "display_chk"], ["operator", "omega_end"] ]
+nodes = [
+    ["init", "task"],
+    ["to-loop", "operator:seq_composition"],
+    ["control-loop-start", "operator:omega_start"],
+    ["filtering", "task"],
+    ["filtered-sample", "operator:seq_composition"],
+    ["conversion", "task"],
+    ["measurement", "operator:seq_composition"],
+    ["display_chk", "checkpoint"],
+    ["control-loop-end", "operator:omega_end"]
+]
+edges = [
+    ["init","to-loop"],
+    ["to-loop","control-loop-start"],
+    ["control-loop-start","filtering"],
+    ["filtering","filtered-sample"],
+    ["filtered-sample","conversion"],
+    ["conversion","measurement"],
+    ["measurement","display_chk"],
+    ["display_chk","control-loop-end"],
+    ["control-loop-end", "control-loop-start"]
+]
+start = "init"
 
 [[process.tasks]]
     name = "init"
@@ -116,14 +135,14 @@ name = "rt-monitor-example-app"
     [[process.tasks.posts]]
         name = "init_time_bound"
         format = "protosympy"
-        file = "./sandbox/rt-monitor-example-app/specification/init_time_bound"
+        file = "init_time_bound"     # note that the extension of the name has no impact
 
 [[process.tasks]]
     name = "filtering"
     [[process.tasks.pres]]
         name = "filtering_pre"
         format = "protosmt2"
-        file = "/Users/clpombo/sandbox/invap-github/rt-monitor/sandbox/rt-monitor-example-app/specification/filtering_pre.protosmt2"
+        file = "filtering_pre.protosmt2"
     [[process.tasks.posts]]
         name = "filtering_post"
         format = "protosmt2"
@@ -325,12 +344,12 @@ Another aspect that has to be declared in the specification of the analysis fram
 ```toml
 [[components]]
     name = "adc"
-    component = "process_rt_monitor.components.rt_monitor_example_app.ex_adc.adc"
+    component = "framework.components.rt_monitor_example_app.ex_adc.adc"
     visual = true
 
 [[components]]
     name = "display"
-    component = "process_rt_monitor.components.rt_monitor_example_app.ex_display.display"
+    component = "framework.components.rt_monitor_example_app.ex_display.display"
     visual = true
 ```
 In both cases the digital twins have visual components accompanying their implementation for providing a graphical echo of runtime behaviour of the component (see Section [Implementation of digital twins for monitoring software components](https://github.com/invap/rt-monitor/blob/main/README.md#implementation-of-digital-twins-for-monitoring-software-components "Implementation of digital twins for monitoring software components.") for more information about the implementation of digital twins for monitoring software components of the SUT, and their associated visual).
