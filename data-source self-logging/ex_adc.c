@@ -20,10 +20,10 @@ void adc_init (void){
     resume(&reporting_clk);
     //
     file = fopen("./adc_info.csv","r");
-    if (file == NULL) {
-        adc_info_present = false;
-    } else {
+    if (file != NULL)
         adc_info_present = true;
+    else {
+        adc_info_present = false;
         srand(time(NULL));
         previous_sample = rand();
         previous_sample = previous_sample>>4;

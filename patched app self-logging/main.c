@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "../data-source self loggable/ex_adc.h"
+#include "../data-source self-logging/ex_adc.h"
 #include "functions.h"
 
 // Added to use the reporting API
@@ -118,5 +118,5 @@ int main( void ){
         report(process_event,"checkpoint_reached,display_chk");
         resume(&reporting_clk);
         //
-	} // WHILE
+    } // WHILE
 } // MAIN

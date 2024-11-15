@@ -11,11 +11,11 @@ patched: clean
 	make -C ../c-reporter-api lib
 	gcc patched\ app/main.c patched\ app/functions.c data-display/ex_display.c data-source/ex_adc.c -L../c-reporter-api/lib/ -lstopwatch -L../c-reporter-api/lib/ -lc-reporter-api -o main
 
-buggy-selfloggable: clean
+buggy-self-logging: clean
 	make -C ../c-reporter-api/ lib
-	gcc buggy\ app\ self\ loggable/main.c buggy\ app\ self\ loggable/functions.c data-display/ex_display.c data-source\ self\ loggable/ex_adc.c -L../c-reporter-api/lib/ -lstopwatch -L../c-reporter-api/lib/ -lc-reporter-api -o main
+	gcc buggy\ app\ self-logging/main.c buggy\ app\ self-logging/functions.c data-display/ex_display.c data-source\ self-logging/ex_adc.c -L../c-reporter-api/lib/ -lstopwatch -L../c-reporter-api/lib/ -lc-reporter-api -o main
 
-patched-selfloggable: clean
+patched-self-logging: clean
 	make -C ../c-reporter-api/ lib
-	gcc patched\ app\ self\ loggable/main.c patched\ app\ self\ loggable/functions.c data-display/ex_display.c data-source\ self\ loggable/ex_adc.c -L../c-reporter-api/lib/ -lstopwatch -L../c-reporter-api/lib/ -lc-reporter-api -o main
+	gcc patched\ app\ self-logging/main.c patched\ app\ self-logging/functions.c data-display/ex_display.c data-source\ self-logging/ex_adc.c -L../c-reporter-api/lib/ -lstopwatch -L../c-reporter-api/lib/ -lc-reporter-api -o main
 
