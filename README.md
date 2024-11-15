@@ -345,11 +345,13 @@ Another aspect that has to be declared in the specification of the analysis fram
 [[components]]
     name = "adc"
     component = "framework.components.rt_monitor_example_app.ex_adc.adc"
+    visual_component = "framework.components.rt_monitor_example_app.ex_adcVisual.adcVisual"
     visual = true
 
 [[components]]
     name = "display"
     component = "framework.components.rt_monitor_example_app.ex_display.display"
+    visual_component = "framework.components.rt_monitor_example_app.ex_displayVisual.displayVisual"
     visual = true
 ```
 In both cases the digital twins have visual components accompanying their implementation for providing a graphical echo of runtime behaviour of the component (see Section [Implementation of digital twins for monitoring software components](https://github.com/invap/rt-monitor/blob/main/README.md#implementation-of-digital-twins-for-monitoring-software-components "Implementation of digital twins for monitoring software components.") for more information about the implementation of digital twins for monitoring software components of the SUT, and their associated visual).
