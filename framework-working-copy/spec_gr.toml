@@ -1,4 +1,5 @@
 name = "rt-monitor-example-app"
+working_directory = "./path_to_files/"
 [process]
     format = "graph"
 [process.structure]
@@ -38,49 +39,46 @@ start = "init"
     [[process.tasks.posts]]
         name = "init_fondo_display"
         format = "protosmt2"
-        file = "./sandbox/rt-monitor-example-app/specification/init_fondo_display.protosmt2"       # local file.
+        file = "init_fondo_display.protosmt2"       # local file.
     [[process.tasks.posts]]
         name = "init_time_bound"
         format = "protosympy"
-        file = "./sandbox/rt-monitor-example-app/specification/init_time_bound"       # relative path to file.
-                                                                                      # file is the filename as it is; if it does not have
-                                                                                      # extension, so be it.
-
+        file = "init_time_bound"       # local file without extension.
 [[process.tasks]]
     name = "filtering"
     [[process.tasks.pres]]
         name = "filtering_pre"
         format = "protosmt2"
-        file = "/Users/clpombo/sandbox/invap-github/rt-monitor/sandbox/rt-monitor-example-app/specification/filtering_pre.protosmt2"       # absolute path to file.
+        file = "filtering_pre.protosmt2"       # local file.
     [[process.tasks.posts]]
         name = "filtering_post"
         format = "protosmt2"
-        file = "./sandbox/rt-monitor-example-app/specification/filtering_post.protosmt2"       # local file.
+        file = "filtering_post.protosmt2"       # local file.
     [[process.tasks.posts]]
         name = "filtering_time_bound"
         format = "protopy"
-        file = "./sandbox/rt-monitor-example-app/specification/filtering_time_bound.protopy"       # local file.
+        file = "filtering_time_bound.protopy"       # local file.
     [[process.tasks.checkpoints]]
         name = "filtering_chk"
         [[process.tasks.checkpoints.properties]]
             name = "12bitsreading"
             format = "protosympy"
-            file = "./sandbox/rt-monitor-example-app/specification/12bitsreading.protosympy"       # local file.
+            file = "12bitsreading.protosympy"       # local file.
         [[process.tasks.checkpoints.properties]]
             name = "additionbound"
             format = "protopy"
-            file = "./sandbox/rt-monitor-example-app/specification/additionbound.protopy"       # local file.
+            file = "additionbound.protopy"       # local file.
 
 [[process.tasks]]
     name = "conversion"
     [[process.tasks.pres]]
         name = "conversion_pre"
         format = "protosmt2"
-        file = "./sandbox/rt-monitor-example-app/specification/conversion_pre.protosmt2"       # absolute path to file.
+        file = "conversion_pre.protosmt2"       # local file.
     [[process.tasks.posts]]
         name = "conversion_post"
         format = "protosmt2"
-        file = "./sandbox/rt-monitor-example-app/specification/conversion_post.protosmt2"       # local file.
+        file = "conversion_post.protosmt2"       # local file.
     [[process.tasks.checkpoints]]
 
 [[process.checkpoints]]
@@ -88,15 +86,15 @@ start = "init"
     [[process.checkpoints.properties]]
         name = "barpointiscorrect"
         format = "protosmt2"
-        file = "./sandbox/rt-monitor-example-app/specification/barpointiscorrect.protosmt2"       # local file.
+        file = "barpointiscorrect.protosmt2"       # local file.
     [[process.checkpoints.properties]]
         name = "bariscorrect"
         format = "protosmt2"
-        file = "./sandbox/rt-monitor-example-app/specification/bariscorrect.protosmt2"       # local file.
+        file = "bariscorrect.protosmt2"       # local file.
 
 [[components]]
     name = "adc"
-    component = "framework.components.rt_monitor_example_app.ex_adc.adc"        # python relative component name
+    component = "framework.components.rt_monitor_example_app.ex_adc_visual_selflogging.adc"        # python relative component name
     visual_component = "framework.components.rt_monitor_example_app.ex_adcVisual.adcVisual"
     visual = true
 [[components]]
