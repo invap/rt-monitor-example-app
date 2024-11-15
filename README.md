@@ -37,8 +37,8 @@ rt-monitor-example-app/
 │   ├── functions.c
 │   ├── functions.h
 │   └── main.c
-├── buggy app self loggable/          # Example application with a bug in file functions.c
-│   ├── functions.c                   # and resorting to the self-loggable implementation
+├── buggy app self-logging/           # Example application with a bug in file functions.c
+│   ├── functions.c                   # and resorting to the self-logging implementation
 │   ├── functions.h                   # of the data source.
 │   └── main.c
 ├── data-display/                     # Implementation of the stub for the API of the display
@@ -48,8 +48,8 @@ rt-monitor-example-app/
 ├── data-source/                      # Implementation of the API of the data source
 │   ├── ex_adc.c
 │   └── ex_adc.h
-├── data-source self loggable/        # Implementation of the API of the data source with
-│   ├── ex_adc.c                      # self-loggable capabilities
+├── data-source self-logging/         # Implementation of the API of the data source with
+│   ├── ex_adc.c                      # self-logging capabilities
 │   └── ex_adc.h
 ├── framework-working-copy/           # Definition of the analysis framework
 │   ├── 12bitsreading.protosympy      # │
@@ -59,11 +59,11 @@ rt-monitor-example-app/
 │   ├── init_time_bound               # │
 │   └── spec_gr.toml                  # Specification of the SSP
 ├── patched app/                      # Example application with the bug in file functions.c
-│   ├── functions.c                   # fixed and resorting to the self-loggable implementation
+│   ├── functions.c                   # fixed and resorting to the self-logging implementation
 │   ├── functions.h
 │   └── main.c
-├── patched app self loggable/        # Example application with the bug in file functions.c
-│   ├── functions.c                   # fixed and resorting to the self-loggable implementation
+├── patched app self-logging/         # Example application with the bug in file functions.c
+│   ├── functions.c                   # fixed and resorting to the self-logging implementation
 │   ├── functions.h                   # of the data source.
 │   └── main.c
 ├── README_images/                    # Images for the read me file
@@ -461,7 +461,7 @@ and code fragment from [Line 98](https://github.com/invap/rt-monitor-example-app
 int g = ((24 * dato_ing - 96) <= 0) ? 0 : ((24 * dato_ing - 96) >= 383) ? 383 : (24 * dato_ing - 96);
 int h = ((24 * dato_ing_old - 96) <= 0) ? 0 : ((24 * dato_ing_old - 96) >= 383) ? 383 : (24 * dato_ing_old - 96);
 ```
-3. *[buggy app self loggable](https://github.com/invap/rt-monitor-example-app/tree/main/buggy%20app%20self%20loggable/)*: the application is identical to the one described in **1.** but the component ADC was implemented with self logging capability. This is reflected in the following code fragments:
+3. *[buggy app self-logging](https://github.com/invap/rt-monitor-example-app/tree/main/buggy%20app%20self%20loggable/)*: the application is identical to the one described in **1.** but the component ADC was implemented with self logging capability. This is reflected in the following code fragments:
 	- in function [`adc_init`](https://github.com/invap/rt-monitor-example-app/blob/main/data-source%20self%20loggable/ex_adc.c#L16) of file [`ex_adc.c`](https://github.com/invap/rt-monitor-example-app/blob/main/data-source%20self%20loggable/ex_adc.c), see the code fragment from [Line 17](https://github.com/invap/rt-monitor-example-app/blob/main/data-source%20self%20loggable/ex_adc.c#L17) to [Line 21](https://github.com/invap/rt-monitor-example-app/blob/main/data-source%20self%20loggable/ex_adc.c#L21), where the execution reports the initialisation of a log file identified as "adc":
 	```c
 	// [ INSTRUMENTACION: Initialization event. ]
@@ -489,7 +489,7 @@ int h = ((24 * dato_ing_old - 96) <= 0) ? 0 : ((24 * dato_ing_old - 96) >= 383) 
 	resume(&reporting_clk);
 	//
 	```
-4. *[patched app self loggable](https://github.com/invap/rt-monitor-example-app/tree/main/patched%20app%20self%20loggable/)*: it is identical to the implementation presented in **2.** but including the considerations discussed above, in **3.**, about the use of an implementation of the ADC with self-logging capability.
+4. *[patched app self-logging](https://github.com/invap/rt-monitor-example-app/tree/main/patched%20app%20self%20loggable/)*: it is identical to the implementation presented in **2.** but including the considerations discussed above, in **3.**, about the use of an implementation of the ADC with self-logging capability.
 
 
 ## A comment on the use of the stopwatch `reporting_clk`
