@@ -93,6 +93,7 @@ The specification of the analysis framework must be written in TOML format. For 
 The following fragment shows the structured sequential process of [Figure 2](#ssp-software) in TOML format:
 ```toml
 name = "rt-monitor-example-app"
+working_directory = "./path_to_files/"
 [process]
     format = "graph"
 [process.structure]
@@ -185,6 +186,7 @@ start = "init"
         format = "protosmt2"
         file = "bariscorrect.protosmt2"
 ```
+By default, the files are expected to be found in the location designated by the attribute `working_directory`. If such attribute is not present, then the path of the analysis framework specification is used instead. Nonetheless, if the `file` attribute of a property is specified by a string starting with `/` of `.`, the path section of the value of the attribute (i.e., the substring starting at position 0 and ending right before the last occurrence of `/`) overrides the default.
 
 Below there is a list of the properties involved in the above, accompanied by its rationale. The reader is pointed to Section [Specification language for describing the analysis framework](https://github.com/invap/rt-monitor/blob/main/README.md#specification-language "Specification language for describing the analysis framework") for a detailed explanation of the syntax used to write each type of formula. 
 
