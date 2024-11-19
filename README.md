@@ -344,16 +344,22 @@ None
 ```
 Another aspect that has to be declared in the specification of the analysis framework is the components that will play a role for analysing the system. In this specific case study we analyse the behaviour of the system by considering that the implementation of the ADC and the LCD are not monitored internally but only through the invocation of the functions in their interface. This requires from us to declare which are the Python clases that provide implementations of the digital twins for both the [ADC](https://github.com/invap/rt-monitor/blob/main/framework/components/rt_monitor_example_app/ex_adc.py) and the [LCD](https://github.com/invap/rt-monitor/blob/main/framework/components/rt_monitor_example_app/ex_display.py). The components that are used for the runtime verification of this example application are declared as part of the specification also in TOML format:
 ```toml
-[[components]]
+[components]
+    location = "general_path_to_components"       # this is optional; if not present uses "."
+[[components.list]]
     name = "adc"
-    component = "framework.components.rt_monitor_example_app.ex_adc.adc"
-    visual_component = "framework.components.rt_monitor_example_app.ex_adcVisual.adcVisual"
+    component_path = "specific_path_to_component"       # this is optional; if not present uses the location attribute
+    component_file = "ex_adc_visual.py"
+    component_name = "adc"
+    visual_component_file = "ex_adcVisual.py"       # the visual component is assumed to be in the same location as the component
+    visual_component_name = "adcVisual"
     visual = true
-
-[[components]]
+[[components.list]]
     name = "display"
-    component = "framework.components.rt_monitor_example_app.ex_display.display"
-    visual_component = "framework.components.rt_monitor_example_app.ex_displayVisual.displayVisual"
+    component_file = "ex_display.py"
+    component_name = "display"
+    visual_component_file = "ex_displayVisual.py"
+    visual_component_name = "displayVisual"
     visual = true
 ```
 In both cases the digital twins have visual components accompanying their implementation for providing a graphical echo of runtime behaviour of the component (see Section [Implementation of digital twins for monitoring software components](https://github.com/invap/rt-monitor/blob/main/README.md#implementation-of-digital-twins-for-monitoring-software-components "Implementation of digital twins for monitoring software components.") for more information about the implementation of digital twins for monitoring software components of the SUT, and their associated visual).

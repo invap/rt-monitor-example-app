@@ -1,5 +1,5 @@
 name = "rt-monitor-example-app"
-working_directory = "./path_to_files/"
+working_directory = "path_to_specification_files"
 [process]
     format = "graph"
 [process.structure]
@@ -43,13 +43,16 @@ start = "init"
     [[process.tasks.posts]]
         name = "init_time_bound"
         format = "protosympy"
-        file = "init_time_bound"       # local file without extension.
+        file = "./sandbox/rt-monitor-example-app/specification/init_time_bound"       # relative path to file.
+                                                                                      # file is the filename as it is; if it does not have
+                                                                                      # extension, so be it.
+
 [[process.tasks]]
     name = "filtering"
     [[process.tasks.pres]]
         name = "filtering_pre"
         format = "protosmt2"
-        file = "filtering_pre.protosmt2"       # local file.
+        file = "/Users/clpombo/sandbox/invap-github/rt-monitor/sandbox/rt-monitor-example-app/specification/filtering_pre.protosmt2"       # absolute path to file.
     [[process.tasks.posts]]
         name = "filtering_post"
         format = "protosmt2"
@@ -92,13 +95,20 @@ start = "init"
         format = "protosmt2"
         file = "bariscorrect.protosmt2"       # local file.
 
-[[components]]
+[components]
+    location = "general_path_to_components"       # this is optional; if not present uses "."
+[[components.list]]
     name = "adc"
-    component = "framework.components.rt_monitor_example_app.ex_adc_visual_selflogging.adc"        # python relative component name
-    visual_component = "framework.components.rt_monitor_example_app.ex_adcVisual.adcVisual"
+    component_path = "specific_path_to_component"       # this is optional; if not present uses the location attribute
+    component_file = "ex_adc_visual_selflogging.py"
+    component_name = "adc"
+    visual_component_file = "ex_adcVisual.py"       # the visual component is assumed to be in the same location as the component
+    visual_component_name = "adcVisual"
     visual = true
-[[components]]
+[[components.list]]
     name = "display"
-    component = "framework.components.rt_monitor_example_app.ex_display.display"        # python relative component name
-    visual_component = "framework.components.rt_monitor_example_app.ex_displayVisual.displayVisual"
+    component_file = "ex_display.py"
+    component_name = "display"
+    visual_component_file = "ex_displayVisual.py"
+    visual_component_name = "displayVisual"
     visual = true
