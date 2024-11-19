@@ -96,6 +96,7 @@ start = "init"
         file = "bariscorrect.protosmt2"       # local file.
 
 [components]
+    visual = true
     location = "general_path_to_components"       # this is optional; if not present uses "."
 [[components.list]]
     name = "adc"
