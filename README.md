@@ -345,6 +345,7 @@ None
 Another aspect that has to be declared in the specification of the analysis framework is the components that will play a role for analysing the system. In this specific case study we analyse the behaviour of the system by considering that the implementation of the ADC and the LCD are not monitored internally but only through the invocation of the functions in their interface. This requires from us to declare which are the Python clases that provide implementations of the digital twins for both the [ADC](https://github.com/invap/rt-monitor/blob/main/framework/components/rt_monitor_example_app/ex_adc.py) and the [LCD](https://github.com/invap/rt-monitor/blob/main/framework/components/rt_monitor_example_app/ex_display.py). The components that are used for the runtime verification of this example application are declared as part of the specification also in TOML format:
 ```toml
 [components]
+    visual = true
     location = "general_path_to_components"       # this is optional; if not present uses "."
 [[components.list]]
     name = "adc"
