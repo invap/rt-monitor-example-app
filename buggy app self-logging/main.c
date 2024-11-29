@@ -29,6 +29,12 @@ int main( void ){
     resume(&reporting_clk);
     //
     adc_init ();
+    // [ INSTRUMENTACION: Component event. ]
+    pause(&reporting_clk);
+    sprintf(str, "adc,adc_init");
+    report(component_event,str);
+    resume(&reporting_clk);
+    //
     background();
     // [ POTENTIAL PROBLEM FOUND: realvalue_old was not initialized.  ]
     realvalue_old = 0;
