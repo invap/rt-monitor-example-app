@@ -1,4 +1,4 @@
-# Example application for the Runtime Monitor
+# Example application for the Runtime Monitor written in C
 This project provides a simple C application serving as example for the use of the [Runtime Reporter](https://github.com/invap/rt-reporter/ "The Runtime Reporter") and the [Runtime Monitor](https://github.com/invap/rt-monitor/ "The Runtime Monitoring") in the runtime verification of a software system. The application implements the software layer of the hardware-software system shown in [Figure 1](#hardware-software-system).
 
 <figure id="hardware-software-system" style="text-align: center;">
