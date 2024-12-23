@@ -1,5 +1,5 @@
 # Example application for the Runtime Monitor written in C
-This project provides a simple C application serving as example for the use of the [Runtime Reporter](https://github.com/invap/rt-reporter/ "The Runtime Reporter") and the [Runtime Monitor](https://github.com/invap/rt-monitor/ "The Runtime Monitoring") in the runtime verification of a software system. The application implements the software layer of the hardware-software system shown in [Figure 1](#hardware-software-system).
+This project provides a simple C application serving as example for the use of the [Runtime Reporter](https://github.com/invap/rt-reporter/ "The Runtime Reporter") and the [Runtime Monitor](https://github.com/invap/rt-monitor/ "The Runtime Monitor") in the runtime verification of a software system. The application implements the software layer of the hardware-software system shown in [Figure 1](#hardware-software-system).
 
 <figure id="hardware-software-system" style="text-align: center;">
   <img src="./README_images/hardware-software-system.png" width="600" alt="A hardware-software system for displaying the magnitude of an analog signal.">
@@ -12,7 +12,8 @@ The rationale of the system is that of a control loop (**Main control loop** in 
 2. converts it to a floating point number (from now on, referred to as engineering value), and
 3. displays it as a bar in an LCD akin the SSD1963 from Solomon Systech Limited (*LCD*).
 
-The runtime verification attained with the runtime monitor is done at the software layer of the system in order to check the correctness[^correctness] of the software implementation with respect to an abstract specification of the process (see Section [Structured Sequential Processes](https://github.com/invap/rt-monitor/blob/main/README.md#structured-sequential-processes "Structured Sequential Processes") for a detailed presentation of the language for describing structured sequential processes, the abstract language used for specifying software artifacts). 
+The runtime verification attained with the Runtime Monitor is done at the software layer of the system in order to 
+check the correctness[^correctness] of the software implementation with respect to an abstract specification of the process (see Section [Structured Sequential Processes](https://github.com/invap/rt-monitor/blob/main/README.md#structured-sequential-processes "Structured Sequential Processes") for a detailed presentation of the language for describing structured sequential processes, the abstract language used for specifying software artifacts). 
 
 The ADC and the LCD are operated through high level libraries (**ADC API** and **LCD API** in [Figure 1](#hardware-software-system), respectively, for reference) that are discussed in detail in Section [ADC implementation and operation](#adc-implementation-and-operation) and Section [LCD implementation and operation](#lcd-implementation-and-operation).
 
@@ -20,7 +21,7 @@ The project provides four implementations of the software level of the system (w
 
 
 ## Installation
-In this section we will review relevant aspects of how to setup this project for using it as a example application for using the [Runtime Reporter](https://github.com/invap/rt-reporter/ "The Runtime Reporter") and the [Runtime Monitor](https://github.com/invap/rt-monitor/ "The Runtime Monitoring").
+In this section we will review relevant aspects of how to setup this project for using it as a example application for using the [Runtime Reporter](https://github.com/invap/rt-reporter/ "The Runtime Reporter") and the [Runtime Monitor](https://github.com/invap/rt-monitor/ "The Runtime Monitor").
 
 The implementation of the example application is distributed as source code to be used as running example. For obtaining it checkout the repository [rt-monitor-example-app](https://github.com/invap/rt-monitor-example-app/ "An example application for the Runtime Monitor")
 
@@ -365,7 +366,8 @@ Another aspect that has to be declared in the specification of the analysis fram
 ```
 In both cases the digital twins have visual components accompanying their implementation for providing a graphical echo of runtime behaviour of the component (see Section [Implementation of digital twins for monitoring software components](https://github.com/invap/rt-monitor/blob/main/README.md#implementation-of-digital-twins-for-monitoring-software-components "Implementation of digital twins for monitoring software components.") for more information about the implementation of digital twins for monitoring software components of the SUT, and their associated visual).
 
-The reader should note that the specification is incomplete and many more properties of interest would have been added to be checked along the execution of the system, but we focussed on a subset that could provide an interesting example for the use of the Runtime monitor.
+The reader should note that the specification is incomplete and many more properties of interest would have been 
+added to be checked along the execution of the system, but we focussed on a subset that could provide an interesting example for the use of the Runtime Monitor.
 
 The complete specification of the analysis framework is provided as a [TOML file](https://github.com/invap/rt-monitor-example-app/blob/main/framework-working-copy/spec_gr.toml). For a complete explanation of the syntax see Section [Specification language for describing the analysis framework](https://github.com/invap/rt-monitor/blob/main/README.md#specification-language "Specification language for describing the analysis framework."). 
 
