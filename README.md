@@ -1,5 +1,5 @@
-# Example application for the Runtime Monitor written in C
-This project provides a simple C application serving as example for the use of the [Runtime Reporter](https://github.com/invap/rt-reporter/ "The Runtime Reporter") and the [Runtime Monitor](https://github.com/invap/rt-monitor/ "The Runtime Monitor") in the runtime verification of a software system. The application implements the software layer of the hardware-software system shown in [Figure 1](#hardware-software-system).
+# Example application written in C for the Runtime Monitor
+This project provides a simple C application serving as example for the use of the [Runtime Reporter](https://github.com/invap/rt-reporter/ "The Runtime Reporter") and the [Runtime Monitor](https://github.com/invap/rt-monitor/ "The Runtime Monitoring") in the runtime verification of a software system. The application implements the software layer of the hardware-software system shown in [Figure 1](#hardware-software-system).
 
 <figure id="hardware-software-system" style="text-align: center;">
   <img src="./README_images/hardware-software-system.png" width="600" alt="A hardware-software system for displaying the magnitude of an analog signal.">
@@ -12,8 +12,7 @@ The rationale of the system is that of a control loop (**Main control loop** in 
 2. converts it to a floating point number (from now on, referred to as engineering value), and
 3. displays it as a bar in an LCD akin the SSD1963 from Solomon Systech Limited (*LCD*).
 
-The runtime verification attained with the Runtime Monitor is done at the software layer of the system in order to 
-check the correctness[^correctness] of the software implementation with respect to an abstract specification of the process (see Section [Structured Sequential Processes](https://github.com/invap/rt-monitor/blob/main/README.md#structured-sequential-processes "Structured Sequential Processes") for a detailed presentation of the language for describing structured sequential processes, the abstract language used for specifying software artifacts). 
+The runtime verification attained with the runtime monitor is done at the software layer of the system in order to check the correctness[^correctness] of the software implementation with respect to an abstract specification of the process (see Section [Structured Sequential Processes](https://github.com/invap/rt-monitor/blob/main/README.md#structured-sequential-processes "Structured Sequential Processes") for a detailed presentation of the language for describing structured sequential processes, the abstract language used for specifying software artifacts). 
 
 The ADC and the LCD are operated through high level libraries (**ADC API** and **LCD API** in [Figure 1](#hardware-software-system), respectively, for reference) that are discussed in detail in Section [ADC implementation and operation](#adc-implementation-and-operation) and Section [LCD implementation and operation](#lcd-implementation-and-operation).
 
@@ -21,7 +20,7 @@ The project provides four implementations of the software level of the system (w
 
 
 ## Installation
-In this section we will review relevant aspects of how to setup this project for using it as a example application for using the [Runtime Reporter](https://github.com/invap/rt-reporter/ "The Runtime Reporter") and the [Runtime Monitor](https://github.com/invap/rt-monitor/ "The Runtime Monitor").
+In this section we will review relevant aspects of how to setup this project for using it as a example application for using the [Runtime Reporter](https://github.com/invap/rt-reporter/ "The Runtime Reporter") and the [Runtime Monitor](https://github.com/invap/rt-monitor/ "The Runtime Monitoring").
 
 The implementation of the example application is distributed as source code to be used as running example. For obtaining it checkout the repository [rt-monitor-example-app](https://github.com/invap/rt-monitor-example-app/ "An example application for the Runtime Monitor")
 
@@ -366,8 +365,7 @@ Another aspect that has to be declared in the specification of the analysis fram
 ```
 In both cases the digital twins have visual components accompanying their implementation for providing a graphical echo of runtime behaviour of the component (see Section [Implementation of digital twins for monitoring software components](https://github.com/invap/rt-monitor/blob/main/README.md#implementation-of-digital-twins-for-monitoring-software-components "Implementation of digital twins for monitoring software components.") for more information about the implementation of digital twins for monitoring software components of the SUT, and their associated visual).
 
-The reader should note that the specification is incomplete and many more properties of interest would have been 
-added to be checked along the execution of the system, but we focussed on a subset that could provide an interesting example for the use of the Runtime Monitor.
+The reader should note that the specification is incomplete and many more properties of interest would have been added to be checked along the execution of the system, but we focussed on a subset that could provide an interesting example for the use of the Runtime monitor.
 
 The complete specification of the analysis framework is provided as a [TOML file](https://github.com/invap/rt-monitor-example-app/blob/main/framework-working-copy/spec_gr.toml). For a complete explanation of the syntax see Section [Specification language for describing the analysis framework](https://github.com/invap/rt-monitor/blob/main/README.md#specification-language "Specification language for describing the analysis framework."). 
 
@@ -441,7 +439,8 @@ void display_Show_RGB(unsigned char dat1,unsigned char dat2,unsigned char dat3, 
 The reader should note that the example proposes an interface providing high level functionalities for operating with the LCD. If we consider the hardware-software system proposed in [Figure 1](#hardware-software-system), in general, the low-level interface of the LCD hardware devices do not provide any capability for inspecting the state of the hardware component. This characteristic, shared with many other hardware components, is a key argument behind the addition of an event type for *component function calls* (see Section [Event language](https://github.com/invap/rt-monitor/blob/main/README.md#event-language "Event language.") for further details), as it provides an effective connection between the operation of the component, part of the software under test (SUT) and whose internal behaviour is not being verified, and a digital twin, used by the monitor for checking the properties of interest. In the case of the LCD of the present application, it is implemented in "[ex_display.py](https://github.com/invap/rt-monitor/blob/main/framework/components/rt_monitor_example_app/ex_display.py)"). For a more detailed explanation regarding the (black box) runtime verification of components see Section [Monitoring components](https://github.com/invap/rt-monitor/blob/main/README.md#monitoring-components).
 
 
-## Implementations of the application [Figure 3](#class-diagram) shows the architectural view of the implementation of the software layer implementation of the system shown in [Figure 1](#hardware-software-system).
+## Implementations of the application
+[Figure 3](#class-diagram) shows the architectural view of the implementation of the software layer implementation of the system shown in [Figure 1](#hardware-software-system).
 
 <figure id="class-diagram" style="text-align: center;">
   <img src="./README_images/class-diagram.png" width="600" alt="The architectural view of the software layer implementation of the system shown in Figure 1.">
@@ -449,7 +448,7 @@ The reader should note that the example proposes an interface providing high lev
   </figcaption>
 </figure>
 
-From a general point of view, the component `main` implements the infinite control loop (through function `main`) which, after taking some initial actions like initialising some variables, painting the background of the LCD (functions `background` of component `ex_display`), and initializing the ADC (function `adc_init` of component `ex_adc`), proceeds to subsequently compute the average of 16 samples, read from the ADC (through function `sample` of component `ex_adc`) and then write the engineering value corresponding to that computation in numbers in the lower section of the screen (through `measure` of component `ex_display`) and as a vertical bar (akin to a VU meter) in the central part of the LCD (through `bat` of component `ex_display`).
+From a general point of view, the component `main` implements the infinite control loop (through function `main`) which, after taking some initial actions like initialising some variables, painting the background of the LCD (functions `background` of component `ex_display`), and initializing the ADC (function `adc_init` of component `ex_adc`), proceeds to subsequently compute the average of 16 samples, read from the ADC (through function `sample` of component `ex_adc`) and then write the engineering value corresponding to that computation in numbers in the lower section of the screen (through `measure` of component `ex_display`) and as a vertical bar (akin to a VU meter) in the central part of the LCD (through `bar` of component `ex_display`).
 
 Below we provide an explanation of the different implementations contained in this project. Notice that, as in the case of testing, the notion of *buggy* for the implementation experiencing bugs, and *patched* for the implementation correcting them, is relative to the formal properties we stated in the specification of the system we gave in Section [The software layer of the system as a structured sequential process](#the-software-layer-of-the-system-as-a-structured-sequential-process).
 
