@@ -1,5 +1,6 @@
-(bar_point:State Int),(pixels:Component (Array Int (Array Int (Array Int Int))))
-(forall ((y Int) (x Int))
+format = "smt2"
+variables = "(bar_point:State Int),(pixels:Component (Array Int (Array Int (Array Int Int))))"
+formula = """(forall ((y Int) (x Int))
         (=>
             (and (>= y 155) (<= y 190))
             (and
@@ -21,4 +22,4 @@
                 )
             )
         )
-)
+)"""

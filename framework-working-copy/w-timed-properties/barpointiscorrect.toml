@@ -1,5 +1,6 @@
-(bar_dato_ing:State Real),(bar_point:State Int)
-(exists ((real_value Real))
+format = "smt2"
+variables = "(bar_dato_ing:State Real),(bar_point:State Int)"
+formula = """(exists ((real_value Real))
         (let (
                 (abs_diff
                 (ite (< bar_dato_ing real_value)
@@ -21,4 +22,4 @@
                 )
              )
         )
-)
+)"""

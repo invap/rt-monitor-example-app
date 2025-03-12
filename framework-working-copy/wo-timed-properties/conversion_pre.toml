@@ -1,0 +1,4 @@
+format = "smt2"
+variables = "(main_realvalue:State Int)"
+formula = "(and (<= 0 main_realvalue) (< main_realvalue 4096))"
+
