@@ -93,127 +93,133 @@ The specification of the analysis framework must be written in TOML format. For 
 The following fragment shows the structured sequential process of [Figure 2](#ssp-software) in TOML format:
 ```toml
 name = "rt-monitor-example-app"
-working_directory = "./path_to_files/"
+working_directory = "./sandbox/rt-monitor-example-app self-logging patched/specification/"
 [process]
-    format = "graph"
+format = "graph"
 [process.structure]
 nodes = [
-    ["init", "task"],
-    ["to-loop", "operator:seq_composition"],
-    ["control-loop-start", "operator:omega_start"],
-    ["filtering", "task"],
-    ["filtered-sample", "operator:seq_composition"],
-    ["conversion", "task"],
-    ["measurement", "operator:seq_composition"],
-    ["display_chk", "checkpoint"],
-    ["control-loop-end", "operator:omega_end"]
+	["init", "task"],
+	["to-loop", "operator:seq_composition"],
+	["control-loop-start", "operator:omega_start"],
+	["filtering", "task"],
+	["filtered-sample", "operator:seq_composition"],
+	["conversion", "task"],
+	["measurement", "operator:seq_composition"],
+	["display_chk", "checkpoint"],
+	["control-loop-end", "operator:omega_end"]
 ]
 edges = [
-    ["init","to-loop"],
-    ["to-loop","control-loop-start"],
-    ["control-loop-start","filtering"],
-    ["filtering","filtered-sample"],
-    ["filtered-sample","conversion"],
-    ["conversion","measurement"],
-    ["measurement","display_chk"],
-    ["display_chk","control-loop-end"],
-    ["control-loop-end", "control-loop-start"]
+	["init","to-loop"],
+	["to-loop","control-loop-start"],
+	["control-loop-start","filtering"],
+	["filtering","filtered-sample"],
+	["filtered-sample","conversion"],
+	["conversion","measurement"],
+	["measurement","display_chk"],
+	["display_chk","control-loop-end"],
+	["control-loop-end", "control-loop-start"]
 ]
 start = "init"
 
-[[process.tasks]]
-    name = "init"
-    [[process.tasks.pres]]
-    [[process.tasks.posts]]
-        name = "init_vars"
-        format = "protosmt2"
-        variables = "(main_realvalue_old:State Int)"
-        formula = "(= main_realvalue_old 0)"
-    [[process.tasks.posts]]
-        name = "init_fondo_display"
-        format = "protosmt2"
-        file = "init_fondo_display.protosmt2"
-    [[process.tasks.posts]]
-        name = "init_time_bound"
-        format = "protosympy"
-        file = "init_time_bound"     # note that the extension of the name has no impact
 
 [[process.tasks]]
-    name = "filtering"
-    [[process.tasks.pres]]
-        name = "filtering_pre"
-        format = "protosmt2"
-        file = "filtering_pre.protosmt2"
-    [[process.tasks.posts]]
-        name = "filtering_post"
-        format = "protosmt2"
-        file = "filtering_post.protosmt2"
-    [[process.tasks.posts]]
-        name = "filtering_time_bound"
-        format = "protopy"
-        file = "filtering_time_bound.protopy"
-    [[process.tasks.checkpoints]]
-        name = "filtering_chk"
-        [[process.tasks.checkpoints.properties]]
-            name = "12bitsreading"
-            format = "protosympy"
-            file = "12bitsreading.protosympy"
-        [[process.tasks.checkpoints.properties]]
-            name = "additionbound"
-            format = "protopy"
-            file = "additionbound.protopy"
+name = "init"
+[[process.tasks.pres]]
+[[process.tasks.posts]]
+name = "init_vars"
+format = "smt2"
+variables = "(main_realvalue_old:State Int)"
+formula = "(= main_realvalue_old 0)"        # inline formula.
+[[process.tasks.posts]]
+name = "init_fondo_display"
+format = "smt2"
+file = "init_fondo_display.toml"       # local file.
+[[process.tasks.posts]]
+name = "init_time_bound"
+format = "sympy"
+file = "./sandbox/rt-monitor-example-app self-logging patched/specification/init_time_bound.toml"       # relative path to file.
 
 [[process.tasks]]
-    name = "conversion"
-    [[process.tasks.pres]]
-        name = "conversion_pre"
-        format = "protosmt2"
-        file = "conversion_pre.protosmt2"
-    [[process.tasks.posts]]
-        name = "conversion_post"
-        format = "protosmt2"
-        file = "conversion_post.protosmt2"
-    [[process.tasks.checkpoints]]
+name = "filtering"
+[[process.tasks.pres]]
+name = "filtering_pre"
+format = "smt2"
+file = "/Users/clpombo/sandbox/invap-github/rt-monitor/sandbox/rt-monitor-example-app self-logging patched/specification/filtering_pre.toml"       # absolute path to file.
+[[process.tasks.posts]]
+name = "filtering_post"
+format = "smt2"
+file = "filtering_post.toml"       # local file.
+[[process.tasks.posts]]
+name = "filtering_time_bound"
+format = "py"
+file = "filtering_time_bound.toml"       # local file.
+[[process.tasks.checkpoints]]
+name = "filtering_chk"
+[[process.tasks.checkpoints.properties]]
+name = "12bitsreading"
+format = "sympy"
+file = "12bitsreading.toml"       # local file.
+[[process.tasks.checkpoints.properties]]
+name = "additionbound"
+format = "py"
+file = "additionbound.toml"       # local file.
+
+[[process.tasks]]
+name = "conversion"
+[[process.tasks.pres]]
+name = "conversion_pre"
+format = "smt2"
+file = "conversion_pre.toml"       # local file.
+[[process.tasks.posts]]
+name = "conversion_post"
+format = "smt2"
+file = "conversion_post.toml"       # local file.
+[[process.tasks.checkpoints]]
 
 [[process.checkpoints]]
-    name = "display_chk"
-    [[process.checkpoints.properties]]
-        name = "barpointiscorrect"
-        format = "protosmt2"
-        file = "barpointiscorrect.protosmt2"
-    [[process.checkpoints.properties]]
-        name = "bariscorrect"
-        format = "protosmt2"
-        file = "bariscorrect.protosmt2"
+name = "display_chk"
+[[process.checkpoints.properties]]
+name = "barpointiscorrect"
+format = "smt2"
+file = "barpointiscorrect.toml"       # local file.
+[[process.checkpoints.properties]]
+name = "bariscorrect"
+format = "smt2"
+file = "bariscorrect.toml"       # local file.
 ```
 By default, the files are expected to be found in the location designated by the attribute `working_directory`. If such attribute is not present, then the path of the analysis framework specification is used instead. Nonetheless, if the `file` attribute of a property is specified by a string starting with `/` of `.`, the path section of the value of the attribute (i.e., the substring starting at position 0 and ending right before the last occurrence of `/`) overrides the default.
 
-Below there is a list of the properties involved in the above, accompanied by its rationale. The reader is pointed to Section [Specification language for describing the analysis framework](https://github.com/invap/rt-monitor/blob/main/README.md#specification-language "Specification language for describing the analysis framework") for a detailed explanation of the syntax used to write each type of formula. 
+Below there is a list of the properties involved in the above analysis framework, accompanied by its rationale. Notice that properties are written in toml format. The reader is pointed to Section [Specification language for describing the analysis framework](https://github.com/invap/rt-monitor/blob/main/README.md#specification-language "Specification language for describing the analysis framework") for a detailed explanation of the syntax used to write each type of formula. 
 
 - `init_vars`: asserts that the variable storing the previous sample is initialised with 0
-```smt
-(main_realvalue_old:State Int)
-(= main_realvalue_old 0)
+```toml
+name = "init_vars"
+format = "smt2"
+variables = "(main_realvalue_old:State Int)"
+formula = "(= main_realvalue_old 0)"        # inline formula.
 ```
 - `init_fondo_display`: asserts that the invariant part of the image shown in the display has been correctly written. **Important note**: this is a dummy property because it is too cumbersome and does not add much to the purpose of this example; we will complete this in the future with a proper formula
-```smt
-None
-(= 1 1)
+```toml
+format = "smt2"
+formula = "(= 1 1)"
 ```
 - `init_time_bound`: establishes a bound to the time required to perform the task *init*, between 10 and 1000 milliseconds
-```smt
-(init_clk:Clock Int)
-((10 <= init_clk) & (init_clk < 1000))
+```toml
+format = "py"
+variables = "(init_clk:Clock Int)"
+formula = "((10 <= init_clk) & (init_clk < 1000))"
 ```
 - `filtering_pre`: states the precondition of the task *filtering* asserting that the variable in which the process computes the addition of the 16 samples has been assigned 0
-```smt
-(main_addition:State Int)
-(= main_addition 0)
+```toml
+format = "smt2"
+variables = "(main_addition:State Int)"
+formula = "(= main_addition 0)"
 ```
 - `filtering_post`: states that the value reported as the result of computing the addition of 16 sampled datum and then dividing by 16 is indeed the average of those values
-```smt
-(main_addition:State Int),(main_realvalue:State Int),(main_value_0:State Int),(main_value_1:State Int),(main_value_2:State Int),(main_value_3:State Int),(main_value_4:State Int),(main_value_5:State Int),(main_value_6:State Int),(main_value_7:State Int),(main_value_8:State Int),(main_value_9:State Int),(main_value_10:State Int),(main_value_11:State Int),(main_value_12:State Int),(main_value_13:State Int),(main_value_14:State Int),(main_value_15:State Int)
-(and
+```toml
+format = "smt2"
+variables = "(main_addition:State Int),(main_realvalue:State Int),(main_value_0:State Int),(main_value_1:State Int),(main_value_2:State Int),(main_value_3:State Int),(main_value_4:State Int),(main_value_5:State Int),(main_value_6:State Int),(main_value_7:State Int),(main_value_8:State Int),(main_value_9:State Int),(main_value_10:State Int),(main_value_11:State Int),(main_value_12:State Int),(main_value_13:State Int),(main_value_14:State Int),(main_value_15:State Int)"
+formula = """(and
     (and
         (and (<= 0 main_value_0) (< main_value_0 4096))
         (and (<= 0 main_value_1) (< main_value_1 4096))
@@ -234,32 +240,37 @@ None
     )
     (= main_addition (+ main_value_0 main_value_1 main_value_2 main_value_3 main_value_4 main_value_5 main_value_6 main_value_7 main_value_8 main_value_9 main_value_10 main_value_11 main_value_12 main_value_13 main_value_14 main_value_15))
     (= main_realvalue (div main_addition 16))
-)
+)"""
 ```
 - `filtering_time_bound`: establishes a bound to the time required to compute the final sample as the average of 16 sampled datum from the ADC, between 100 and 500 milliseconds
-```smt
-(filtering_clk:Clock Int)
-((100 <= filtering_clk) and (filtering_clk < 500))
+```toml
+format = "py"
+variables = "(filtering_clk:Clock Int)"
+formula = "((100 <= filtering_clk) and (filtering_clk < 6000))"
 ```
 - `12bitsreading`: asserts that the value read from the ADC is bound to an unsigned integers in the range [0, 4096), which is the integers that can be represented with 12 bits 
-```smt
-(adc_read:Component Int)
-((0 <= adc_read) & (adc_read < 4096))
+```toml
+format = "sympy"
+variables = "(adc_read:Component Int)"
+formula = "((0 <= adc_read) & (adc_read < 4096))"
 ```
 - `additionbound`: asserts that the partial addition performed until the moment in which this property is checked is necessarily in hte range [0, 16*4096)
-```smt
-(main_addition:State Int)
-((0 <= main_addition) and (main_addition < 16 * 4096))
+```toml
+format = "sympy"
+variables = "(main_addition:State Int)"
+formula = "((0 <= main_addition) and (main_addition < 16 * 4096))"
 ```
 - `conversion_pre`: asserts that the sample computed by task *filtering* is an unsigned integer value in the range [0, 4095)
-```smt
-(main_realvalue:State Int)
-(and (<= 0 main_realvalue) (< main_realvalue 4096))
+```toml
+format = "smt2"
+variables = "(main_realvalue:State Int)"
+formula = "(and (<= 0 main_realvalue) (< main_realvalue 4096))"
 ```
 - `conversion_post`: asserts that the engineering value computed, as a floating point value, by task *conversion* correspond (upto a rounding error not representable in a single precision floating point) to the theoretical value resulting from the mathematical interpretation of the sample with respecto to the analog signal
-```smt
-(measurement_dato_ing:State Real),(main_realvalue:State Int),(measurement_dato_ing2:State Real)
-(exists (
+```toml
+format = "smt2"
+variables = "(measurement_dato_ing:State Real),(main_realvalue:State Int),(measurement_dato_ing2:State Real)"
+formula = """(exists (
             (real_measurement_dato_ing Real)
             (real_measurement_dato_ing2 Real)
         )
@@ -285,13 +296,13 @@ None
             (= real_measurement_dato_ing (* 0.00524590164 main_realvalue))
             (= real_measurement_dato_ing2 (* (^ 1 -13) (^ 2.71828 (* 1.1231 measurement_dato_ing))))
         )
-)
-
+)"""
 ```
 - `barpointiscorrect`: asserts that the topmost row of the bar that is coloured in green (referred to as `bar_point`) corresponds to the engineering value computed by task *conversion*, also establishing a hard upper and lower bound for that row
-```smt
-(bar_dato_ing:State Real),(bar_point:State Int)
-(exists ((real_value Real))
+```toml
+format = "smt2"
+variables = "(bar_dato_ing:State Real),(bar_point:State Int)"
+formula = """(exists ((real_value Real))
         (let (
                 (abs_diff
                 (ite (< bar_dato_ing real_value)
@@ -303,9 +314,9 @@ None
                 (< abs_diff (* real_value 0.00001))
                 (=
                     bar_point
-                    (ite (<= (- (* 24 real_value) 96) 0)
+                    (ite (<= (to_int (- (* 24 real_value) 96)) 0)
                         0
-                        (ite (<= 383 (- (* 24 real_value) 96))
+                        (ite (<= 383 (to_int (- (* 24 real_value) 96)))
                             383
                             (to_int (- (* 24 real_value) 96))
                         )
@@ -313,12 +324,13 @@ None
                 )
              )
         )
-)
+)"""
 ```
 - `bariscorrect`: establishes that the rows of the bar that fall below or equal to the `bar_point` are coloured in green, and those that fall above are black
-```smt
-(bar_point:State Int),(pixels:Component (Array Int (Array Int (Array Int Int))))
-(forall ((y Int) (x Int))
+```toml
+format = "smt2"
+variables = "(bar_point:State Int),(pixels:Component (Array Int (Array Int (Array Int Int))))"
+formula = """(forall ((y Int) (x Int))
         (=>
             (and (>= y 155) (<= y 190))
             (and
@@ -340,7 +352,7 @@ None
                 )
             )
         )
-)
+)"""
 ```
 Another aspect that has to be declared in the specification of the analysis framework is the components that will play a role for analysing the system. In this specific case study we analyse the behaviour of the system by considering that the implementation of the ADC and the LCD are not monitored internally but only through the invocation of the functions in their interface. This requires from us to declare which are the Python clases that provide implementations of the digital twins for both the [ADC](https://github.com/invap/rt-monitor/blob/main/framework/components/rt_monitor_example_app/ex_adc.py) and the [LCD](https://github.com/invap/rt-monitor/blob/main/framework/components/rt_monitor_example_app/ex_display.py). The components that are used for the runtime verification of this example application are declared as part of the specification also in TOML format:
 ```toml
