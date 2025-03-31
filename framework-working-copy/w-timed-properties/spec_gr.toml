@@ -5,25 +5,15 @@ working_directory = "./sandbox/rt-monitor-example-app self-logging patched/speci
 [process.structure]
 nodes = [
     ["init", "task"],
-    ["to-loop", "operator:seq_composition"],
-    ["control-loop-start", "operator:omega_start"],
     ["filtering", "task"],
-    ["filtered-sample", "operator:seq_composition"],
     ["conversion", "task"],
-    ["measurement", "operator:seq_composition"],
     ["display_chk", "checkpoint"],
-    ["control-loop-end", "operator:omega_end"]
 ]
 edges = [
-    ["init","to-loop"],
-    ["to-loop","control-loop-start"],
-    ["control-loop-start","filtering"],
-    ["filtering","filtered-sample"],
-    ["filtered-sample","conversion"],
-    ["conversion","measurement"],
-    ["measurement","display_chk"],
-    ["display_chk","control-loop-end"],
-    ["control-loop-end", "control-loop-start"]
+    ["init","filtering"],
+    ["filtering","conversion"],
+    ["conversion","display_chk"],
+    ["display_chk","filtering"]
 ]
 start = "init"
 
