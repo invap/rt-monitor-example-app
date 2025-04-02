@@ -1,22 +1,8 @@
 name = "rt-monitor-example-app"
 working_directory = "./sandbox/rt-monitor-example-app/specification/"
 [process]
-    format = "graph"
-[process.structure]
-nodes = [
-    ["init", "task"],
-    ["filtering", "task"],
-    ["conversion", "task"],
-    ["display_chk", "checkpoint"],
-]
-edges = [
-    ["init","filtering"],
-    ["filtering","conversion"],
-    ["conversion","display_chk"],
-    ["display_chk","filtering"]
-]
-start = "init"
-
+    format = "regex"
+    structure = "init;(filtering;conversion;display_chk)*"
 
 [[process.tasks]]
     name = "init"
@@ -89,7 +75,7 @@ start = "init"
 [[components.list]]
     name = "adc"
     component_path = "./rt_monitor/framework/components/rt_monitor_example_app"
-    component_file = "ex_adc_visual_selflogging.py"
+    component_file = "ex_adc_visual.py"
     component_name = "adc"
     visual_component_file = "ex_adcVisual.py"       # the visual component is assumed to be in the same location as the component
     visual_component_name = "adcVisual"

@@ -1,5 +1,5 @@
 name = "rt-monitor-example-app"
-working_directory = "./sandbox/rt-monitor-example-app self-logging patched/specification/"
+working_directory = "./sandbox/rt-monitor-example-app/specification/"
 [process]
     format = "graph"
 [process.structure]
@@ -30,25 +30,17 @@ start = "init"
         name = "init_fondo_display"
         format = "smt2"
         file = "init_fondo_display.toml"       # local file.
-    [[process.tasks.posts]]
-        name = "init_time_bound"
-        format = "sympy"
-        file = "./sandbox/rt-monitor-example-app self-logging patched/specification/init_time_bound.toml"       # relative path to file.
 
 [[process.tasks]]
     name = "filtering"
     [[process.tasks.pres]]
         name = "filtering_pre"
         format = "smt2"
-        file = "/Users/clpombo/sandbox/invap-github/rt-monitor/sandbox/rt-monitor-example-app self-logging patched/specification/filtering_pre.toml"       # absolute path to file.
+        file = "/Users/clpombo/sandbox/invap-github/rt-monitor/sandbox/rt-monitor-example-app/specification/filtering_pre.toml"       # absolute path to file.
     [[process.tasks.posts]]
         name = "filtering_post"
         format = "smt2"
         file = "filtering_post.toml"       # local file.
-    [[process.tasks.posts]]
-        name = "filtering_time_bound"
-        format = "py"
-        file = "filtering_time_bound.toml"       # local file.
     [[process.tasks.checkpoints]]
         name = "filtering_chk"
         [[process.tasks.checkpoints.properties]]
