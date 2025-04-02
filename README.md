@@ -179,6 +179,13 @@ file = "bariscorrect.toml"       # local file.
 ```
 By default, the files are expected to be found in the location designated by the attribute `working_directory`. If such attribute is not present, then the path of the analysis framework specification is used instead. Nonetheless, if the `file` attribute of a property is specified by a string starting with `/` of `.`, the path section of the value of the attribute (i.e., the substring starting at position 0 and ending right before the last occurrence of `/`) overrides the default.
 
+In the previous fragment the structures sequential process is given as a graph but it can be alternatively defined by means of the regular expression; the following fragment shows the alternative definition of the process structure:
+```toml
+[process]
+    format = "regex"
+    structure = "init;(filtering;conversion;display_chk)*"
+```
+
 Below there is a list of the properties involved in the above analysis framework, accompanied by its rationale. Notice that properties are written in toml format. The reader is pointed to Section [Specification language for describing the analysis framework](https://github.com/invap/rt-monitor/blob/main/README.md#specification-language "Specification language for describing the analysis framework") for a detailed explanation of the syntax used to write each type of formula. 
 
 - `init_vars`: asserts that the variable storing the previous sample is initialised with 0
