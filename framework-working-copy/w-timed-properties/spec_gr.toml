@@ -40,10 +40,7 @@ start = "init"
         file = "/Users/clpombo/sandbox/invap-github/rt-monitor/sandbox/rt-monitor-example-app/specification/filtering_pre.toml"       # absolute path to file.
     [[process.tasks.posts]]
         name = "filtering_post"
-        # For a PASS result due to z3.unsat
-        file = "filtering_post-pass.toml"       # local file.
-        # For an FAILED result due to z3.unknown
-        # file = "filtering_post.toml"       # local file.
+        file = "filtering_post.toml"       # local file.
     [[process.tasks.posts]]
         name = "filtering_time_bound"
         file = "filtering_time_bound.toml"       # local file.
