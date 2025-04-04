@@ -95,87 +95,78 @@ The following fragment shows the structured sequential process of [Figure 2](#ss
 name = "rt-monitor-example-app"
 working_directory = "./sandbox/rt-monitor-example-app self-logging patched/specification/"
 [process]
-format = "graph"
-[process.structure]
-nodes = [
-	["init", "task"],
-	["filtering", "task"],
-	["conversion", "task"],
-	["display_chk", "checkpoint"],
-]
-edges = [
-	["init","filtering"],
-	["filtering","conversion"],
-	["conversion","display_chk"],
-	["display_chk","filtering"]
-]
-start = "init"
-
-
-[[process.tasks]]
-name = "init"
-[[process.tasks.pres]]
-[[process.tasks.posts]]
-name = "init_vars"
-format = "smt2"
-variables = "(main_realvalue_old:State Int)"
-formula = "(= main_realvalue_old 0)"        # inline formula.
-[[process.tasks.posts]]
-name = "init_fondo_display"
-format = "smt2"
-file = "init_fondo_display.toml"       # local file.
-[[process.tasks.posts]]
-name = "init_time_bound"
-format = "sympy"
-file = "./sandbox/rt-monitor-example-app self-logging patched/specification/init_time_bound.toml"       # relative path to file.
+	format = "graph"
+	[process.structure]
+		nodes = [
+			["init", "task"],
+			["filtering", "task"],
+			["conversion", "task"],
+			["display_chk", "checkpoint"],
+		]
+		edges = [
+			["init","filtering"],
+			["filtering","conversion"],
+			["conversion","display_chk"],
+			["display_chk","filtering"]
+		]
+		start = "init"
 
 [[process.tasks]]
-name = "filtering"
-[[process.tasks.pres]]
-name = "filtering_pre"
-format = "smt2"
-file = "/Users/clpombo/sandbox/invap-github/rt-monitor/sandbox/rt-monitor-example-app self-logging patched/specification/filtering_pre.toml"       # absolute path to file.
-[[process.tasks.posts]]
-name = "filtering_post"
-format = "smt2"
-file = "filtering_post.toml"       # local file.
-[[process.tasks.posts]]
-name = "filtering_time_bound"
-format = "py"
-file = "filtering_time_bound.toml"       # local file.
-[[process.tasks.checkpoints]]
-name = "filtering_chk"
-[[process.tasks.checkpoints.properties]]
-name = "12bitsreading"
-format = "sympy"
-file = "12bitsreading.toml"       # local file.
-[[process.tasks.checkpoints.properties]]
-name = "additionbound"
-format = "py"
-file = "additionbound.toml"       # local file.
+	name = "init"
+	[[process.tasks.pres]]
+	[[process.tasks.posts]]
+		name = "init_vars"
+		format = "smt2"
+		variables = "(main_realvalue_old:State Int)"
+		formula = "(= main_realvalue_old 0)"        # inline formula.
+	[[process.tasks.posts]]
+		name = "init_fondo_display"
+		file = "init_fondo_display.toml"       # local file.
+	[[process.tasks.posts]]
+		name = "init_time_bound"
+		file = "./sandbox/rt-monitor-example-app self-logging patched/specification/init_time_bound.toml"       # relative path to file.
 
 [[process.tasks]]
-name = "conversion"
-[[process.tasks.pres]]
-name = "conversion_pre"
-format = "smt2"
-file = "conversion_pre.toml"       # local file.
-[[process.tasks.posts]]
-name = "conversion_post"
-format = "smt2"
-file = "conversion_post.toml"       # local file.
-[[process.tasks.checkpoints]]
+	name = "filtering"
+	[[process.tasks.pres]]
+		name = "filtering_pre"
+		file = "/Users/clpombo/sandbox/invap-github/rt-monitor/sandbox/rt-monitor-example-app self-logging patched/specification/filtering_pre.toml"       # absolute path to file.
+	[[process.tasks.posts]]
+		name = "filtering_post"
+		file = "filtering_post.toml"       # local file.
+	[[process.tasks.posts]]
+		name = "filtering_time_bound"
+		file = "filtering_time_bound.toml"       # local file.
+	[[process.tasks.checkpoints]]
+		name = "filtering_chk"
+		[[process.tasks.checkpoints.properties]]
+			name = "12bitsreading"
+			file = "12bitsreading.toml"       # local file.
+		[[process.tasks.checkpoints.properties]]
+			name = "additionbound"
+			file = "additionbound.toml"       # local file.
+
+[[process.tasks]]
+	name = "conversion"
+	[[process.tasks.pres]]
+		name = "conversion_pre"
+		file = "conversion_pre.toml"       # local file.
+	[[process.tasks.posts]]
+        name = "conversion_post"
+        # For a PASS result due to z3.unsat
+        file = "conversion_post-pass.toml"       # local file.
+        # For an FAILED result due to z3.unknown
+        # file = "conversion_post-unknown.toml"       # local file.
+	[[process.tasks.checkpoints]]
 
 [[process.checkpoints]]
-name = "display_chk"
-[[process.checkpoints.properties]]
-name = "barpointiscorrect"
-format = "smt2"
-file = "barpointiscorrect.toml"       # local file.
-[[process.checkpoints.properties]]
-name = "bariscorrect"
-format = "smt2"
-file = "bariscorrect.toml"       # local file.
+	name = "display_chk"
+	[[process.checkpoints.properties]]
+		name = "barpointiscorrect"
+		file = "barpointiscorrect.toml"       # local file.
+	[[process.checkpoints.properties]]
+		name = "bariscorrect"
+		file = "bariscorrect.toml"       # local file.
 ```
 By default, the files are expected to be found in the location designated by the attribute `working_directory`. If such attribute is not present, then the path of the analysis framework specification is used instead. Nonetheless, if the `file` attribute of a property is specified by a string starting with `/` of `.`, the path section of the value of the attribute (i.e., the substring starting at position 0 and ending right before the last occurrence of `/`) overrides the default.
 
@@ -212,7 +203,7 @@ format = "smt2"
 variables = "(main_addition:State Int)"
 formula = "(= main_addition 0)"
 ```
-- `filtering_post`: there are two different expressions of this formula; both state that the value reported as the result of computing the addition of 16 sampled datum and then dividing by 16 is indeed the average of those values. In the first place there is one that uses a universal quantifier for indexing the array and a function `sum` for adding all the numbers whose analisys yield `unknown` in the case of its anaisys with Z3:
+- `filtering_post`: states that the value reported as the result of computing the addition of 16 sampled datum, stored in an array, and then dividing by 16 is indeed the average of those values
 ```toml
 format = "smt2"
 variables = "(main_addition:State Int),(main_realvalue:State Int),(main_value_arr:State (Array Int Int))"
@@ -235,52 +226,6 @@ formula = """(and
     (= main_realvalue (div main_addition 16))
 )"""
 ```
-And in the second place, one that explicitly computes the addition without using neither quantifiers, nor auxiliary functions:
-```toml
-format = "smt2"
-variables = "(main_addition:State Int),(main_realvalue:State Int),(main_value_arr:State (Array Int Int))"
-formula = """(and
-    (and
-        (and (<= 0 (select main_value_arr 0)) (< (select main_value_arr 0 4096)))
-        (and (<= 0 (select main_value_arr 1)) (< (select main_value_arr 1 4096)))
-        (and (<= 0 (select main_value_arr 2)) (< (select main_value_arr 2 4096)))
-        (and (<= 0 (select main_value_arr 3)) (< (select main_value_arr 3 4096)))
-        (and (<= 0 (select main_value_arr 4)) (< (select main_value_arr 4 4096)))
-        (and (<= 0 (select main_value_arr 5)) (< (select main_value_arr 5 4096)))
-        (and (<= 0 (select main_value_arr 6)) (< (select main_value_arr 6 4096)))
-        (and (<= 0 (select main_value_arr 7)) (< (select main_value_arr 7 4096)))
-        (and (<= 0 (select main_value_arr 8)) (< (select main_value_arr 8 4096)))
-        (and (<= 0 (select main_value_arr 9)) (< (select main_value_arr 9 4096)))
-        (and (<= 0 (select main_value_arr 10)) (< (select main_value_arr 10 4096)))
-        (and (<= 0 (select main_value_arr 11)) (< (select main_value_arr 11 4096)))
-        (and (<= 0 (select main_value_arr 12)) (< (select main_value_arr 12 4096)))
-        (and (<= 0 (select main_value_arr 13)) (< (select main_value_arr 13 4096)))
-        (and (<= 0 (select main_value_arr 14)) (< (select main_value_arr 14 4096)))
-        (and (<= 0 (select main_value_arr 15)) (< (select main_value_arr 15 4096)))
-    )
-    (= main_addition
-        (+
-            (select main_value_arr 0)
-            (select main_value_arr 1)
-            (select main_value_arr 2)
-            (select main_value_arr 3)
-            (select main_value_arr 4)
-            (select main_value_arr 5)
-            (select main_value_arr 6)
-            (select main_value_arr 7)
-            (select main_value_arr 8)
-            (select main_value_arr 9)
-            (select main_value_arr 10)
-            (select main_value_arr 11)
-            (select main_value_arr 12)
-            (select main_value_arr 13)
-            (select main_value_arr 14)
-            (select main_value_arr 15)
-        )
-    )
-    (= main_realvalue (div main_addition 16))
-)"""
-``` 
 - `filtering_time_bound`: establishes a bound to the time required to compute the final sample as the average of 16 sampled datum from the ADC, between 100 and 500 milliseconds
 ```toml
 format = "py"

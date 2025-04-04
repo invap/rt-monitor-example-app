@@ -17,7 +17,6 @@ edges = [
 ]
 start = "init"
 
-
 [[process.tasks]]
     name = "init"
     [[process.tasks.pres]]
@@ -40,7 +39,7 @@ start = "init"
         # For a PASS result due to z3.unsat
         file = "filtering_post-pass.toml"       # local file.
         # For an FAILED result due to z3.unknown
-        # file = "filtering_post-unknown.toml"       # local file.
+        # file = "filtering_post.toml"       # local file.
     [[process.tasks.checkpoints]]
         name = "filtering_chk"
         [[process.tasks.checkpoints.properties]]

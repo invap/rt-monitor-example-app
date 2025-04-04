@@ -11,10 +11,10 @@ declarations = """(declare-fun sum ((Array Int Int) Int Int) Int)
 formula = """(and
     (forall ((i Int))
         (=>
-            (and (<= 0 i) (<= i 15))
+            (and (<= 0 i) (< i 16))
             (and (<= 0 (select main_value_arr i)) (< (select main_value_arr i) 4096))
         )
     )
-    (= main_addition (sum main_value_arr 0 15))
+    (= main_addition (sum main_value_arr 0 16))
     (= main_realvalue (div main_addition 16))
 )"""
