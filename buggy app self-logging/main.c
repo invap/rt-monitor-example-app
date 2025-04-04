@@ -16,7 +16,7 @@ extern stopwatch reporting_clk;
 
 int main( void ){
     // [ INSTRUMENTACION: Inicialización del timer. ]
-    start (&reporting_clk, ZERO);
+    start (&reporting_clk, EPOCH);
     //
     // [ INSTRUMENTACION: Agregado para poder enviar el string especificando el evento. ]
     char str[MAX_EVENT_SIZE];
