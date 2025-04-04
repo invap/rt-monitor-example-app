@@ -212,33 +212,75 @@ format = "smt2"
 variables = "(main_addition:State Int)"
 formula = "(= main_addition 0)"
 ```
-- `filtering_post`: states that the value reported as the result of computing the addition of 16 sampled datum and then dividing by 16 is indeed the average of those values
+- `filtering_post`: there are two different expressions of this formula; both state that the value reported as the result of computing the addition of 16 sampled datum and then dividing by 16 is indeed the average of those values. In the first place there is one that uses a universal quantifier for indexing the array and a function `sum` for adding all the numbers whose analisys yield `unknown` in the case of its anaisys with Z3:
 ```toml
 format = "smt2"
-variables = "(main_addition:State Int),(main_realvalue:State Int),(main_value_0:State Int),(main_value_1:State Int),(main_value_2:State Int),(main_value_3:State Int),(main_value_4:State Int),(main_value_5:State Int),(main_value_6:State Int),(main_value_7:State Int),(main_value_8:State Int),(main_value_9:State Int),(main_value_10:State Int),(main_value_11:State Int),(main_value_12:State Int),(main_value_13:State Int),(main_value_14:State Int),(main_value_15:State Int)"
+variables = "(main_addition:State Int),(main_realvalue:State Int),(main_value_arr:State (Array Int Int))"
+declarations = """(declare-fun sum ((Array Int Int) Int Int) Int)
+                  (assert (forall ((a (Array Int Int)) (i Int)) (= (sum a i i) 0)))
+                  (assert (forall ((a (Array Int Int)) (i Int) (j Int))
+                              (=> (< i j)
+                                  (= (sum a i j) (+ (select a i) (sum a (+ i 1) j)))
+                              )
+                          )
+                  )"""
 formula = """(and
-    (and
-        (and (<= 0 main_value_0) (< main_value_0 4096))
-        (and (<= 0 main_value_1) (< main_value_1 4096))
-        (and (<= 0 main_value_2) (< main_value_2 4096))
-        (and (<= 0 main_value_3) (< main_value_3 4096))
-        (and (<= 0 main_value_4) (< main_value_4 4096))
-        (and (<= 0 main_value_5) (< main_value_5 4096))
-        (and (<= 0 main_value_6) (< main_value_6 4096))
-        (and (<= 0 main_value_7) (< main_value_7 4096))
-        (and (<= 0 main_value_8) (< main_value_8 4096))
-        (and (<= 0 main_value_9) (< main_value_9 4096))
-        (and (<= 0 main_value_10) (< main_value_10 4096))
-        (and (<= 0 main_value_11) (< main_value_11 4096))
-        (and (<= 0 main_value_12) (< main_value_12 4096))
-        (and (<= 0 main_value_13) (< main_value_13 4096))
-        (and (<= 0 main_value_14) (< main_value_14 4096))
-        (and (<= 0 main_value_15) (< main_value_15 4096))
+    (forall ((i Int))
+        (=>
+            (and (<= 0 i) (<= i 15))
+            (and (<= 0 (select main_value_arr i)) (< (select main_value_arr i) 4096))
+        )
     )
-    (= main_addition (+ main_value_0 main_value_1 main_value_2 main_value_3 main_value_4 main_value_5 main_value_6 main_value_7 main_value_8 main_value_9 main_value_10 main_value_11 main_value_12 main_value_13 main_value_14 main_value_15))
+    (= main_addition (sum main_value_arr 0 15))
     (= main_realvalue (div main_addition 16))
 )"""
 ```
+And in the second place, one that explicitly computes the addition without using neither quantifiers, nor auxiliary functions:
+```toml
+format = "smt2"
+variables = "(main_addition:State Int),(main_realvalue:State Int),(main_value_arr:State (Array Int Int))"
+formula = """(and
+    (and
+        (and (<= 0 (select main_value_arr 0)) (< (select main_value_arr 0 4096)))
+        (and (<= 0 (select main_value_arr 1)) (< (select main_value_arr 1 4096)))
+        (and (<= 0 (select main_value_arr 2)) (< (select main_value_arr 2 4096)))
+        (and (<= 0 (select main_value_arr 3)) (< (select main_value_arr 3 4096)))
+        (and (<= 0 (select main_value_arr 4)) (< (select main_value_arr 4 4096)))
+        (and (<= 0 (select main_value_arr 5)) (< (select main_value_arr 5 4096)))
+        (and (<= 0 (select main_value_arr 6)) (< (select main_value_arr 6 4096)))
+        (and (<= 0 (select main_value_arr 7)) (< (select main_value_arr 7 4096)))
+        (and (<= 0 (select main_value_arr 8)) (< (select main_value_arr 8 4096)))
+        (and (<= 0 (select main_value_arr 9)) (< (select main_value_arr 9 4096)))
+        (and (<= 0 (select main_value_arr 10)) (< (select main_value_arr 10 4096)))
+        (and (<= 0 (select main_value_arr 11)) (< (select main_value_arr 11 4096)))
+        (and (<= 0 (select main_value_arr 12)) (< (select main_value_arr 12 4096)))
+        (and (<= 0 (select main_value_arr 13)) (< (select main_value_arr 13 4096)))
+        (and (<= 0 (select main_value_arr 14)) (< (select main_value_arr 14 4096)))
+        (and (<= 0 (select main_value_arr 15)) (< (select main_value_arr 15 4096)))
+    )
+    (= main_addition
+        (+
+            (select main_value_arr 0)
+            (select main_value_arr 1)
+            (select main_value_arr 2)
+            (select main_value_arr 3)
+            (select main_value_arr 4)
+            (select main_value_arr 5)
+            (select main_value_arr 6)
+            (select main_value_arr 7)
+            (select main_value_arr 8)
+            (select main_value_arr 9)
+            (select main_value_arr 10)
+            (select main_value_arr 11)
+            (select main_value_arr 12)
+            (select main_value_arr 13)
+            (select main_value_arr 14)
+            (select main_value_arr 15)
+        )
+    )
+    (= main_realvalue (div main_addition 16))
+)"""
+``` 
 - `filtering_time_bound`: establishes a bound to the time required to compute the final sample as the average of 16 sampled datum from the ADC, between 100 and 500 milliseconds
 ```toml
 format = "py"
@@ -248,8 +290,8 @@ formula = "((100 <= filtering_clk) and (filtering_clk < 6000))"
 - `12bitsreading`: asserts that the value read from the ADC is bound to an unsigned integers in the range [0, 4096), which is the integers that can be represented with 12 bits 
 ```toml
 format = "sympy"
-variables = "(adc_read:Component Int)"
-formula = "((0 <= adc_read) & (adc_read < 4096))"
+variables = "(main_value:State Int)"
+formula = "((0 <= main_value) & (main_value < 4096))"
 ```
 - `additionbound`: asserts that the partial addition performed until the moment in which this property is checked is necessarily in hte range [0, 16*4096)
 ```toml
@@ -263,11 +305,10 @@ format = "smt2"
 variables = "(main_realvalue:State Int)"
 formula = "(and (<= 0 main_realvalue) (< main_realvalue 4096))"
 ```
-- `conversion_post`: asserts that the engineering value computed, as a floating point value, by task *conversion* correspond (upto a rounding error not representable in a single precision floating point) to the theoretical value resulting from the mathematical interpretation of the sample with respecto to the analog signal
-```toml
-format = "smt2"
-variables = "(measurement_dato_ing:State Real),(main_realvalue:State Int),(measurement_dato_ing2:State Real)"
-formula = """(exists (
+- `conversion_post`: similar to the case of `filtering_post`, there are two different expressions of this formula; both assert that the engineering value computed, as a floating point value, by task *conversion* correspond (upto a rounding error not representable in a single precision floating point) to the theoretical value resulting from the mathematical interpretation of the sample with respecto to the analog signal. In the first place there is one that uses a existential quantifier for abstractly rounding the representation error, and whose analisys yield `unknown` in the case of its anaisys with Z3:
+```smt
+(measurement_dato_ing:State Real),(main_realvalue:State Int),(measurement_dato_ing2:State Real)
+(exists (
             (real_measurement_dato_ing Real)
             (real_measurement_dato_ing2 Real)
         )
@@ -293,7 +334,14 @@ formula = """(exists (
             (= real_measurement_dato_ing (* 0.00524590164 main_realvalue))
             (= real_measurement_dato_ing2 (* (^ 1 -13) (^ 2.71828 (* 1.1231 measurement_dato_ing))))
         )
-)"""
+)
+
+```
+And in the second place, one that explicitly puts bound on the representation error in the form of a Python program:
+```toml
+format = "py"
+variables = "(measurement_dato_ing:State Real),(main_realvalue:State Int),(measurement_dato_ing2:State Real)"
+formula = "(((0.00524590164 * main_realvalue) * 0.99999 <= measurement_dato_ing) or (measurement_dato_ing <= (0.00524590164 * main_realvalue) * 1.00001)) and (((1 ** -13) * (2.71828 * 1.1231 * measurement_dato_ing) * 0.99999 <= measurement_dato_ing2) or (measurement_dato_ing2 <= (1 ** -13) * (2.71828 * 1.1231 * measurement_dato_ing) * 1.00001))"
 ```
 - `barpointiscorrect`: asserts that the topmost row of the bar that is coloured in green (referred to as `bar_point`) corresponds to the engineering value computed by task *conversion*, also establishing a hard upper and lower bound for that row
 ```toml

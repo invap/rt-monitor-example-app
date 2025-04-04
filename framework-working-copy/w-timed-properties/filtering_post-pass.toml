@@ -1,0 +1,43 @@
+format = "smt2"
+variables = "(main_addition:State Int),(main_realvalue:State Int),(main_value_arr:State (Array Int Int))"
+formula = """(and
+    (and
+        (and (<= 0 (select main_value_arr 0)) (< (select main_value_arr 0 4096)))
+        (and (<= 0 (select main_value_arr 1)) (< (select main_value_arr 1 4096)))
+        (and (<= 0 (select main_value_arr 2)) (< (select main_value_arr 2 4096)))
+        (and (<= 0 (select main_value_arr 3)) (< (select main_value_arr 3 4096)))
+        (and (<= 0 (select main_value_arr 4)) (< (select main_value_arr 4 4096)))
+        (and (<= 0 (select main_value_arr 5)) (< (select main_value_arr 5 4096)))
+        (and (<= 0 (select main_value_arr 6)) (< (select main_value_arr 6 4096)))
+        (and (<= 0 (select main_value_arr 7)) (< (select main_value_arr 7 4096)))
+        (and (<= 0 (select main_value_arr 8)) (< (select main_value_arr 8 4096)))
+        (and (<= 0 (select main_value_arr 9)) (< (select main_value_arr 9 4096)))
+        (and (<= 0 (select main_value_arr 10)) (< (select main_value_arr 10 4096)))
+        (and (<= 0 (select main_value_arr 11)) (< (select main_value_arr 11 4096)))
+        (and (<= 0 (select main_value_arr 12)) (< (select main_value_arr 12 4096)))
+        (and (<= 0 (select main_value_arr 13)) (< (select main_value_arr 13 4096)))
+        (and (<= 0 (select main_value_arr 14)) (< (select main_value_arr 14 4096)))
+        (and (<= 0 (select main_value_arr 15)) (< (select main_value_arr 15 4096)))
+    )
+    (= main_addition
+        (+
+            (select main_value_arr 0)
+            (select main_value_arr 1)
+            (select main_value_arr 2)
+            (select main_value_arr 3)
+            (select main_value_arr 4)
+            (select main_value_arr 5)
+            (select main_value_arr 6)
+            (select main_value_arr 7)
+            (select main_value_arr 8)
+            (select main_value_arr 9)
+            (select main_value_arr 10)
+            (select main_value_arr 11)
+            (select main_value_arr 12)
+            (select main_value_arr 13)
+            (select main_value_arr 14)
+            (select main_value_arr 15)
+        )
+    )
+    (= main_realvalue (div main_addition 16))
+)"""

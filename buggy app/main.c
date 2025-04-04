@@ -70,13 +70,15 @@ int main( void ){
             value = sample ();
             // [ INSTRUMENTACION: Component event. ]
             pause(&reporting_clk);
-            sprintf(str, "adc,sample,%d",value);
+            sprintf(str, "adc,sample");
             report(component_event,str);
             resume(&reporting_clk);
             //
             // [ INSTRUMENTACION: Variable assigned. ]
             pause(&reporting_clk);
-            sprintf(str, "variable_value_assigned,main_value_%d,%d",i,value);
+            sprintf(str, "variable_value_assigned,main_value,%d",value);
+            report(state_event,str);
+            sprintf(str, "variable_value_assigned,main_value_arr[%d],%d",i,value);
             report(state_event,str);
             resume(&reporting_clk);
             //
