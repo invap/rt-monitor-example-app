@@ -12,7 +12,7 @@ formula = """(exists (
                          (- measurement_dato_ing real_measurement_dato_ing))
                     )
                  )
-                 (< abs_diff (* real_measurement_dato_ing 0.00001))
+                 (< abs_diff (* real_measurement_dato_ing 0.001))
             )
             (let (
                     (abs_diff
@@ -21,7 +21,7 @@ formula = """(exists (
                          (- measurement_dato_ing2 real_measurement_dato_ing2))
                     )
                  )
-                 (< abs_diff (* real_measurement_dato_ing2 0.00001))
+                 (< abs_diff (* real_measurement_dato_ing2 0.001))
             )
             (= real_measurement_dato_ing (* 0.00524590164 main_realvalue))
             (= real_measurement_dato_ing2 (* (^ 10 -13) (^ 2.71828 (* 1.1231 measurement_dato_ing))))

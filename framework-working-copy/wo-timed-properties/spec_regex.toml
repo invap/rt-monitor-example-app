@@ -1,5 +1,5 @@
 name = "rt-monitor-example-app"
-working_directory = "./sandbox/rt-monitor-example-app/specification/"
+working_directory = "./sandbox/rt-monitor-example-app spec/"
 [process]
     format = "regex"
     structure = "init;(filtering;conversion;display_chk)*"
@@ -17,13 +17,13 @@ working_directory = "./sandbox/rt-monitor-example-app/specification/"
         file = "init_fondo_display.toml"       # local file.
     [[process.tasks.posts]]
         name = "init_time_bound"
-        file = "./sandbox/rt-monitor-example-app/specification/init_time_bound.toml"       # relative path to file.
+        file = "./sandbox/rt-monitor-example-app spec/init_time_bound.toml"       # relative path to file.
 
 [[process.tasks]]
     name = "filtering"
     [[process.tasks.pres]]
         name = "filtering_pre"
-        file = "/Users/clpombo/sandbox/invap-github/rt-monitor/sandbox/rt-monitor-example-app/specification/filtering_pre.toml"       # absolute path to file.
+        file = "/Users/clpombo/sandbox/invap-github/rt-monitor/sandbox/rt-monitor-example-app spec/filtering_pre.toml"       # absolute path to file.
     [[process.tasks.posts]]
         name = "filtering_post"
         file = "filtering_post.toml"       # local file.
