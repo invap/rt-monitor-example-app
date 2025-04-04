@@ -153,10 +153,11 @@ working_directory = "./sandbox/rt-monitor-example-app self-logging patched/speci
 		file = "conversion_pre.toml"       # local file.
 	[[process.tasks.posts]]
         name = "conversion_post"
-        # For a PASS result due to z3.unsat
-        file = "conversion_post-pass.toml"       # local file.
-        # For an FAILED result due to z3.unknown
-        # file = "conversion_post-unknown.toml"       # local file.
+        file = "conversion_post-py.toml"       # local file.
+        # For a FAILED result in quantifier-free smt2 format due to z3.unknown
+        # file = "conversion_post-smt2-qf.toml"       # local file.
+        # For a FAILED result in smt2 format due to z3.unknown
+        # file = "conversion_post-smt2-eq.toml"       # local file.
 	[[process.tasks.checkpoints]]
 
 [[process.checkpoints]]
@@ -218,11 +219,11 @@ declarations = """(declare-fun sum ((Array Int Int) Int Int) Int)
 formula = """(and
     (forall ((i Int))
         (=>
-            (and (<= 0 i) (<= i 15))
+            (and (<= 0 i) (< i 16))
             (and (<= 0 (select main_value_arr i)) (< (select main_value_arr i) 4096))
         )
     )
-    (= main_addition (sum main_value_arr 0 15))
+    (= main_addition (sum main_value_arr 0 16))
     (= main_realvalue (div main_addition 16))
 )"""
 ```
@@ -250,43 +251,11 @@ format = "smt2"
 variables = "(main_realvalue:State Int)"
 formula = "(and (<= 0 main_realvalue) (< main_realvalue 4096))"
 ```
-- `conversion_post`: similar to the case of `filtering_post`, there are two different expressions of this formula; both assert that the engineering value computed, as a floating point value, by task *conversion* correspond (upto a rounding error not representable in a single precision floating point) to the theoretical value resulting from the mathematical interpretation of the sample with respecto to the analog signal. In the first place there is one that uses a existential quantifier for abstractly rounding the representation error, and whose analisys yield `unknown` in the case of its anaisys with Z3:
-```smt
-(measurement_dato_ing:State Real),(main_realvalue:State Int),(measurement_dato_ing2:State Real)
-(exists (
-            (real_measurement_dato_ing Real)
-            (real_measurement_dato_ing2 Real)
-        )
-        (and
-            (let (
-                    (abs_diff
-                    (ite (< measurement_dato_ing real_measurement_dato_ing)
-                         (- real_measurement_dato_ing measurement_dato_ing)
-                         (- measurement_dato_ing real_measurement_dato_ing))
-                    )
-                 )
-                 (< abs_diff (* real_measurement_dato_ing 0.00001))
-            )
-            (let (
-                    (abs_diff
-                    (ite (< measurement_dato_ing2 real_measurement_dato_ing2)
-                         (- real_measurement_dato_ing2 measurement_dato_ing2)
-                         (- measurement_dato_ing2 real_measurement_dato_ing2))
-                    )
-                 )
-                 (< abs_diff (* real_measurement_dato_ing2 0.00001))
-            )
-            (= real_measurement_dato_ing (* 0.00524590164 main_realvalue))
-            (= real_measurement_dato_ing2 (* (^ 1 -13) (^ 2.71828 (* 1.1231 measurement_dato_ing))))
-        )
-)
-
-```
-And in the second place, one that explicitly puts bound on the representation error in the form of a Python program:
+- `conversion_post`: puts a bound to the error when computing the engineering values from the discrete sample
 ```toml
 format = "py"
 variables = "(measurement_dato_ing:State Real),(main_realvalue:State Int),(measurement_dato_ing2:State Real)"
-formula = "(((0.00524590164 * main_realvalue) * 0.99999 <= measurement_dato_ing) or (measurement_dato_ing <= (0.00524590164 * main_realvalue) * 1.00001)) and (((1 ** -13) * (2.71828 * 1.1231 * measurement_dato_ing) * 0.99999 <= measurement_dato_ing2) or (measurement_dato_ing2 <= (1 ** -13) * (2.71828 * 1.1231 * measurement_dato_ing) * 1.00001))"
+formula = "((((0.00524590164 * main_realvalue) * 0.999 <= measurement_dato_ing) and (measurement_dato_ing <= (0.00524590164 * main_realvalue) * 1.001)) and (((10 ** -13) * (2.71828 ** (1.1231 * measurement_dato_ing)) * 0.999 <= measurement_dato_ing2) and (measurement_dato_ing2 <= ((10 ** -13) * (2.71828 ** (1.1231 * measurement_dato_ing)) * 1.001))))"
 ```
 - `barpointiscorrect`: asserts that the topmost row of the bar that is coloured in green (referred to as `bar_point`) corresponds to the engineering value computed by task *conversion*, also establishing a hard upper and lower bound for that row
 ```toml
