@@ -3,19 +3,19 @@ working_directory = "./sandbox/rt-monitor-example-app/specification/"
 [process]
     format = "graph"
 [process.structure]
-nodes = [
-    ["init", "task"],
-    ["filtering", "task"],
-    ["conversion", "task"],
-    ["display_chk", "checkpoint"],
-]
-edges = [
-    ["init","filtering"],
-    ["filtering","conversion"],
-    ["conversion","display_chk"],
-    ["display_chk","filtering"]
-]
-start = "init"
+    nodes = [
+        ["init", "task"],
+        ["filtering", "task"],
+        ["conversion", "task"],
+        ["display_chk", "checkpoint"],
+    ]
+    edges = [
+        ["init","filtering"],
+        ["filtering","conversion"],
+        ["conversion","display_chk"],
+        ["display_chk","filtering"]
+    ]
+    start = "init"
 
 [[process.tasks]]
     name = "init"
@@ -36,10 +36,7 @@ start = "init"
         file = "/Users/clpombo/sandbox/invap-github/rt-monitor/sandbox/rt-monitor-example-app/specification/filtering_pre.toml"       # absolute path to file.
     [[process.tasks.posts]]
         name = "filtering_post"
-        # For a PASS result due to z3.unsat
-        file = "filtering_post-pass.toml"       # local file.
-        # For an FAILED result due to z3.unknown
-        # file = "filtering_post.toml"       # local file.
+        file = "filtering_post.toml"       # local file.
     [[process.tasks.checkpoints]]
         name = "filtering_chk"
         [[process.tasks.checkpoints.properties]]
@@ -55,11 +52,13 @@ start = "init"
         name = "conversion_pre"
         file = "conversion_pre.toml"       # local file.
     [[process.tasks.posts]]
-    name = "conversion_post"
-        # For a PASS result due to z3.unsat
-        file = "conversion_post-pass.toml"       # local file.
-        # For an FAILED result due to z3.unknown
-        # file = "conversion_post-unknown.toml"       # local file.
+        name = "conversion_post"
+        # For a PASS result in python format
+        file = "conversion_post-py.toml"       # local file.
+        # For a FAILED result in quantifier-free smt2 format due to z3.unknown
+        # file = "conversion_post-smt2-qf.toml"       # local file.
+        # For a FAILED result in smt2 format due to z3.unknown
+        # file = "conversion_post-smt2-eq.toml"       # local file.
     [[process.tasks.checkpoints]]
 
 [[process.checkpoints]]

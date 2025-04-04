@@ -46,10 +46,12 @@ working_directory = "./sandbox/rt-monitor-example-app/specification/"
         file = "conversion_pre.toml"       # local file.
     [[process.tasks.posts]]
         name = "conversion_post"
-        # For a PASS result due to z3.unsat
-        file = "conversion_post-pass.toml"       # local file.
-        # For an FAILED result due to z3.unknown
-        # file = "conversion_post-unknown.toml"       # local file.
+        # For a PASS result in python format
+        file = "conversion_post-py.toml"       # local file.
+        # For a FAILED result in quantifier-free smt2 format due to z3.unknown
+        # file = "conversion_post-smt2-qf.toml"       # local file.
+        # For a FAILED result in smt2 format due to z3.unknown
+        # file = "conversion_post-smt2-eq.toml"       # local file.
     [[process.tasks.checkpoints]]
 
 [[process.checkpoints]]
