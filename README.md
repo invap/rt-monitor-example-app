@@ -98,10 +98,10 @@ working_directory = "./sandbox/rt-monitor-example-app self-logging patched/speci
 	format = "graph"
 	[process.structure]
 		nodes = [
-			["init", "task"],
-			["filtering", "task"],
-			["conversion", "task"],
-			["display_chk", "checkpoint"],
+		    "init",
+		    "filtering",
+		    "conversion",
+		    "display_chk",
 		]
 		edges = [
 			["init","filtering"],
