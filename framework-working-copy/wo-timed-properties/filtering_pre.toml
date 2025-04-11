@@ -1,3 +1,0 @@
-format = "smt2"
-variables = "(main_addition:State Int)"
-formula = "(= main_addition 0)"

@@ -1,3 +1,0 @@
-format = "sympy"
-variables = "(main_value:State Int)"
-formula = "((0 <= main_value) & (main_value < 4096))"

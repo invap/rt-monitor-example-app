@@ -3,19 +3,19 @@ working_directory = "./sandbox/rt-monitor-example-app/specification/"
 [process]
     format = "graph"
 [process.structure]
-nodes = [
-    ["init", "task"],
-    ["filtering", "task"],
-    ["conversion", "task"],
-    ["display_chk", "checkpoint"],
-]
-edges = [
-    ["init","filtering"],
-    ["filtering","conversion"],
-    ["conversion","display_chk"],
-    ["display_chk","filtering"]
-]
-start = "init"
+    nodes = [
+        "init",
+        "filtering",
+        "conversion",
+        "display_chk",
+    ]
+    edges = [
+        ["init","filtering"],
+        ["filtering","conversion"],
+        ["conversion","display_chk"],
+        ["display_chk","filtering"]
+    ]
+    start = "init"
 
 
 [[process.tasks]]
