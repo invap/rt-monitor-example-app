@@ -57,7 +57,8 @@ rt-monitor-example-app/
 │   ├── bariscorrect.protosmt2        # │ Properties to be checked at different points in the SSP
 │   │...                              # │ the SSP
 │   ├── init_time_bound               # │
-│   └── spec_gr.toml                  # Specification of the SSP
+│   ├── spec_gr.toml                  # Specification of the SSP in graph format
+│   └── spec_regex.toml               # Specification of the SSP in regular expression format
 ├── patched app/                      # Example application with the bug in file functions.c
 │   ├── functions.c                   # fixed and resorting to the self-logging implementation
 │   ├── functions.h
@@ -111,63 +112,69 @@ working_directory = "./sandbox/rt-monitor-example-app self-logging patched/speci
 		]
 		start = "init"
 
-[[process.tasks]]
-	name = "init"
-	[[process.tasks.pres]]
-	[[process.tasks.posts]]
-		name = "init_vars"
-		format = "smt2"
-		variables = "(main_realvalue_old:State Int)"
-		formula = "(= main_realvalue_old 0)"        # inline formula.
-	[[process.tasks.posts]]
-		name = "init_fondo_display"
-		file = "init_fondo_display.toml"       # local file.
-	[[process.tasks.posts]]
-		name = "init_time_bound"
-		file = "./sandbox/rt-monitor-example-app self-logging patched/specification/init_time_bound.toml"       # relative path to file.
+    [[process.tasks]]
+        name = "init"
+        postconditions = ["init_vars", "init_fondo_display","init_time_bound"]
+    [[process.tasks]]
+        name = "filtering"
+        preconditions = ["filtering_pre"]
+        postconditions = ["filtering_post", "filtering_time_bound"]
+        checkpoints = ["filtering_chk"]
+    [[process.tasks]]
+        name = "conversion"
+        preconditions = ["conversion_pre"]
+        postconditions = ["conversion_post"]
 
-[[process.tasks]]
-	name = "filtering"
-	[[process.tasks.pres]]
-		name = "filtering_pre"
-		file = "/Users/clpombo/sandbox/invap-github/rt-monitor/sandbox/rt-monitor-example-app self-logging patched/specification/filtering_pre.toml"       # absolute path to file.
-	[[process.tasks.posts]]
-		name = "filtering_post"
-		file = "filtering_post.toml"       # local file.
-	[[process.tasks.posts]]
-		name = "filtering_time_bound"
-		file = "filtering_time_bound.toml"       # local file.
-	[[process.tasks.checkpoints]]
-		name = "filtering_chk"
-		[[process.tasks.checkpoints.properties]]
-			name = "12bitsreading"
-			file = "12bitsreading.toml"       # local file.
-		[[process.tasks.checkpoints.properties]]
-			name = "additionbound"
-			file = "additionbound.toml"       # local file.
+    [[process.checkpoints]]
+        name = "filtering_chk"
+        properties = ["12bitsreading", "additionbound"]
+    [[process.checkpoints]]
+        name = "display_chk"
+        properties = ["barpointiscorrect", "bariscorrect"]
 
-[[process.tasks]]
-	name = "conversion"
-	[[process.tasks.pres]]
-		name = "conversion_pre"
-		file = "conversion_pre.toml"       # local file.
-	[[process.tasks.posts]]
+    [[process.properties]]
+        name = "init_vars"
+        format = "smt2"
+        variables = "(main_realvalue_old:State Int)"
+        formula = "(= main_realvalue_old 0)"        # inline formula.
+    [[process.properties]]
+        name = "init_fondo_display"
+        file = "init_fondo_display.toml"       # local file.
+    [[process.properties]]
+        name = "init_time_bound"
+        file = "./sandbox/rt-monitor-example-app spec/init_time_bound.toml"       # relative path to file.
+    [[process.properties]]
+        name = "filtering_pre"
+        file = "/Users/clpombo/sandbox/invap-github/rt-monitor/sandbox/rt-monitor-example-app spec/filtering_pre.toml"       # absolute path to file.
+    [[process.properties]]
+        name = "filtering_post"
+        file = "filtering_post.toml"       # local file.
+    [[process.properties]]
+        name = "filtering_time_bound"
+        file = "filtering_time_bound.toml"       # local file.
+    [[process.properties]]
+        name = "conversion_pre"
+        file = "conversion_pre.toml"       # local file.
+    [[process.properties]]
         name = "conversion_post"
+        # For a PASS result in python format
         file = "conversion_post-py.toml"       # local file.
         # For a FAILED result in quantifier-free smt2 format due to z3.unknown
         # file = "conversion_post-smt2-qf.toml"       # local file.
         # For a FAILED result in smt2 format due to z3.unknown
         # file = "conversion_post-smt2-eq.toml"       # local file.
-	[[process.tasks.checkpoints]]
-
-[[process.checkpoints]]
-	name = "display_chk"
-	[[process.checkpoints.properties]]
-		name = "barpointiscorrect"
-		file = "barpointiscorrect.toml"       # local file.
-	[[process.checkpoints.properties]]
-		name = "bariscorrect"
-		file = "bariscorrect.toml"       # local file.
+    [[process.properties]]
+        name = "12bitsreading"
+        file = "12bitsreading.toml"       # local file.
+    [[process.properties]]
+        name = "additionbound"
+        file = "additionbound.toml"       # local file.
+    [[process.properties]]
+        name = "barpointiscorrect"
+        file = "barpointiscorrect.toml"       # local file.
+    [[process.properties]]
+        name = "bariscorrect"
+        file = "bariscorrect.toml"       # local file.
 ```
 By default, the files are expected to be found in the location designated by the attribute `working_directory`. If such attribute is not present, then the path of the analysis framework specification is used instead. Nonetheless, if the `file` attribute of a property is specified by a string starting with `/` of `.`, the path section of the value of the attribute (i.e., the substring starting at position 0 and ending right before the last occurrence of `/`) overrides the default.
 
