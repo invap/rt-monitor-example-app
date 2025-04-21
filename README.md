@@ -51,14 +51,6 @@ rt-monitor-example-app/
 ├── data-source self-logging/         # Implementation of the API of the data source with
 │   ├── ex_adc.c                      # self-logging capabilities
 │   └── ex_adc.h
-├── framework-working-copy/           # Definition of the analysis framework
-│   ├── 12bitsreading.protosympy      # │
-│   ├── additionbound.protopy         # │
-│   ├── bariscorrect.protosmt2        # │ Properties to be checked at different points in the SSP
-│   │...                              # │ the SSP
-│   ├── init_time_bound               # │
-│   ├── spec_gr.toml                  # Specification of the SSP in graph format
-│   └── spec_regex.toml               # Specification of the SSP in regular expression format
 ├── patched app/                      # Example application with the bug in file functions.c
 │   ├── functions.c                   # fixed and resorting to the self-logging implementation
 │   ├── functions.h
@@ -71,6 +63,15 @@ rt-monitor-example-app/
 │   ├── class-diagram.png             # Class diagram of the software layer of the system
 │   ├── hardware-software-system.png  # Systems design
 │   └── ssp-software.png              # SSP diagram
+├── rt_monitor_components/            # Components implementing the digital twins of the components used in the (different versions of the) example
+├── specification/                    # Definition of the analysis framework
+│   ├── 12bitsreading.protosympy      # │
+│   ├── additionbound.protopy         # │
+│   ├── bariscorrect.protosmt2        # │ Properties to be checked at different points in the SSP
+│   │...                              # │ the SSP
+│   ├── init_time_bound               # │
+│   ├── spec_gr.toml                  # Specification of the SSP in graph format
+│   └── spec_regex.toml               # Specification of the SSP in regular expression format
 ├── COPYING                           # Licence of the project 
 ├── makefile                          # Make file for building the different versions of the application
 └── README.md                         # Read me file of the project
@@ -89,7 +90,7 @@ hardware-software system shown in Figure 1 as a structured sequential process.">
 
 The intuition behind the SSP shown above is that after an initial task (*init*) that performs the initialization of the process, the artifact enters an infinite loop which performs a filtering task (*filtering*), which has a local checkpoint (*filtering_chk*), that computes a stable sample by taking the average of 16 individual samples, then the process goes through a conversion task (*conversion*) that produces the engineering value corresponding to that sample according to the interpretation of the analog signal being sampled, and, finally, there is a global checkpoint (*display_chk*) for checking the coherence of the data shown in the LCD with respect to the engineering value computed in the task *conversion*.
 
-The specification of the analysis framework must be written in TOML format. For a detailed presentation of the syntax the reader is pointed to Section [Specification language for describing the analysis framework](https://github.com/invap/rt-monitor/blob/main/README.md#specification-language-for-describing-the-analysis-framework "Specification language for describing the analysis framework").
+The specification of the analysis framework must be written in TOML format (see [here](https://github.com/invap/rt-monitor-example-app/blob/main/specification/) for the specification of the analysis framework for this example). For a detailed presentation of the syntax the reader is pointed to Section [Specification language for describing the analysis framework](https://github.com/invap/rt-monitor/blob/main/README.md#specification-language-for-describing-the-analysis-framework "Specification language for describing the analysis framework").
 
 The following fragment shows the structured sequential process of [Figure 2](#ssp-software) in TOML format:
 ```toml
@@ -320,7 +321,7 @@ formula = """(forall ((y Int) (x Int))
         )
 )"""
 ```
-Another aspect that has to be declared in the specification of the analysis framework is the components that will play a role for analysing the system. In this specific case study we analyse the behaviour of the system by considering that the implementation of the ADC and the LCD are not monitored internally but only through the invocation of the functions in their interface. This requires from us to declare which are the Python clases that provide implementations of the digital twins for both the [ADC](https://github.com/invap/rt-monitor/blob/main/framework/components/rt_monitor_example_app/ex_adc.py) and the [LCD](https://github.com/invap/rt-monitor/blob/main/framework/components/rt_monitor_example_app/ex_display.py). The components that are used for the runtime verification of this example application are declared as part of the specification also in TOML format:
+Another aspect that has to be declared in the specification of the analysis framework is the components that will play a role for analysing the system. In this specific case study we analyse the behaviour of the system by considering that the implementation of the ADC and the LCD are not monitored internally but only through the invocation of the functions in their interface. This requires from us to declare which are the Python clases that provide implementations of the digital twins for both the [ADC](https://github.com/invap/rt-monitor-example-app/blob/main/rt_monitor_components/ex_adc_visual.py) and the [LCD](https://github.com/invap/rt-monitor-example-app/blob/main/rt_monitor_components/ex_display.py). The components that are used for the runtime verification of this example application are declared as part of the specification also in TOML format:
 ```toml
 [components]
     visual = true
@@ -345,7 +346,7 @@ In both cases the digital twins have visual components accompanying their implem
 
 The reader should note that the specification is incomplete and many more properties of interest would have been added to be checked along the execution of the system, but we focussed on a subset that could provide an interesting example for the use of the Runtime monitor.
 
-The complete specification of the analysis framework is provided as a [TOML file](https://github.com/invap/rt-monitor-example-app/blob/main/framework-working-copy/spec_gr.toml). For a complete explanation of the syntax see Section [Specification language for describing the analysis framework](https://github.com/invap/rt-monitor/blob/main/README.md#specification-language "Specification language for describing the analysis framework."). 
+The complete specification of the analysis framework is provided as a [TOML file](https://github.com/invap/rt-monitor-example-app/blob/main/specification/spec_gr.toml). For a complete explanation of the syntax see Section [Specification language for describing the analysis framework](https://github.com/invap/rt-monitor/blob/main/README.md#specification-language "Specification language for describing the analysis framework."). 
 
 
 ## ADC implementation and operation
