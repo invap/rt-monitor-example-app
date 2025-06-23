@@ -6,7 +6,7 @@ import wx
 
 
 class displayVisual(wx.Frame):
-    def __init__(self, parent, display):
+    def __init__(self, display):
         super().__init__(
             None,
             title="Display",

@@ -324,25 +324,18 @@ formula = """(forall ((y Int) (x Int))
 Another aspect that has to be declared in the specification of the analysis framework is the components that will play a role for analysing the system. In this specific case study we analyse the behaviour of the system by considering that the implementation of the ADC and the LCD are not monitored internally but only through the invocation of the functions in their interface. This requires from us to declare which are the Python clases that provide implementations of the digital twins for both the [ADC](https://github.com/invap/rt-monitor-example-app/blob/main/rt_monitor_components/ex_adc_visual.py) and the [LCD](https://github.com/invap/rt-monitor-example-app/blob/main/rt_monitor_components/ex_display.py). The components that are used for the runtime verification of this example application are declared as part of the specification also in TOML format:
 ```toml
 [components]
-    visual = true
     location = "general_path_to_components"       # this is optional; if not present uses "."
 [[components.list]]
     name = "adc"
     component_path = "specific_path_to_component"       # this is optional; if not present uses the location attribute
     component_file = "ex_adc_visual.py"
     component_name = "adc"
-    visual_component_file = "ex_adcVisual.py"       # the visual component is assumed to be in the same location as the component
-    visual_component_name = "adcVisual"
-    visual = true
 [[components.list]]
     name = "display"
     component_file = "ex_display.py"
     component_name = "display"
-    visual_component_file = "ex_displayVisual.py"
-    visual_component_name = "displayVisual"
-    visual = true
 ```
-In both cases the digital twins have visual components accompanying their implementation for providing a graphical echo of runtime behaviour of the component (see Section [Implementation of digital twins for monitoring software components](https://github.com/invap/rt-monitor/blob/main/README.md#implementation-of-digital-twins-for-monitoring-software-components "Implementation of digital twins for monitoring software components.") for more information about the implementation of digital twins for monitoring software components of the SUT, and their associated visual).
+In both cases the digital twins have visual features accompanying their implementation for providing a graphical echo of runtime behaviour of the component (see Section [Implementation of digital twins for monitoring software components](https://github.com/invap/rt-monitor/blob/main/README.md#implementation-of-digital-twins-for-monitoring-software-components "Implementation of digital twins for monitoring software components.") for more information about the implementation of digital twins for monitoring software components of the SUT, and their associated visual).
 
 The reader should note that the specification is incomplete and many more properties of interest would have been added to be checked along the execution of the system, but we focussed on a subset that could provide an interesting example for the use of the Runtime monitor.
 

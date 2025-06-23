@@ -2,39 +2,27 @@
 # Copyright (c) 2024 INVAP, open@invap.com.ar
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Fundacion-Sadosky-Commercial
 
-import inspect
-import numpy as np
-
-from rt_monitor.errors.component_errors import FunctionNotImplementedError
-from rt_monitor.framework.components.component import VisualComponent, SelfLoggingComponent
-from rt_monitor.novalue import NoValue
+from rt_monitor.framework.components.component import SelfLoggingComponent
+from rt_monitor.framework.components.new_rt_monitor_example_app.ex_adcVisual import adcVisual
 
 
-class adc(VisualComponent, SelfLoggingComponent):
-    def __init__(self, visual_component_class, visual):
-        VisualComponent.__init__(self, visual_component_class, visual)
-        SelfLoggingComponent.__init__(self)
-        AcumCalib = 0
-        Calib = 0
-        ContCalib = 0
-        self._adc_read = NoValue
+class adc(SelfLoggingComponent):
+    def __init__(self):
+        super().__init__()
         # statistics variables
         self.__total_values_read = 0
         self.__current_value = 0
         # Initializes the visual feature of the class
-        self.initialize_visual_component()
+        self.__visual = adcVisual(self)
 
     def state(self):
-        state = {"adc_read": ("Int", self._adc_read)}
-        return state
+        return {}  # state
 
     def adc_init(self):
         pass
 
-    def sample(self, read: np.uint16):
-        self._adc_read = read
+    def sample(self):
         self.__total_values_read += 1
-        self.__current_value = read
 
     def get_status(self):
         return [self.__total_values_read, self.__current_value]
@@ -55,12 +43,5 @@ class adc(VisualComponent, SelfLoggingComponent):
         log_file.seek(current_pos)
 
     def _process_event(self, event):
-        self._adc_read = int(event[0])
         self.__total_values_read += 1
         self.__current_value = int(event[0])
-
-    def stop(self):
-        if self._visual:
-            # Closes the visualization features associated.
-            self._visual_component.timer.Stop()
-            self._visual_component.Hide()

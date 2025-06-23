@@ -8,7 +8,8 @@ from enum import Enum
 import numpy as np
 
 from rt_monitor.errors.component_errors import FunctionNotImplementedError
-from rt_monitor.framework.components.component import VisualComponent
+from rt_monitor.framework.components.component import Component
+from rt_monitor.framework.components.new_rt_monitor_example_app.ex_displayVisual import displayVisual
 
 
 class LCDCmdsCodes:
@@ -104,13 +105,13 @@ class TextConfiguration:
       uint8_t scale;    /**< Text scale */   """
 
 
-class display(VisualComponent):
-    def __init__(self, visual_component_class, visual):
+class display(Component):
+    def __init__(self):
         # TODO driver must have the base configuration of the display, such as the commands codes, etc.
         # in this prototype we assume the display configuration
         # set the default width and height of the display, note that some drivers can update the size with the
         # respective command
-        super().__init__(visual_component_class, visual)
+        super().__init__()
         self.width = 480
         self.height = 200
         # create and initialize the display's information with (0,0,0) RGB
@@ -150,7 +151,7 @@ class display(VisualComponent):
         # - Default Font Matrix Map 6_8
         self.__font_matrix = Font6_8()
         # Initializes the visual feature of the class
-        self.initialize_visual_component()
+        self.__visual = displayVisual(self)
 
     def state(self):
         """state.__display_pixels is a 3d (heigth, width, 3) matrix where the last axis
@@ -596,12 +597,6 @@ class display(VisualComponent):
                     )
 
         return function(*new_args)
-
-    def stop(self):
-        if self._visual:
-            # Closes the visualization features associated.
-            self._visual_component.timer.Stop()
-            self._visual_component.Hide()
 
 class Font6_8:
     def __init__(self):

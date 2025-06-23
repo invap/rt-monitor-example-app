@@ -6,7 +6,7 @@ import wx
 
 
 class adcVisual(wx.Frame):
-    def __init__(self, parent, adc_component):
+    def __init__(self, adc_component):
         super().__init__(None, title="ADC", style=wx.CAPTION & ~wx.RESIZE_BORDER)
         self.adc_component = adc_component
         self._render()
