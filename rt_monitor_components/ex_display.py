@@ -9,7 +9,7 @@ import numpy as np
 
 from rt_monitor.errors.component_errors import FunctionNotImplementedError
 from rt_monitor.framework.components.component import Component
-from rt_monitor.framework.components.new_rt_monitor_example_app.ex_displayVisual import displayVisual
+from rt_monitor.framework.components.rt_monitor_example_app.ex_displayVisual import displayVisual
 
 
 class LCDCmdsCodes:

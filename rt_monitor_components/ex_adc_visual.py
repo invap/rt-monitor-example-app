@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Fundacion-Sadosky-Commercial
 
 from rt_monitor.framework.components.component import Component
-from rt_monitor.framework.components.new_rt_monitor_example_app.ex_adcVisual import adcVisual
+from rt_monitor.framework.components.rt_monitor_example_app.ex_adcVisual import adcVisual
 
 
 class adc(Component):
