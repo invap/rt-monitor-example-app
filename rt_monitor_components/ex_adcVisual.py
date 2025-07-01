@@ -3,6 +3,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Fundacion-Sadosky-Commercial
 
 import wx
+from wx import Point
 
 
 class adcVisual(wx.Frame):
@@ -23,7 +24,7 @@ class adcVisual(wx.Frame):
         self.sizer = wx.BoxSizer(wx.VERTICAL)
         self._set_up_components()
         self.SetSizerAndFit(self.sizer)
-        position = (50, wx.DisplaySize()[1] - self.GetSize()[1] - 150)
+        position = Point(50, wx.DisplaySize()[1] - self.GetSize()[1] - 150)
         self.SetPosition(position)
 
     def _set_up_components(self):

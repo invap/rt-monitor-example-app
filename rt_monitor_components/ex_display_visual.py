@@ -9,6 +9,7 @@ import numpy as np
 
 from rt_monitor.errors.component_errors import FunctionNotImplementedError
 from rt_monitor.framework.components.component import Component
+from rt_monitor.framework.components.rt_monitor_example_app.ex_displayVisual import displayVisual
 
 
 class LCDCmdsCodes:
@@ -149,6 +150,8 @@ class display(Component):
         )
         # - Default Font Matrix Map 6_8
         self.__font_matrix = Font6_8()
+        # Initializes the visual feature of the class
+        self.__visual = displayVisual(self)
 
     def state(self):
         """state.__display_pixels is a 3d (heigth, width, 3) matrix where the last axis
