@@ -1,0 +1,81 @@
+name = "rt-monitor-example-app"
+working_directory = "./sandbox/rt-monitor-example-app spec/"
+[process]
+    format = "regex"
+    structure = "init;(filtering;conversion;display_chk)*"
+
+    [[process.tasks]]
+        name = "init"
+        postconditions = ["init_vars", "init_fondo_display","init_time_bound"]
+    [[process.tasks]]
+        name = "filtering"
+        preconditions = ["filtering_pre"]
+        postconditions = ["filtering_post", "filtering_time_bound"]
+        checkpoints = ["filtering_chk"]
+    [[process.tasks]]
+        name = "conversion"
+        preconditions = ["conversion_pre"]
+        postconditions = ["conversion_post"]
+
+    [[process.checkpoints]]
+        name = "filtering_chk"
+        properties = ["12bitsreading", "additionbound"]
+    [[process.checkpoints]]
+        name = "display_chk"
+        properties = ["barpointiscorrect", "bariscorrect"]
+
+    [[process.properties]]
+        name = "init_vars"
+        format = "smt2"
+        variables = "(main_realvalue_old:State Int)"
+        formula = "(= main_realvalue_old 0)"        # inline formula.
+    [[process.properties]]
+        name = "init_fondo_display"
+        file = "init_fondo_display.toml"       # local file.
+    [[process.properties]]
+        name = "init_time_bound"
+        file = "./sandbox/rt-monitor-example-app spec/init_time_bound.toml"       # relative path to file.
+    [[process.properties]]
+        name = "filtering_pre"
+        file = "/Users/clpombo/sandbox/invap-github/rt-monitor/sandbox/rt-monitor-example-app spec/filtering_pre.toml"       # absolute path to file.
+    [[process.properties]]
+        name = "filtering_post"
+        file = "filtering_post.toml"       # local file.
+    [[process.properties]]
+        name = "filtering_time_bound"
+        file = "filtering_time_bound.toml"       # local file.
+    [[process.properties]]
+        name = "conversion_pre"
+        file = "conversion_pre.toml"       # local file.
+    [[process.properties]]
+        name = "conversion_post"
+        # For a PASS result in python format
+        file = "conversion_post-py.toml"       # local file.
+        # For a FAILED result in quantifier-free smt2 format due to z3.unknown
+        # file = "conversion_post-smt2-qf.toml"       # local file.
+        # For a FAILED result in smt2 format due to z3.unknown
+        # file = "conversion_post-smt2-eq.toml"       # local file.
+    [[process.properties]]
+        name = "12bitsreading"
+        file = "12bitsreading.toml"       # local file.
+    [[process.properties]]
+        name = "additionbound"
+        file = "additionbound.toml"       # local file.
+    [[process.properties]]
+        name = "barpointiscorrect"
+        file = "barpointiscorrect.toml"       # local file.
+    [[process.properties]]
+        name = "bariscorrect"
+        file = "bariscorrect.toml"       # local file.
+
+[components]
+    location = "./rt_monitor/framework/components/rt_monitor_example_app"
+    [[components.list]]
+        name = "adc"
+        component_path = "./rt_monitor/framework/components/rt_monitor_example_app"
+        component_file = "ex_adc.py"
+        component_name = "adc"
+    [[components.list]]
+        name = "display"
+        component_file = "ex_display.py"
+        component_name = "display"
