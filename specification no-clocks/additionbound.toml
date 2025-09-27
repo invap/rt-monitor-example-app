@@ -1,0 +1,3 @@
+format = "smt2"
+variables = "(main_addition:State Int)"
+formula = "(and (<= 0 main_addition) (< main_addition (* 16 4096)))"

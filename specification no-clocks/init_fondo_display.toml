@@ -1,0 +1,2 @@
+format = "smt2"
+formula = "(= 1 1)"

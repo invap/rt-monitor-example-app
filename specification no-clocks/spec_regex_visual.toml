@@ -1,0 +1,67 @@
+[process]
+    format = "regex"
+    structure = "init;(filtering;conversion;display_chk)*"
+
+    [[process.tasks]]
+        name = "init"
+        postconditions = ["init_vars", "init_fondo_display"]
+    [[process.tasks]]
+        name = "filtering"
+        preconditions = ["filtering_pre"]
+        postconditions = ["filtering_post"]
+        checkpoints = ["filtering_chk"]
+    [[process.tasks]]
+        name = "conversion"
+        preconditions = ["conversion_pre"]
+        postconditions = ["conversion_post"]
+
+    [[process.checkpoints]]
+        name = "filtering_chk"
+        properties = ["12bitsreading", "additionbound"]
+    [[process.checkpoints]]
+        name = "display_chk"
+        properties = ["barpointiscorrect", "bariscorrect"]
+
+    [[process.properties]]
+        name = "init_vars"
+        format = "smt2"
+        variables = "(main_realvalue_old:State Int)"
+        formula = "(= main_realvalue_old 0)"        # inline formula.
+    [[process.properties]]
+        name = "init_fondo_display"
+        file = "init_fondo_display.toml"       # local file.
+    [[process.properties]]
+        name = "filtering_pre"
+        file = "/Users/clpombo/sandbox/invap-github/rt-monitor/sandbox/rt-monitor-example-app spec/filtering_pre.toml"       # absolute path to file.
+    [[process.properties]]
+        name = "filtering_post"
+        file = "filtering_post.toml"       # local file.
+    [[process.properties]]
+        name = "conversion_pre"
+        file = "conversion_pre.toml"       # local file.
+    [[process.properties]]
+        name = "conversion_post"
+        file = "conversion_post.toml"       # local file.
+    [[process.properties]]
+        name = "12bitsreading"
+        file = "12bitsreading.toml"       # local file.
+    [[process.properties]]
+        name = "additionbound"
+        file = "additionbound.toml"       # local file.
+    [[process.properties]]
+        name = "barpointiscorrect"
+        file = "barpointiscorrect.toml"       # local file.
+    [[process.properties]]
+        name = "bariscorrect"
+        file = "bariscorrect.toml"       # local file.
+
+[components]
+    location = "./rt_monitor/framework/components/rt_monitor_example_app"
+    [[components.list]]
+        name = "adc"
+        component_file = "ex_adc_visual.py"
+        component_name = "adc"
+    [[components.list]]
+        name = "display"
+        component_file = "ex_display_visual.py"
+        component_name = "display"
