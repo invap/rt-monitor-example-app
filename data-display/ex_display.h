@@ -22,4 +22,6 @@ void display_write_text(const char* text);
 
 void display_Show_RGB(unsigned char dat1,unsigned char dat2,unsigned char dat3, unsigned int HEIGHT0, unsigned int HEIGHT1, unsigned int WIDTH0, unsigned int WIDTH1);
 
+void display_set_pixel(uint32_t, uint32_t, const rgb*);
+
 #endif

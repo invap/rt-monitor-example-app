@@ -18,6 +18,61 @@ rgb color_blue = {0x00,0x00, 0xFF};
 rgb color_white = {0xFF,0xFF, 0xFF};
 rgb color_black = {0x00,0x00, 0x00};
 
+uint8_t const unidad[] = {
+        0x00, 0x30, 0x00, 0x1C,
+        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x03, 0x00, 0x00, 0x00, 0x00, 0x00, 0x03, 0x00, 0x00, 0x00,
+        0x00, 0x00, 0x07, 0x80, 0x00, 0x00, 0x00, 0x00, 0x06, 0x80, 0x00, 0x00, 0x00, 0x00, 0x04, 0xC0,
+        0x00, 0x00, 0x00, 0x00, 0x0C, 0xC0, 0x00, 0x00, 0x00, 0x00, 0x0C, 0x40, 0x00, 0x00, 0x00, 0x00,
+        0x08, 0x60, 0x00, 0x00, 0x00, 0x00, 0x18, 0x60, 0x00, 0x00, 0x00, 0x00, 0x1F, 0xF0, 0x00, 0x00,
+        0x00, 0x00, 0x1F, 0xF0, 0x00, 0x00, 0x00, 0x00, 0x30, 0x10, 0x00, 0x00, 0x00, 0x00, 0x30, 0x18,
+        0x00, 0x00, 0x00, 0x00, 0x60, 0x18, 0x00, 0x00, 0x00, 0x00, 0x60, 0x0C, 0x00, 0x00, 0x00, 0x00,
+        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+};
+
+void drawImage2Color_HSB8( uint16_t hheightPosition , uint16_t wwidthPosition , uint8_t const * bbitMapMatrix , const rgb * ccolor1 ,  const rgb* ccolor2 ){
+    // [ INSTRUMENTACION: Agregado para poder enviar el string especificando el evento. ]
+    char str[MAX_EVENT_SIZE];
+    //
+    uint16_t widthBitMapMatrix_8 , heigthBitMapMatrix;
+    uint8_t bitMapTemp;
+
+    // Extraer de la matriz el tama�o de la imagen
+    widthBitMapMatrix_8  = ( ( ( ( (uint16_t)(bbitMapMatrix[ 0 ]) ) << 8 ) & 0xFF00 ) | ( ((uint16_t)(bbitMapMatrix[ 1 ])) & 0x00FF ) ) / ( (uint16_t)(8) );
+    heigthBitMapMatrix   = ( ( (   (uint16_t)(bbitMapMatrix[ 2 ]) ) << 8 ) & 0xFF00 ) | ( ((uint16_t)(bbitMapMatrix[ 3 ])) & 0x00FF );
+
+    // Recorrer linea (Heigth)
+    for( uint8_t iLineCounter = 0 ; iLineCounter < heigthBitMapMatrix ; iLineCounter++ ){
+        // Recorrer ancho formado por bytes ( Width / 8 )
+        for( uint8_t iWidthByteCounter = 0 ; iWidthByteCounter < widthBitMapMatrix_8 ; iWidthByteCounter++ ){
+            // --- Recorrer Byte ---
+            for( uint8_t iBitsCounter = 0 ; iBitsCounter < 8 ; iBitsCounter++ ){
+                // Calcular posici�n del bit
+                bitMapTemp = ( bbitMapMatrix[ 4 + iWidthByteCounter + ( widthBitMapMatrix_8 * iLineCounter ) ] << iBitsCounter ) & ( 0x80 );
+                // Verifiacr valor del bit para pintar su pixel correspondiente
+                if( bitMapTemp == 0 ){
+                    // Pintar pixel de color 1 ( Bit = 0 )
+                    display_set_pixel( ( hheightPosition - iLineCounter ) , ( wwidthPosition + iBitsCounter + (iWidthByteCounter * 8) ) , ccolor1 );
+                    // [ INSTRUMENTACION: component event. ]
+                    sprintf(str, "display,display_set_pixel,%u,%u,%u,%u,%u",( hheightPosition - iLineCounter ), ( wwidthPosition + iBitsCounter + (iWidthByteCounter * 8) ), (*ccolor1).r, (*ccolor1).g, (*ccolor1).b);
+                    report(component_event,str);
+                    //
+                }else{
+                    // Pintar pixel de color 2 ( Bit = 1 )
+                    display_set_pixel( ( hheightPosition - iLineCounter ) , ( wwidthPosition + iBitsCounter + (iWidthByteCounter * 8) ) , ccolor2 );
+                    // [ INSTRUMENTACION: component event. ]
+                    sprintf(str, "display,display_set_pixel,%u,%u,%u,%u,%u",( hheightPosition - iLineCounter ), ( wwidthPosition + iBitsCounter + (iWidthByteCounter * 8) ), (*ccolor2).r, (*ccolor2).g, (*ccolor2).b);
+                    report(component_event,str);
+                    //
+                }
+            }
+        }
+    }
+}
+
 void measurement(int16_t dato){
     // [ INSTRUMENTACION: Agregado para poder enviar el string especificando el evento. ]
     char str[MAX_EVENT_SIZE];
@@ -383,6 +438,9 @@ void background(void) {
     report(component_event,str);
     resume(&reporting_clk);
     //
+
+    drawImage2Color_HSB8(27, 45, unidad, &color_black, &color_g);
+
     display_rect(50 + 14, 60, 2, 20, &color_white);
     // [ INSTRUMENTACION: component event. ]
     pause(&reporting_clk);

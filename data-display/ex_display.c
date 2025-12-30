@@ -22,5 +22,9 @@ void display_set_text_origin_position(uint16_t  WIDTH){
 }
 void display_write_text(const char* text){
 }
+
 void display_Show_RGB(unsigned char r,unsigned char g,unsigned char b, unsigned int HEIGHT0, unsigned int HEIGHT1, unsigned int WIDTH0, unsigned int WIDTH1){
+}
+
+void display_set_pixel(uint32_t HEIGHT, uint32_t WIDTH,  const rgb* color) {
 }
