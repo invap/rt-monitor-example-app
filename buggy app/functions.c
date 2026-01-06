@@ -128,7 +128,7 @@ void measurement(int16_t dato){
        if (dato_ing<3.5)
            sprintf(text_tmp, "**L    \n");
        else
-           sprintf(text_tmp, "%2.0E \n", dato_ing2);
+           sprintf(text_tmp, "%2.0E  \n", dato_ing2);
     display_write_text(text_tmp);
     // [ INSTRUMENTACION: component event. ]
     pause(&reporting_clk);
