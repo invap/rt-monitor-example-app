@@ -9,7 +9,7 @@ formula = """(exists ((real_value Real))
                 )
              )
              (and
-                (< abs_diff (* real_value 0.00001))
+                (< abs_diff (* real_value 0.000001))
                 (=
                     bar_point
                     (ite (<= (to_int (- (* 24 real_value) 96)) 0)
