@@ -4,7 +4,7 @@
 
     [[process.tasks]]
         name = "init"
-        postconditions = ["init_vars", "init_fondo_display"]
+        postconditions = ["init_vars"]
     [[process.tasks]]
         name = "filtering"
         preconditions = ["filtering_pre"]
