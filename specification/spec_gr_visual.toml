@@ -1,5 +1,3 @@
-name = "rt-monitor-example-app"
-working_directory = "./sandbox/rt-monitor-example-app/specification/"
 [process]
     format = "graph"
     [process.structure]
@@ -19,7 +17,7 @@ working_directory = "./sandbox/rt-monitor-example-app/specification/"
 
     [[process.tasks]]
         name = "init"
-        postconditions = ["init_vars", "init_fondo_display","init_time_bound"]
+        postconditions = ["init_vars", "init_time_bound"]
     [[process.tasks]]
         name = "filtering"
         preconditions = ["filtering_pre"]
@@ -62,12 +60,7 @@ working_directory = "./sandbox/rt-monitor-example-app/specification/"
         file = "conversion_pre.toml"       # local file.
     [[process.properties]]
         name = "conversion_post"
-        # For a PASS result in python format
-        file = "conversion_post-py.toml"       # local file.
-        # For a FAILED result in quantifier-free smt2 format due to z3.unknown
-        # file = "conversion_post-smt2-qf.toml"       # local file.
-        # For a FAILED result in smt2 format due to z3.unknown
-        # file = "conversion_post-smt2-eq.toml"       # local file.
+        file = "conversion_post.toml"       # local file.
     [[process.properties]]
         name = "12bitsreading"
         file = "12bitsreading.toml"       # local file.
@@ -86,9 +79,9 @@ working_directory = "./sandbox/rt-monitor-example-app/specification/"
     [[components.list]]
         name = "adc"
         component_path = "./rt_monitor/framework/components/rt_monitor_example_app"
-        component_file = "ex_adc_visual_selflogging.py"
+        component_file = "ex_adc_visual.py"
         component_name = "adc"
     [[components.list]]
         name = "display"
-        component_file = "ex_display.py"
+        component_file = "ex_display_visual.py"
         component_name = "display"

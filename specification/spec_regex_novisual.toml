@@ -1,5 +1,3 @@
-name = "rt-monitor-example-app"
-working_directory = "./sandbox/rt-monitor-example-app spec/"
 [process]
     format = "regex"
     structure = "init;(filtering;conversion;display_chk)*"
