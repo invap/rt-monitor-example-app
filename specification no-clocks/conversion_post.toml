@@ -26,10 +26,8 @@ formula = """(and
         (let ((exp_arg (* 1.1231 measurement_dato_ing)))
           (let ((taylor_approx (taylor_exp exp_arg)))
             (and
-                (<= (- (* (/ 1 (^ 10 13)) taylor_approx) 0.000001) measurement_dato_ing2)
+                (<= (- (* (/ 1 (^ 10 13)) taylor_approx) 0.999999) measurement_dato_ing2)
                 (<= measurement_dato_ing2 (+ (* (/ 1 (^ 10 13)) taylor_approx) 0.000001))
             )))
     )
 )"""
-
-

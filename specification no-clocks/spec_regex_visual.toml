@@ -28,9 +28,6 @@
         variables = "(main_realvalue_old:State Int)"
         formula = "(= main_realvalue_old 0)"        # inline formula.
     [[process.properties]]
-        name = "init_fondo_display"
-        file = "init_fondo_display.toml"       # local file.
-    [[process.properties]]
         name = "filtering_pre"
         file = "/Users/clpombo/sandbox/invap-github/rt-monitor/sandbox/rt-monitor-example-app spec/filtering_pre.toml"       # absolute path to file.
     [[process.properties]]
