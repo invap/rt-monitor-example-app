@@ -72,7 +72,7 @@ rt-monitor-example-app/
 │   ├── init_time_bound               # │
 │   ├── spec_gr.toml                  # Specification of the SSP in graph format
 │   └── spec_regex.toml               # Specification of the SSP in regular expression format
-├── COPYING                           # Licence of the project 
+├── LICENSE                           # Licence of the project 
 ├── makefile                          # Make file for building the different versions of the application
 └── README.md                         # Read me file of the project
 ```
