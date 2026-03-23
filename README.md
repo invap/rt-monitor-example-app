@@ -185,7 +185,6 @@ Below there is a list of the properties involved in the above analysis framework
 
 - `init_vars`: asserts that the variable storing the previous sample is initialised with 0
 ```toml
-name = "init_vars"
 format = "smt2"
 variables = "(main_realvalue_old:State Int)"
 formula = "(= main_realvalue_old 0)"        # inline formula.
@@ -194,7 +193,7 @@ formula = "(= main_realvalue_old 0)"        # inline formula.
 ```toml
 format = "py"
 variables = "(init_clk:Clock Int)"
-formula = "((10 <= init_clk) & (init_clk < 1000))"
+formula = "((200 <= init_clk) & (init_clk < 2000000))"
 ```
 - `filtering_pre`: states the precondition of the task *filtering* asserting that the variable in which the process computes the addition of the 16 samples has been assigned 0
 ```toml
@@ -229,7 +228,7 @@ formula = """(and
 ```toml
 format = "py"
 variables = "(filtering_clk:Clock Int)"
-formula = "((100 <= filtering_clk) and (filtering_clk < 6000))"
+formula = "((100 <= filtering_clk) and (filtering_clk < 1000000))"
 ```
 - `12bitsreading`: asserts that the value read from the ADC is bound to an unsigned integers in the range [0, 4096), which is the integers that can be represented with 12 bits 
 ```toml

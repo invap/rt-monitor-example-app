@@ -1,3 +1,3 @@
 format = "py"
 variables = "(init_clk:Clock Int)"
-formula = "((10 <= init_clk) & (init_clk < 1000))"
+formula = "((200 <= init_clk) & (init_clk < 2000000))"
