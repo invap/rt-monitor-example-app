@@ -1,20 +1,33 @@
 format = "smt2"
-variables = "(main_addition:State Int),(main_realvalue:State Int),(main_value_arr:State (Array Int Int))"
-declarations = """(declare-fun sum ((Array Int Int) Int Int) Int)
-                  (assert (forall ((a (Array Int Int)) (i Int)) (= (sum a i i) 0)))
-                  (assert (forall ((a (Array Int Int)) (i Int) (j Int))
-                              (=> (< i j)
-                                  (= (sum a i j) (+ (select a i) (sum a (+ i 1) j)))
-                              )
-                          )
-                  )"""
+variables = "(measurement_dato_ing:State Real),(main_realvalue:State Int),(measurement_dato_ing2:State Real)"
+declarations = """(define-fun-rec taylor_fold ((x Real) (n Int) (k Int) (term Real) (sum Real)) Real
+  (ite (> k n)
+       sum
+       (taylor_fold x n (+ k 1)
+         (* term (/ x (to_real (+ k 1))))
+         (+ sum term))
+  )
+)
+
+(define-fun taylor_exp ((x Real) (n Int)) Real
+  (taylor_fold x n 0 1.0 0.0)
+)
+
+;caculo iterativo de e^x
+(define-fun taylor_exp ((x Real)) Real
+  (taylor_exp x 20)
+)"""
 formula = """(and
-    (forall ((i Int))
-        (=>
-            (and (<= 0 i) (< i 16))
-            (and (<= 0 (select main_value_arr i)) (< (select main_value_arr i) 4096))
-        )
+    (and
+        (<= (- (* 0.00524590164 main_realvalue) 0.000001) measurement_dato_ing)
+        (<= measurement_dato_ing (+ (* 0.00524590164 main_realvalue) 0.000001))
     )
-    (= main_addition (sum main_value_arr 0 16))
-    (= main_realvalue (div main_addition 16))
+    (and
+        (let ((exp_arg (* 1.1231 measurement_dato_ing)))
+          (let ((taylor_approx (taylor_exp exp_arg)))
+            (and
+                (<= (- (* (/ 1 (^ 10 13)) taylor_approx) 0.000001) measurement_dato_ing2)
+                (<= measurement_dato_ing2 (+ (* (/ 1 (^ 10 13)) taylor_approx) 0.000001))
+            )))
+    )
 )"""

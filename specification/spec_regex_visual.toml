@@ -62,7 +62,6 @@
     location = "./rt_monitor/framework/components/rt_monitor_example_app"
     [[components.list]]
         name = "adc"
-        component_path = "./rt_monitor/framework/components/rt_monitor_example_app"
         component_file = "ex_adc_visual.py"
         component_name = "adc"
     [[components.list]]

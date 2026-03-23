@@ -95,7 +95,7 @@ The specification of the analysis framework must be written in TOML format (see 
 The following fragment shows the structured sequential process of [Figure 2](#ssp-software) in TOML format:
 ```toml
 name = "rt-monitor-example-app"
-working_directory = "./sandbox/rt-monitor-example-app self-logging patched/specification/"
+working_directory = "./sandbox/rt-monitor-example-app buggy/specification/"
 [process]
 	format = "graph"
 	[process.structure]
@@ -115,7 +115,7 @@ working_directory = "./sandbox/rt-monitor-example-app self-logging patched/speci
 
     [[process.tasks]]
         name = "init"
-        postconditions = ["init_vars", "init_fondo_display","init_time_bound"]
+        postconditions = ["init_vars", "init_time_bound"]
     [[process.tasks]]
         name = "filtering"
         preconditions = ["filtering_pre"]
@@ -158,12 +158,7 @@ working_directory = "./sandbox/rt-monitor-example-app self-logging patched/speci
         file = "conversion_pre.toml"       # local file.
     [[process.properties]]
         name = "conversion_post"
-        # For a PASS result in python format
-        file = "conversion_post-py.toml"       # local file.
-        # For a FAILED result in quantifier-free smt2 format due to z3.unknown
-        # file = "conversion_post-smt2-qf.toml"       # local file.
-        # For a FAILED result in smt2 format due to z3.unknown
-        # file = "conversion_post-smt2-eq.toml"       # local file.
+        file = "conversion_post.toml"       # local file.
     [[process.properties]]
         name = "12bitsreading"
         file = "12bitsreading.toml"       # local file.
@@ -194,11 +189,6 @@ name = "init_vars"
 format = "smt2"
 variables = "(main_realvalue_old:State Int)"
 formula = "(= main_realvalue_old 0)"        # inline formula.
-```
-- `init_fondo_display`: asserts that the invariant part of the image shown in the display has been correctly written. **Important note**: this is a dummy property because it is too cumbersome and does not add much to the purpose of this example; we will complete this in the future with a proper formula
-```toml
-format = "smt2"
-formula = "(= 1 1)"
 ```
 - `init_time_bound`: establishes a bound to the time required to perform the task *init*, between 10 and 1000 milliseconds
 ```toml
@@ -243,15 +233,15 @@ formula = "((100 <= filtering_clk) and (filtering_clk < 6000))"
 ```
 - `12bitsreading`: asserts that the value read from the ADC is bound to an unsigned integers in the range [0, 4096), which is the integers that can be represented with 12 bits 
 ```toml
-format = "sympy"
+format = "smt2"
 variables = "(main_value:State Int)"
-formula = "((0 <= main_value) & (main_value < 4096))"
+formula = "(and (<= 0 main_value) (< main_value 4096))"
 ```
 - `additionbound`: asserts that the partial addition performed until the moment in which this property is checked is necessarily in hte range [0, 16*4096)
 ```toml
-format = "sympy"
+format = "smt2"
 variables = "(main_addition:State Int)"
-formula = "((0 <= main_addition) and (main_addition < 16 * 4096))"
+formula = "(and (<= 0 main_addition) (< main_addition (* 16 4096)))"
 ```
 - `conversion_pre`: asserts that the sample computed by task *filtering* is an unsigned integer value in the range [0, 4095)
 ```toml
@@ -261,9 +251,39 @@ formula = "(and (<= 0 main_realvalue) (< main_realvalue 4096))"
 ```
 - `conversion_post`: puts a bound to the error when computing the engineering values from the discrete sample
 ```toml
-format = "py"
+format = "smt2"
 variables = "(measurement_dato_ing:State Real),(main_realvalue:State Int),(measurement_dato_ing2:State Real)"
-formula = "((((0.00524590164 * main_realvalue) * 0.999 <= measurement_dato_ing) and (measurement_dato_ing <= (0.00524590164 * main_realvalue) * 1.001)) and (((10 ** -13) * (2.71828 ** (1.1231 * measurement_dato_ing)) * 0.999 <= measurement_dato_ing2) and (measurement_dato_ing2 <= ((10 ** -13) * (2.71828 ** (1.1231 * measurement_dato_ing)) * 1.001))))"
+declarations = """(define-fun-rec taylor_fold ((x Real) (n Int) (k Int) (term Real) (sum Real)) Real
+  (ite (> k n)
+       sum
+       (taylor_fold x n (+ k 1)
+         (* term (/ x (to_real (+ k 1))))
+         (+ sum term))
+  )
+)
+
+(define-fun taylor_exp ((x Real) (n Int)) Real
+  (taylor_fold x n 0 1.0 0.0)
+)
+
+;caculo iterativo de e^x
+(define-fun taylor_exp ((x Real)) Real
+  (taylor_exp x 20)
+)"""
+formula = """(and
+    (and
+        (<= (- (* 0.00524590164 main_realvalue) 0.000001) measurement_dato_ing)
+        (<= measurement_dato_ing (+ (* 0.00524590164 main_realvalue) 0.000001))
+    )
+    (and
+        (let ((exp_arg (* 1.1231 measurement_dato_ing)))
+          (let ((taylor_approx (taylor_exp exp_arg)))
+            (and
+                (<= (- (* (/ 1 (^ 10 13)) taylor_approx) 0.000001) measurement_dato_ing2)
+                (<= measurement_dato_ing2 (+ (* (/ 1 (^ 10 13)) taylor_approx) 0.000001))
+            )))
+    )
+)"""
 ```
 - `barpointiscorrect`: asserts that the topmost row of the bar that is coloured in green (referred to as `bar_point`) corresponds to the engineering value computed by task *conversion*, also establishing a hard upper and lower bound for that row
 ```toml
@@ -278,7 +298,7 @@ formula = """(exists ((real_value Real))
                 )
              )
              (and
-                (< abs_diff (* real_value 0.00001))
+                (< abs_diff (* real_value 0.000001))
                 (=
                     bar_point
                     (ite (<= (to_int (- (* 24 real_value) 96)) 0)

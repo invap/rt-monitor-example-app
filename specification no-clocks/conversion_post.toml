@@ -19,8 +19,8 @@ declarations = """(define-fun-rec taylor_fold ((x Real) (n Int) (k Int) (term Re
 )"""
 formula = """(and
     (and
-        (<= (* (* 0.00524590164 main_realvalue) 0.999999) measurement_dato_ing)
-        (<= measurement_dato_ing (* (* 0.00524590164 main_realvalue) 1.000001))
+        (<= (- (* 0.00524590164 main_realvalue) 0.000001) measurement_dato_ing)
+        (<= measurement_dato_ing (+ (* 0.00524590164 main_realvalue) 0.000001))
     )
     (and
         (let ((exp_arg (* 1.1231 measurement_dato_ing)))

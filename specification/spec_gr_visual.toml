@@ -41,9 +41,6 @@
         variables = "(main_realvalue_old:State Int)"
         formula = "(= main_realvalue_old 0)"        # inline formula.
     [[process.properties]]
-        name = "init_fondo_display"
-        file = "init_fondo_display.toml"       # local file.
-    [[process.properties]]
         name = "init_time_bound"
         file = "./sandbox/rt-monitor-example-app spec/init_time_bound.toml"       # relative path to file.
     [[process.properties]]
