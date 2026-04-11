@@ -12,6 +12,9 @@ buggy-no-clocks:
 	make -C ../c-reporter-api/ lib
 	gcc buggy\ app\ no-clocks/main.c buggy\ app\ no-clocks/functions.c data-display/ex_display.c data-source/ex_adc.c -L../c-reporter-api/lib/ -lstopwatch -L../c-reporter-api/lib/ -lc-reporter-api -lm -o main
 
+buggy-uninstrumented:
+	gcc -g buggy\ app\ uninstrumented/main.c buggy\ app\ uninstrumented/functions.c data-display/ex_display.c data-source/ex_adc.c -lm -o main
+
 patched:
 	make -C ../c-reporter-api/ lib
 	gcc patched\ app/main.c patched\ app/functions.c data-display/ex_display.c data-source/ex_adc.c -L../c-reporter-api/lib/ -lstopwatch -L../c-reporter-api/lib/ -lc-reporter-api -lm -o main

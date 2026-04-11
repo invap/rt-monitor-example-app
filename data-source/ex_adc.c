@@ -4,6 +4,14 @@
 
 #include "ex_adc.h"
 
+// To discriminate whether adc data is read from file or generated
+bool adc_info_present;
+// For when adc data is read from file
+FILE *file;
+// For when adc data is generated
+uint16_t previous_sample;
+
+
 // Initialization of the ADC
 void adc_init (void){
     file = fopen("./adc_info.csv","r");
