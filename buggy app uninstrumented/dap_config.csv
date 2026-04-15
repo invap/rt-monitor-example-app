@@ -1,73 +1,73 @@
-main_uninstrumented.rs:10:b,task_started,init
-main_uninstrumented.rs:10:b,clock_start,init_clk
-main_uninstrumented.rs:11:b,component_event,adc,adc_init
-main_uninstrumented.rs:14:b,variable_value_assigned,main_realvalue_old,realvalue_old
-main_uninstrumented.rs:14:b,clock_pause,init_clk
-main_uninstrumented.rs:14:b,task_finished,init
-main_uninstrumented.rs:14:b,clock_start,filtering_clk
-main_uninstrumented.rs:14:b,clock_pause,filtering_clk
-main_uninstrumented.rs:17:b,task_started,filtering
-main_uninstrumented.rs:17:b,clock_reset,filtering_clk
-main_uninstrumented.rs:17:b,variable_value_assigned,main_addition,addition
-main_uninstrumented.rs:10:b,component_event,adc,sample
-main_uninstrumented.rs:21:b,variable_value_assigned,main_value,value
-main_uninstrumented.rs:21:b,variable_value_assigned,main_value_arr[{_i}],value
-main_uninstrumented.rs:21:b,variable_value_assigned,main_addition,addition
-main_uninstrumented.rs:21:b,checkpoint_reached,filtering_chk
-main_uninstrumented.rs:24:b,variable_value_assigned,main_realvalue,realvalue
-main_uninstrumented.rs:24:b,clock_pause,filtering_clk
-main_uninstrumented.rs:24:b,task_finished,filtering
-main_uninstrumented.rs:24:b,task_started,conversion
-main_uninstrumented.rs:26:b,task_finished,conversion
-main_uninstrumented.rs:27:a,variable_value_assigned,main_realvalue_old,realvalue_old
-main_uninstrumented.rs:27:b,checkpoint_reached,display_chk
-functions_uninstrumented.rs:48:b,component_event,display,display_set_pixel,{(hheightPosition-iLineCounter)},{(wwidthPosition+iBitsCounter+(iWidthByteCounter*8))},{ccolor1}
-functions_uninstrumented.rs:52:b,component_event,display,display_set_pixel,{(hheightPosition-iLineCounter)},{(wwidthPosition+iBitsCounter+(iWidthByteCounter*8))},{ccolor2}
-functions_uninstrumented.rs:59:b,variable_value_assigned,measurement_dato_ing,dato_ing
-functions_uninstrumented.rs:60:b,variable_value_assigned,measurement_dato_ing2,dato_ing2
-functions_uninstrumented.rs:64:b,component_event,display,display_set_text_scale,scale
-functions_uninstrumented.rs:65:b,component_event,display,display_set_text_pos2,pl,ll
-functions_uninstrumented.rs:66:b,component_event,display,display_set_text_color,color_g.r,color_g.g,color_g.b
-functions_uninstrumented.rs:67:b,component_event,display,display_set_text_bgcolor,color_black.r,color_black.g,color_black.b
-functions_uninstrumented.rs:75:b,component_event,display,display_write_text,string
-functions_uninstrumented.rs:80:b,variable_value_assigned,bar_dato_ing,dato_ing
-functions_uninstrumented.rs:82:b,variable_value_assigned,bar_point,g
-functions_uninstrumented.rs:86:b,component_event,display,display_Show_RGB,0,255,0,i,i,155,190
-functions_uninstrumented.rs:90:b,component_event,display,display_Show_RGB,255,255,0,i,i,155,190
-functions_uninstrumented.rs:94:b,component_event,display,display_Show_RGB,255,0,0,i,i,155,190
-functions_uninstrumented.rs:101:b,component_event,display,display_Show_RGB,0,0,0,i,i,155,190
-functions_uninstrumented.rs:111:b,component_event,display,display_set_text_scale,scale
-functions_uninstrumented.rs:112:b,component_event,display,display_set_text_pos,xl,yl
-functions_uninstrumented.rs:113:b,component_event,display,display_set_text_origin_position,yl
-functions_uninstrumented.rs:114:b,component_event,display,display_set_text_color,color_white.r,color_white.g,color_white.b
-functions_uninstrumented.rs:115:b,component_event,display,display_write_text,"         \n         \n         \n         \n         \n         \n         \n         \n         \n         \n         \n         \n         \n         \n         \n         \n         \n         \n         \n         \n         \n         \n         \n         \n         \n         \n         \n         \n"
-functions_uninstrumented.rs:126:b,component_event,display,display_set_text_pos2,x0,yl
-functions_uninstrumented.rs:127:b,component_event,display,display_write_text,"1E-11\n"
-functions_uninstrumented.rs:128:b,component_event,display,display_set_text_pos2,x2,yl
-functions_uninstrumented.rs:129:b,component_event,display,display_write_text,"1E-10\n"
-functions_uninstrumented.rs:130:b,component_event,display,display_set_text_pos2,x3,yl
-functions_uninstrumented.rs:131:b,component_event,display,display_write_text," 1E-9\n"
-functions_uninstrumented.rs:132:b,component_event,display,display_set_text_pos2,x4,yl
-functions_uninstrumented.rs:133:b,component_event,display,display_write_text," 1E-8\n"
-functions_uninstrumented.rs:134:b,component_event,display,display_set_text_pos2,x5,yl
-functions_uninstrumented.rs:135:b,component_event,display,display_write_text," 1E-7\n"
-functions_uninstrumented.rs:136:b,component_event,display,display_set_text_pos2,x6,yl
-functions_uninstrumented.rs:137:b,component_event,display,display_write_text," 1E-6\n"
-functions_uninstrumented.rs:138:b,component_event,display,display_set_text_pos2,x7,yl
-functions_uninstrumented.rs:139:b,component_event,display,display_write_text," 1E-5\n"
-functions_uninstrumented.rs:140:b,component_event,display,display_set_text_pos2,x8,yl
-functions_uninstrumented.rs:141:b,component_event,display,display_write_text," 1E-4\n"
-functions_uninstrumented.rs:142:b,component_event,display,display_set_text_pos2,x9,yl
-functions_uninstrumented.rs:143:b,component_event,display,display_write_text," 1E-3\n"
-functions_uninstrumented.rs:144:b,component_event,display,display_box,0,0,479,127,color_blue.r,color_blue.g,color_blue.b
-functions_uninstrumented.rs:145:b,component_event,display,display_rect,0,20,1,87,color_black.r,color_black.g,color_black.b
-functions_uninstrumented.rs:147:b,component_event,display,display_rect,478,20,1,87,color_black.r,color_black.g,color_black.b
-functions_uninstrumented.rs:150:b,component_event,display,display_rect,50+14,60,2,20,color_white.r,color_white.g,color_white.b
-functions_uninstrumented.rs:151:b,component_event,display,display_rect,98+14,60,2,20,color_white.r,color_white.g,color_white.b
-functions_uninstrumented.rs:152:b,component_event,display,display_rect,146+14,60,2,20,color_white.r,color_white.g,color_white.b
-functions_uninstrumented.rs:153:b,component_event,display,display_rect,194+14,60,2,20,color_white.r,color_white.g,color_white.b
-functions_uninstrumented.rs:154:b,component_event,display,display_rect,242+14,60,2,2,color_white.r,color_white.g,color_white.b
-functions_uninstrumented.rs:155:b,component_event,display,display_rect,290+14,60,2,20,color_white.r,color_white.g,color_white.b
-functions_uninstrumented.rs:156:b,component_event,display,display_rect,338+14,60,2,20,color_white.r,color_white.g,color_white.b
-functions_uninstrumented.rs:157:b,component_event,display,display_rect,386+14,60,2,20,color_white.r,color_white.g,color_white.b
-functions_uninstrumented.rs:158:b,component_event,display,display_rect,434+14,60,2,20,color_white.r,color_white.g,color_white.b
+main.c:10:b,task_started,init
+main.c:10:b,clock_start,init_clk
+main.c:11:b,component_event,adc,adc_init
+main.c:14:b,variable_value_assigned,main_realvalue_old,realvalue_old
+main.c:14:b,clock_pause,init_clk
+main.c:14:b,task_finished,init
+main.c:14:b,clock_start,filtering_clk
+main.c:14:b,clock_pause,filtering_clk
+main.c:17:b,task_started,filtering
+main.c:17:b,clock_reset,filtering_clk
+main.c:17:b,variable_value_assigned,main_addition,addition
+main.c:10:b,component_event,adc,sample
+main.c:21:b,variable_value_assigned,main_value,value
+main.c:21:b,variable_value_assigned,main_value_arr[{_i}],value
+main.c:21:b,variable_value_assigned,main_addition,addition
+main.c:21:b,checkpoint_reached,filtering_chk
+main.c:24:b,variable_value_assigned,main_realvalue,realvalue
+main.c:24:b,clock_pause,filtering_clk
+main.c:24:b,task_finished,filtering
+main.c:24:b,task_started,conversion
+main.c:26:b,task_finished,conversion
+main.c:27:a,variable_value_assigned,main_realvalue_old,realvalue_old
+main.c:27:b,checkpoint_reached,display_chk
+functions.c:48:b,component_event,display,display_set_pixel,{(hheightPosition-iLineCounter)},{(wwidthPosition+iBitsCounter+(iWidthByteCounter*8))},{ccolor1}
+functions.c:52:b,component_event,display,display_set_pixel,{(hheightPosition-iLineCounter)},{(wwidthPosition+iBitsCounter+(iWidthByteCounter*8))},{ccolor2}
+functions.c:59:b,variable_value_assigned,measurement_dato_ing,dato_ing
+functions.c:60:b,variable_value_assigned,measurement_dato_ing2,dato_ing2
+functions.c:64:b,component_event,display,display_set_text_scale,scale
+functions.c:65:b,component_event,display,display_set_text_pos2,pl,ll
+functions.c:66:b,component_event,display,display_set_text_color,color_g.r,color_g.g,color_g.b
+functions.c:67:b,component_event,display,display_set_text_bgcolor,color_black.r,color_black.g,color_black.b
+functions.c:75:b,component_event,display,display_write_text,string
+functions.c:80:b,variable_value_assigned,bar_dato_ing,dato_ing
+functions.c:82:b,variable_value_assigned,bar_point,g
+functions.c:86:b,component_event,display,display_Show_RGB,0,255,0,i,i,155,190
+functions.c:90:b,component_event,display,display_Show_RGB,255,255,0,i,i,155,190
+functions.c:94:b,component_event,display,display_Show_RGB,255,0,0,i,i,155,190
+functions.c:101:b,component_event,display,display_Show_RGB,0,0,0,i,i,155,190
+functions.c:111:b,component_event,display,display_set_text_scale,scale
+functions.c:112:b,component_event,display,display_set_text_pos,xl,yl
+functions.c:113:b,component_event,display,display_set_text_origin_position,yl
+functions.c:114:b,component_event,display,display_set_text_color,color_white.r,color_white.g,color_white.b
+functions.c:115:b,component_event,display,display_write_text,"         \n         \n         \n         \n         \n         \n         \n         \n         \n         \n         \n         \n         \n         \n         \n         \n         \n         \n         \n         \n         \n         \n         \n         \n         \n         \n         \n         \n"
+functions.c:126:b,component_event,display,display_set_text_pos2,x0,yl
+functions.c:127:b,component_event,display,display_write_text,"1E-11\n"
+functions.c:128:b,component_event,display,display_set_text_pos2,x2,yl
+functions.c:129:b,component_event,display,display_write_text,"1E-10\n"
+functions.c:130:b,component_event,display,display_set_text_pos2,x3,yl
+functions.c:131:b,component_event,display,display_write_text," 1E-9\n"
+functions.c:132:b,component_event,display,display_set_text_pos2,x4,yl
+functions.c:133:b,component_event,display,display_write_text," 1E-8\n"
+functions.c:134:b,component_event,display,display_set_text_pos2,x5,yl
+functions.c:135:b,component_event,display,display_write_text," 1E-7\n"
+functions.c:136:b,component_event,display,display_set_text_pos2,x6,yl
+functions.c:137:b,component_event,display,display_write_text," 1E-6\n"
+functions.c:138:b,component_event,display,display_set_text_pos2,x7,yl
+functions.c:139:b,component_event,display,display_write_text," 1E-5\n"
+functions.c:140:b,component_event,display,display_set_text_pos2,x8,yl
+functions.c:141:b,component_event,display,display_write_text," 1E-4\n"
+functions.c:142:b,component_event,display,display_set_text_pos2,x9,yl
+functions.c:143:b,component_event,display,display_write_text," 1E-3\n"
+functions.c:144:b,component_event,display,display_box,0,0,479,127,color_blue.r,color_blue.g,color_blue.b
+functions.c:145:b,component_event,display,display_rect,0,20,1,87,color_black.r,color_black.g,color_black.b
+functions.c:147:b,component_event,display,display_rect,478,20,1,87,color_black.r,color_black.g,color_black.b
+functions.c:150:b,component_event,display,display_rect,50+14,60,2,20,color_white.r,color_white.g,color_white.b
+functions.c:151:b,component_event,display,display_rect,98+14,60,2,20,color_white.r,color_white.g,color_white.b
+functions.c:152:b,component_event,display,display_rect,146+14,60,2,20,color_white.r,color_white.g,color_white.b
+functions.c:153:b,component_event,display,display_rect,194+14,60,2,20,color_white.r,color_white.g,color_white.b
+functions.c:154:b,component_event,display,display_rect,242+14,60,2,2,color_white.r,color_white.g,color_white.b
+functions.c:155:b,component_event,display,display_rect,290+14,60,2,20,color_white.r,color_white.g,color_white.b
+functions.c:156:b,component_event,display,display_rect,338+14,60,2,20,color_white.r,color_white.g,color_white.b
+functions.c:157:b,component_event,display,display_rect,386+14,60,2,20,color_white.r,color_white.g,color_white.b
+functions.c:158:b,component_event,display,display_rect,434+14,60,2,20,color_white.r,color_white.g,color_white.b
