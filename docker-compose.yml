@@ -1,0 +1,13 @@
+services:
+  rt-monitor-example-app-development-workspace:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: rt-monitor-example-app-development-workspace
+    volumes:
+      - /Users/clpombo/sandbox/invap-github/rt-monitor-example-app:/workspaces/rt-monitor-example-app
+      - /Users/clpombo/sandbox/invap-github/c-reporter-api:/workspaces/c-reporter-api
+    working_dir: /workspaces
+    command: ["sleep", "infinity"]  # Keep container alive
+    stdin_open: true  # Keep STDIN open
+    tty: true         # Allocate a pseudo-TTY

@@ -1,0 +1,44 @@
+{
+	"name": "C example app Dev Container",
+	"service": "rt-monitor-example-app-development-workspace",
+	"dockerComposeFile": "../docker-compose.yml",
+    "workspaceFolder": "/workspaces",
+
+    // VS Code extensions to install
+    "customizations": {
+     "vscode": {
+            "extensions": [
+                "ms-vscode.cpptools",
+                "ms-vscode.cmake-tools",
+                "twxs.cmake",
+                "ms-vscode.cpptools-extension-pack",
+                "jeff-hykin.better-cpp-syntax",
+                "cschlosser.doxdocgen"
+            ],
+            "settings": {
+                "files.associations": {
+                    "*.h": "c",
+                    "*.hpp": "cpp",
+                    "*.c": "c",
+                    "*.cpp": "cpp"
+                },
+                "editor.formatOnSave": true,
+                "C_Cpp.default.compilerPath": "/usr/bin/gcc",
+                "C_Cpp.default.cppStandard": "c++17",
+                "C_Cpp.default.cStandard": "c17",
+                "cmake.configureOnOpen": true,
+                "files.watcherExclude": {
+                    "**/build/**": true,
+                    "**/out/**": true
+                }
+            }
+        }
+    },
+    "forwardPorts": [8000, 8080, 3000],
+
+	// Use 'postCreateCommand' to run commands after the container is created.
+	// "postCreateCommand": "rustc --version",
+
+	// Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
+	// "remoteUser": "root"
+}
