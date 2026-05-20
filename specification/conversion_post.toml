@@ -15,19 +15,19 @@ declarations = """(define-fun-rec taylor_fold ((x Real) (n Int) (k Int) (term Re
 
 ;caculo iterativo de e^x
 (define-fun taylor_exp ((x Real)) Real
-  (taylor_exp x 20)
+  (taylor_exp x 50)
 )"""
 formula = """(and
     (and
-        (<= (- (* 0.00524590164 main_realvalue) 0.00001) measurement_dato_ing)
-        (<= measurement_dato_ing (+ (* 0.00524590164 main_realvalue) 0.00001))
+        (<= (- (* 0.00524590164 main_realvalue) 0.000001) measurement_dato_ing)
+        (<= measurement_dato_ing (+ (* 0.00524590164 main_realvalue) 0.000001))
     )
     (and
         (let ((exp_arg (* 1.1231 measurement_dato_ing)))
           (let ((taylor_approx (taylor_exp exp_arg)))
             (and
-                (<= (- (* (/ 1 (^ 10 13)) taylor_approx) 0.00001) measurement_dato_ing2)
-                (<= measurement_dato_ing2 (+ (* (/ 1 (^ 10 13)) taylor_approx) 0.00001))
+                (<= (- (* (/ 1 (^ 10 13)) taylor_approx) 0.000001) measurement_dato_ing2)
+                (<= measurement_dato_ing2 (+ (* (/ 1 (^ 10 13)) taylor_approx) 0.000001))
             )))
     )
 )"""
